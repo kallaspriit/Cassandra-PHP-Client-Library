@@ -288,6 +288,7 @@ class Cassandra {
 	protected $defaultColumnCount = 100;
 	protected $columnFamilies = array();
 	protected $keyspaceAuthentication = array();
+	protected $autopack = true;
 	
 	const CONSISTENCY_ONE = cassandra_ConsistencyLevel::ONE;
 	const CONSISTENCY_QUORUM = cassandra_ConsistencyLevel::QUORUM;
@@ -304,11 +305,18 @@ class Cassandra {
 	const TYPE_INTEGER = 'IntegerType';
 	const TYPE_TIME_UUID = 'TimeUUIDType';
 	const TYPE_UTF8 = 'UTF8Type';
+
+	const PLACEMENT_SIMPLE = 'org.apache.cassandra.locator.SimpleStrategy';
+	const PLACEMENT_NETWORK
+		= 'org.apache.cassandra.locator.NetworkTopologyStrategy';
+	const PLACEMENT_OLD_NETWORK
+		= 'org.apache.cassandra.locator.OldNetworkTopologyStrategy';
 	
 	const INDEX_KEYS = 0;
 	
-	public function __construct(array $servers = array()) {
+	public function __construct(array $servers = array(), $autopack = true) {
 		$this->cluster = new CassandraCluster($servers);
+		$this->autopack = $autopack;
 	}
 	
 	public static function createInstance(array $servers, $name = 'main') {
@@ -443,19 +451,26 @@ class Cassandra {
 		
 		$cacheKey = 'cassandra.schema|'.$keyspace;
 
-		$schema = $useCache ? apc_fetch($cacheKey) : null;
+		$schema = $useCache ? apc_fetch($cacheKey) : false;
 
 		if ($schema !== false) {
 			return $schema;
 		}
-		
+
 		$info = $this->describeKeyspace($keyspace);
-		$schema = array();
+		
+		$schema = array(
+			'name' => $info->name,
+			'placement-strategy' => $info->strategy_class,
+			'placement-strategy-options' => $info->strategy_options,
+			'replication-factor' => $info->replication_factor,
+			'column-families' => array()
+		);
 		
 		foreach ($info->cf_defs as $columnFamily) {
 			$isSuper = $columnFamily->column_type == 'Super' ? true : false;
 			
-			$schema[$columnFamily->name] = array(
+			$schema['column-families'][$columnFamily->name] = array(
 				'name' => $columnFamily->name,
 				'super' => $isSuper,
 				'column-type' =>
@@ -477,13 +492,13 @@ class Cassandra {
 				),
 				'column-data-types' => array()
 			);
-			
+
 			if (
 				is_array($columnFamily->column_metadata)
 				&& !empty($columnFamily->column_metadata)
 			) {
 				foreach ($columnFamily->column_metadata as $column) {
-					$schema[$columnFamily->name]['column-data-types'][$column->name]
+					$schema['column-families'][$columnFamily->name]['column-data-types'][$column->name]
 						= CassandraUtil::extractType($column->validation_class);
 				}
 			}
@@ -504,7 +519,10 @@ class Cassandra {
 		if (!isset($this->columnFamilies[$name])) {
 			$this->columnFamilies[$name] = new CassandraColumnFamily(
 				$this,
-				$name
+				$name,
+				Cassandra::CONSISTENCY_ONE,
+				Cassandra::CONSISTENCY_ONE,
+				$this->autopack
 			);
 		}
 		
@@ -564,8 +582,8 @@ class Cassandra {
 	
 	public function createKeyspace(
 		$name,
-		$replicationFactor = 0,
-		$placementStrategyClass = 'org.apache.cassandra.locator.SimpleStrategy',
+		$replicationFactor = 1,
+		$placementStrategyClass = self::PLACEMENT_SIMPLE,
 		$placementStrategyOptions = null
 	) {
 		$def = new cassandra_KsDef();
@@ -581,8 +599,8 @@ class Cassandra {
 	
 	public function updateKeyspace(
 		$name,
-		$replicationFactor = 0,
-		$placementStrategyClass = 'org.apache.cassandra.locator.SimpleStrategy',
+		$replicationFactor = 1,
+		$placementStrategyClass = self::PLACEMENT_SIMPLE,
 		$placementStrategyOptions = null
 	) {
 		$def = new cassandra_KsDef();
@@ -803,12 +821,14 @@ class Cassandra {
 		
 		$componentCount = count($components);
 		
+		// @codeCoverageIgnoreStart
 		if ($componentCount < 3 || $componentCount > 11) {
 			throw new CassandraInvalidPatternException(
 				'Invalid pattern, expected between 3 and 11 components, got '.
-				$componentCount
+				$componentCount.', this should not happen'
 			);
 		}
+		// @codeCoverageIgnoreEnd
 		
 		if ($componentCount >= 6) {
 			if (
@@ -848,12 +868,6 @@ class Cassandra {
 				if ($componentCount >= 10 && !empty($components[9])) {
 					$columnCount = (int)$components[9];
 
-					if ($columnCount <= 0) {
-						throw new CassandraInvalidPatternException(
-							'Expected column limit to be larger than zero'
-						);
-					}
-
 					$result['column-count'] = $columnCount;
 				}
 
@@ -869,9 +883,6 @@ class Cassandra {
 		foreach ($result as $key => $item) {
 			$result[$key] = self::unescape($item);
 		}
-
-var_dump($components);
-var_dump($result);
 	
 		return $result;
 	}
@@ -911,14 +922,14 @@ var_dump($result);
 	
 	protected function createColumnDefinition(array $info) {
 		$def = new cassandra_ColumnDef();
-		
+
 		$def->name = $info['name'];
 		
 		if (!empty($info['type'])) {
 			$def->validation_class = $info['type'];
 		}
 		
-		if (!empty($info['index-type'])) {
+		if (isset($info['index-type'])) {
 			$def->index_type = $info['index-type'];
 		}
 		
@@ -961,13 +972,13 @@ class CassandraColumnFamily {
 				$useCache
 			);
 
-			if (!isset($keyspaceSchema[$this->name])) {
+			if (!isset($keyspaceSchema['column-families'][$this->name])) {
 				throw new CassandraColumnFamilyNotFoundException(
 					'Schema for column family "'.$this->name.'" not found'
 				);
 			}
 			
-			$this->schema = $keyspaceSchema[$this->name];
+			$this->schema = $keyspaceSchema['column-families'][$this->name];
 		}
 		
 		return $this->schema;
@@ -1342,7 +1353,9 @@ class CassandraColumnFamily {
 				
 				$results[$superName] = $values;
 			} else {
+				// @codeCoverageIgnoreStart
 				throw new Exception('Expected either normal or super column');
+				// @codeCoverageIgnoreEnd
 			}
 		}
 		
@@ -1353,13 +1366,13 @@ class CassandraColumnFamily {
 class CassandraUtil {
 	
 	public static function extractType($definition) {
-		if ($definition == null or $definition == '') {
+		if ($definition === null or $definition == '') {
 			return Cassandra::TYPE_BYTES;
 		}
 
 		$index = strrpos($definition, '.');
 
-		if ($index == false) {
+		if ($index === false) {
 			return Cassandra::TYPE_BYTES;
 		}
 

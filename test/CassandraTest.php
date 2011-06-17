@@ -14,6 +14,8 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	protected static $setupComplete = false;
 	
 	public function setup() {
+		apc_clear_cache();
+		
 		$this->servers = array(
 			array(
 				'host' => '127.0.0.1',
@@ -29,7 +31,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			} catch (Exception $e) {}
 
 			$this->c->setMaxCallRetries(5);
-			$this->c->createKeyspace('CassandraTest', 1);
+			$this->c->createKeyspace('CassandraTest');
 			$this->c->useKeyspace('CassandraTest');
 			
 			$this->c->createStandardColumnFamily(
@@ -83,6 +85,49 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	
 	public function tearDown() {
 		unset($this->c);
+		apc_clear_cache();
+	}
+	
+	public function testKeyspaceCanBeUpdated() {
+		try {
+			$this->c->dropKeyspace('CassandraTest2');
+		} catch (Exception $e) {}
+		
+		$this->c->createKeyspace('CassandraTest2');
+		
+		$this->assertEquals(array(
+			'column-families' => array(),
+			'name' => 'CassandraTest2',
+			'placement-strategy' => 'org.apache.cassandra.locator.SimpleStrategy',
+			'placement-strategy-options' => array('replication_factor' => 1),
+			'replication-factor' => 1,
+		), $this->c->getKeyspaceSchema('CassandraTest2', false));
+		
+		$this->c->updateKeyspace(
+			'CassandraTest2',
+			1,
+			Cassandra::PLACEMENT_NETWORK,
+			array('DC1' => 2, 'DC2' => 2)
+		);
+		
+		$this->assertEquals(array(
+			'column-families' => array(),
+			'name' => 'CassandraTest2',
+			'placement-strategy' => 'org.apache.cassandra.locator.NetworkTopologyStrategy',
+			'placement-strategy-options' => array(
+				'DC2' => 2,
+				'DC1' => 2
+			),
+			'replication-factor' => null
+		), $this->c->getKeyspaceSchema('CassandraTest2', false));
+	}
+	
+	/**
+	 * @expectedException CassandraColumnFamilyNotFoundException
+	 */
+	public function testExceptionThrownOnGetUnexistingSchema() {
+		$cf = new CassandraColumnFamily($this->c, 'foobar');
+		$cf->getSchema();
 	}
 	
 	/**
@@ -116,6 +161,15 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	
 	public function testCanAuthenticateToKeyspace() {
 		$this->c->useKeyspace('CassandraTest', 'admin', 'qwerty');
+		$this->c->getKeyspaceSchema();
+	}
+	
+	/**
+	 * @expectedException CassandraSettingKeyspaceFailedException
+	 */
+	public function testExceptionThrownIfUnabletToSelectKeyspace() {
+		$this->c->useKeyspace('foobar');
+		$this->c->getKeyspaceSchema();
 	}
 	
 	public function testClusterKnowsActiveKeyspace() {
@@ -239,7 +293,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		$this->c->getKeyspaceSchema(); // coverage
 		
 		$this->assertEquals(
-			$info['user']['name'],
+			$info['column-families']['user']['name'],
 			'user'
 		);
 	}
@@ -368,6 +422,90 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'email' => 'foobar@gmail.com',
 			),
 			$this->c->get('user.foobar|2R')
+		);
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidPatternException
+	 */
+	public function testInvalidGetPatternThrowsException() {
+		$this->c->get('foo#bar');
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidPatternException
+	 */
+	public function testInvalidGetPatternThrowsException2() {
+		$this->c->get('user.foobar:a-f-z');
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidPatternException
+	 */
+	public function testSetWithoutColumnFamilyThrowsException() {
+		$this->c->set('foo', array('foo' => 'bar'));
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidRequestException
+	 */
+	public function testGetWithColumnsAndColumnRangeThrowsException() {
+		$this->c->cf('user')->get('test', array('col1', 'col2'), 'start');
+	}
+	
+	public function testGettingNonexistingKeyReturnsNull() {
+		$this->assertNull($this->c->get('user.x'));
+	}
+	
+	public function testGetAllReturnsAllColumns() {
+		$this->assertEquals(
+			array(
+				'email' => 'foobar@gmail.com',
+				'name' => 'John Smith',
+				'age' => 23
+			),
+			$this->c->cf('user')->getAll('foobar')
+		);
+		
+		$this->c->set(
+			'cities.Estonia',
+			array(
+				'Tallinn' => array(
+					'population' => '411 980',
+					'comment' => 'Capital of Estonia',
+					'size' => 'big'
+				),
+				'Tartu' => array(
+					'population' => '98 589',
+					'comment' => 'City of good thoughts',
+					'size' => 'medium'
+				)
+			)
+		);
+		
+		$this->assertEquals(
+			array(
+				'population' => '98 589',
+				'comment' => 'City of good thoughts',
+				'size' => 'medium'
+			),
+			$this->c->cf('cities')->getAll('Estonia', 'Tartu')
+		);
+		
+		$this->assertEquals(
+			array(
+				'email' => 'foobar@gmail.com',
+				'name' => 'John Smith'
+			),
+			$this->c->cf('user')->getColumns('foobar', array('email', 'name'))
+		);
+		
+		$this->assertEquals(
+			array(
+				'age' => 23,
+				'email' => 'foobar@gmail.com',
+			),
+			$this->c->cf('user')->getColumnRange('foobar', 'age', 'email')
 		);
 	}
 	
