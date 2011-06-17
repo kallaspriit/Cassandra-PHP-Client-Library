@@ -50,7 +50,9 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 					),
 					array(
 						'name' => 'age',
-						'type' => Cassandra::TYPE_UTF8
+						'type' => Cassandra::TYPE_UTF8,
+						'index-type' => Cassandra::INDEX_KEYS,
+						'index-name' => 'AgeIdx'
 					)
 				)
 			);
@@ -324,6 +326,15 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
+		$this->c->set(
+			'user.'.'foo.bar',
+			array(
+				'email' => 'other@gmail.com',
+				'name' => 'Jane Doe',
+				'age' => 18
+			)
+		);
+		
 		$this->assertEquals(
 			array(
 				'email' => 'foobar@gmail.com',
@@ -558,5 +569,77 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			),
 			$this->c->get('cities.Estonia[]')
 		);
+	}
+	
+	public function testDataCanBeRequestedUsingIndexes() {
+		$this->c->set(
+			'user.john',
+			array(
+				'email' => 'john.smith@gmail.com',
+				'name' => 'John Smith',
+				'age' => 34
+			)
+		);
+		
+		$this->c->set(
+			'user.jane',
+			array(
+				'email' => 'jane.doe@gmail.com',
+				'name' => 'Jane Doe',
+				'age' => 24
+			)
+		);
+		
+		$this->c->set(
+			'user.chuck',
+			array(
+				'email' => 'chuck.norris@gmail.com',
+				'name' => 'Chuck Norris',
+				'age' => 34
+			)
+		);
+		
+		$this->c->set(
+			'user.sheldon',
+			array(
+				'email' => 'sheldon@cooper.com',
+				'name' => 'Sheldon Cooper',
+				'age' => 22
+			)
+		);
+		
+		$this->assertEquals(
+			array(
+				'chuck' => array(
+					'email' => 'chuck.norris@gmail.com',
+					'name' => 'Chuck Norris',
+					'age' => 34
+				),
+				'john' => array(
+					'email' => 'john.smith@gmail.com',
+					'name' => 'John Smith',
+					'age' => 34
+				)
+			),
+			$this->c->cf('user')->getWhere(array('age' => 34))
+		);
+		
+		/* WIP
+		$this->assertEquals(
+			array(
+				'jane' => array(
+					'email' => 'jane.doe@gmail.com',
+					'name' => 'Jane Doe',
+					'age' => 24
+				),
+				'sheldon' => array(
+					'email' => 'sheldon@cooper.com',
+					'name' => 'Sheldon Cooper',
+					'age' => 22
+				)
+			),
+			$this->c->cf('user')->getWhere(array(array('age', Cassandra::OP_EQ, 24)))
+		);
+		*/
 	}
 }

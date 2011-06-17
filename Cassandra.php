@@ -305,7 +305,13 @@ class Cassandra {
 	const TYPE_INTEGER = 'IntegerType';
 	const TYPE_TIME_UUID = 'TimeUUIDType';
 	const TYPE_UTF8 = 'UTF8Type';
-
+	
+	const OP_EQ = cassandra_IndexOperator::EQ;
+	const OP_LT = cassandra_IndexOperator::LT;
+	const OP_GT = cassandra_IndexOperator::GT;
+	const OP_LTE = cassandra_IndexOperator::LTE;
+	const OP_GTE = cassandra_IndexOperator::GTE;
+	
 	const PLACEMENT_SIMPLE = 'org.apache.cassandra.locator.SimpleStrategy';
 	const PLACEMENT_NETWORK
 		= 'org.apache.cassandra.locator.NetworkTopologyStrategy';
@@ -1100,6 +1106,68 @@ class CassandraColumnFamily {
 		return $this->parseSliceResponse($result);
 	}
 	
+	public function getWhere(
+		array $where,
+		$columns = null,
+		$startColumn = null,
+		$endColumn = null,
+		$columnsReversed = false,
+		$columnCount = 100,
+		$superColumn = null,
+		$consistency = null
+	) {
+		if ($columns !== null && $startColumn !== null) {
+			throw new CassandraInvalidRequestException(
+				'You can define either a list of columns or the start and end '.
+				'columns for a range but not both at the same time'
+			);
+		}
+		
+		if ($consistency === null) {
+			$consistency = $this->defaultReadConsistency;
+		}
+		
+		$columnParent = $this->createColumnParent($superColumn);
+
+		$slicePredicate = $this->createSlicePredicate(
+			$columns,
+			$startColumn,
+			$endColumn,
+			$columnsReversed,
+			$columnCount
+		);
+		
+		
+		$indexClause = $this->createIndexClause(
+			$where,
+			$startColumn,
+			$columnCount
+		);
+
+		/*
+		$result = $this->connection->call(
+			'get_indexed_slices',
+			$columnParent,
+			$indexClause,
+			$slicePredicate,
+			$consistency
+		);
+		*/
+
+		$result = $this->connection->getClient()->get_indexed_slices(
+			$columnParent,
+			$indexClause,
+			$slicePredicate,
+			$consistency
+		);
+		
+		if (count($result) == 0) {
+			return array();
+		}
+		
+		return $this->parseSlicesResponse($result);
+	}
+	
 	public function set(
 		$key,
 		array $columns,
@@ -1216,6 +1284,70 @@ class CassandraColumnFamily {
 		return $predicate;
 	}
 	
+	public function createIndexClause(
+		array $where,
+		$startKey = null,
+		$columnCount = 100
+	) {
+		$indexClause = new cassandra_IndexClause();
+		$expressions = array();
+		
+		foreach ($where as $columnName => $value) {
+			$indexExpression = new cassandra_IndexExpression();
+			
+			if (is_array($value)) {
+				$supportedOperators = array(
+					Cassandra::OP_EQ,
+					Cassandra::OP_LT,
+					Cassandra::OP_GT,
+					Cassandra::OP_LTE,
+					Cassandra::OP_GTE
+				);
+				
+				if (
+					count($value) != 3
+					|| !in_array($value[1], $supportedOperators)
+				) {
+					throw new CassandraInvalidRequestException(
+						'Invalid where clause: '.serialize($value)
+					);
+				}
+				
+				$indexExpression->column_name = CassandraUtil::pack(
+					$value[0],
+					$this->getColumnNameType()
+				);
+				
+				$indexExpression->op = $value[1];
+				
+				$indexExpression->value = CassandraUtil::pack(
+					$value[2],
+					$this->getColumnValueType($value[0])
+				);
+			} else {
+				$indexExpression->column_name = CassandraUtil::pack(
+					$columnName,
+					$this->getColumnNameType()
+				);
+				
+				$indexExpression->op = Cassandra::OP_EQ;
+				
+				$indexExpression->value = CassandraUtil::pack(
+					$value,
+					$this->getColumnValueType($columnName)
+				);
+			}
+			
+			$expressions[] = $indexExpression;
+		}
+		
+		$indexClause->expressions = $expressions;
+        $indexClause->start_key = $startKey !== null ? $startKey : '';
+        $indexClause->count = $columnCount;
+		
+		return $indexClause;
+	}
+	
 	public function createColumnMutations(
 		array $columns,
 		$timestamp = null,
@@ -1323,43 +1455,72 @@ class CassandraColumnFamily {
 		$results = array();
 		
 		foreach ($response as $row) {
-			if ($row->column !== null) {
-				$nameType = $this->getColumnNameType();
-				$valueType = $this->getColumnValueType($row->column->name);
-				
-				$name = CassandraUtil::unpack($row->column->name, $nameType);
-				$value = CassandraUtil::unpack($row->column->value, $valueType);
-				
-				$results[$name] = $value;
-			} else if($row->super_column !== null) {
-				$superNameType = null;
-
-				$superName = CassandraUtil::unpack(
-					$row->super_column->name,
-					$superNameType
+			$results = array_merge(
+				$results,
+				$this->parseSliceRow($row)
+			);
+		}
+		
+		return $results;
+	}
+	
+	protected function parseSlicesResponse(array $response) {
+		$results = array();
+		
+		foreach ($response as $response) {
+			$key = $response->key;
+			$results[$key] = array();
+			
+			foreach ($response->columns as $row) {
+				$results[$key] = array_merge(
+					$results[$key],
+					$this->parseSliceRow($row)
 				);
-				
-				$values = array();
-				
-				foreach ($row->super_column->columns as $column) {
-					$nameType = $this->getColumnNameType();
-					$valueType = $this->getColumnValueType($column->name);
-					
-					$name = CassandraUtil::unpack($column->name, $nameType);
-					$value = CassandraUtil::unpack($column->value, $valueType);
-					
-					$values[$name] = $value;
-				}
-				
-				$results[$superName] = $values;
-			} else {
-				// @codeCoverageIgnoreStart
-				throw new Exception('Expected either normal or super column');
-				// @codeCoverageIgnoreEnd
 			}
 		}
 		
 		return $results;
+	}
+	
+	protected function parseSliceRow(cassandra_ColumnOrSuperColumn $row) {
+		$result = array();
+		
+		if ($row->column !== null) {
+			$nameType = $this->getColumnNameType();
+			$valueType = $this->getColumnValueType($row->column->name);
+
+			$name = CassandraUtil::unpack($row->column->name, $nameType);
+			$value = CassandraUtil::unpack($row->column->value, $valueType);
+
+			$result[$name] = $value;
+		} else if($row->super_column !== null) {
+			$superNameType = null;
+
+			$superName = CassandraUtil::unpack(
+				$row->super_column->name,
+				$superNameType
+			);
+
+			$values = array();
+
+			foreach ($row->super_column->columns as $column) {
+				$nameType = $this->getColumnNameType();
+				$valueType = $this->getColumnValueType($column->name);
+
+				$name = CassandraUtil::unpack($column->name, $nameType);
+				$value = CassandraUtil::unpack($column->value, $valueType);
+
+				$values[$name] = $value;
+			}
+
+			$result[$superName] = $values;
+		} else {
+			// @codeCoverageIgnoreStart
+			throw new Exception('Expected either normal or super column');
+			// @codeCoverageIgnoreEnd
+		}
+		
+		return $result;
 	}
 }
 
