@@ -424,13 +424,18 @@ class Cassandra {
 			);
 		}
 		
+		$try = 0;
+		
 		while($tries-- > 0) {
 			$client = $this->getClient();
+			$try++;
 			
 			try {
                 return call_user_func_array(array($client, $methodName), $args);
             } catch (Exception $e) {
 				$lastException = $e;
+				
+				usleep(0.1 * pow(2, $try) * 1000000);
 			}
 		}
 
@@ -686,6 +691,17 @@ class Cassandra {
 		$memtableFlushAfterThroughputMb = null,
 		$memtableFlushAfterOpsMillions = null
 	) {
+		foreach ($columns as $column) {
+			if (
+				array_key_exists('index-type', $column)
+				|| array_key_exists('index-name', $column)
+			) {
+				throw new CassandraUnsupportedException(
+					'Secondary indexes are not supported by supercolumns'
+				);
+			}
+		}
+		
 		return $this->createColumnFamily(
 			$keyspace,
 			$name,
@@ -949,7 +965,7 @@ class Cassandra {
 
 class CassandraColumnFamily {
 	
-	protected $connection;
+	protected $cassandra;
 	protected $name;
 	protected $defaultReadConsistency;
 	protected $defaultWriteConsistency;
@@ -957,13 +973,13 @@ class CassandraColumnFamily {
 	protected $schema;
 	
 	public function __construct(
-		Cassandra $connection,
+		Cassandra $cassandra,
 		$name,
 		$defaultReadConsistency = Cassandra::CONSISTENCY_ONE,
 		$defaultWriteConsistency = Cassandra::CONSISTENCY_ONE,
 		$autopack = true
 	) {
-		$this->connection = $connection;
+		$this->cassandra = $cassandra;
 		$this->name = $name;
 		$this->defaultReadConsistency = $defaultReadConsistency;
 		$this->defaultWriteConsistency = $defaultWriteConsistency;
@@ -971,9 +987,13 @@ class CassandraColumnFamily {
 		$this->schema = null;
 	}
 	
+	public function getCassandra() {
+		return $this->cassandra;
+	}
+	
 	public function getSchema($useCache = true) {
 		if ($this->schema === null) {
-			$keyspaceSchema = $this->connection->getKeyspaceSchema(
+			$keyspaceSchema = $this->cassandra->getKeyspaceSchema(
 				null,
 				$useCache
 			);
@@ -1091,7 +1111,7 @@ class CassandraColumnFamily {
 			$columnCount
 		);
 		
-		$result = $this->connection->call(
+		$result = $this->cassandra->call(
 			'get_slice',
 			$key,
 			$columnParent,
@@ -1109,12 +1129,14 @@ class CassandraColumnFamily {
 	public function getWhere(
 		array $where,
 		$columns = null,
+		$rowCountLimit = null,
 		$startColumn = null,
 		$endColumn = null,
 		$columnsReversed = false,
 		$columnCount = 100,
 		$superColumn = null,
-		$consistency = null
+		$consistency = null,
+		$bufferSize = 1000
 	) {
 		if ($columns !== null && $startColumn !== null) {
 			throw new CassandraInvalidRequestException(
@@ -1143,29 +1165,16 @@ class CassandraColumnFamily {
 			$startColumn,
 			$columnCount
 		);
-
-		/*
-		$result = $this->connection->call(
-			'get_indexed_slices',
+		
+		return new CassandraIndexedDataIterator(
+			$this,
 			$columnParent,
 			$indexClause,
 			$slicePredicate,
-			$consistency
+			$consistency,
+			$rowCountLimit,
+			$bufferSize
 		);
-		*/
-
-		$result = $this->connection->getClient()->get_indexed_slices(
-			$columnParent,
-			$indexClause,
-			$slicePredicate,
-			$consistency
-		);
-		
-		if (count($result) == 0) {
-			return array();
-		}
-		
-		return $this->parseSlicesResponse($result);
 	}
 	
 	public function set(
@@ -1193,7 +1202,7 @@ class CassandraColumnFamily {
 			)
 		);
 		
-		$this->connection->call('batch_mutate', $mutationMap, $consistency);
+		$this->cassandra->call('batch_mutate', $mutationMap, $consistency);
 	}
 	
 	public function createColumnParent($superColumnName = null) {
@@ -1450,21 +1459,8 @@ class CassandraColumnFamily {
 		
 		return $results;
 	}
-
-	protected function parseSliceResponse(array $response) {
-		$results = array();
-		
-		foreach ($response as $row) {
-			$results = array_merge(
-				$results,
-				$this->parseSliceRow($row)
-			);
-		}
-		
-		return $results;
-	}
 	
-	protected function parseSlicesResponse(array $response) {
+	public function parseSlicesResponse(array $response) {
 		$results = array();
 		
 		foreach ($response as $response) {
@@ -1477,6 +1473,19 @@ class CassandraColumnFamily {
 					$this->parseSliceRow($row)
 				);
 			}
+		}
+		
+		return $results;
+	}
+
+	public function parseSliceResponse(array $response) {
+		$results = array();
+		
+		foreach ($response as $row) {
+			$results = array_merge(
+				$results,
+				$this->parseSliceRow($row)
+			);
 		}
 		
 		return $results;
@@ -1519,7 +1528,7 @@ class CassandraColumnFamily {
 			throw new Exception('Expected either normal or super column');
 			// @codeCoverageIgnoreEnd
 		}
-		
+
 		return $result;
 	}
 }
@@ -1703,12 +1712,14 @@ class CassandraUtil {
 				$value = $arr[1] * 4294967296 + $arr[2];
 			}
 		}
-		return 
-		$value;
+		
+		return $value;
 	}
 	
 	public static function unpackInteger($value) {
-		return unpack('N', $value);
+		$unpacked = unpack('N', $value);
+		
+		return array_pop($unpacked);
 	}
 	
 	public static function unpackString($value, $length) {
@@ -1736,6 +1747,195 @@ class CassandraUtil {
 	}
 }
 
+abstract class CassandraDataIterator implements Iterator {
+	
+	protected $columnFamily;
+	protected $columnParent;
+	protected $slicePredicate;
+	protected $consistency;
+	protected $rowCountLimit;
+	protected $bufferSize;
+	
+	protected $buffer;
+	protected $originalStartKey;
+	protected $nextStartKey;
+	protected $isValid;
+	protected $rowsSeen;
+	protected $expectedPageSize;
+	protected $currentPageSize;
+	
+	public function __construct(
+		CassandraColumnFamily $columnFamily,
+		cassandra_ColumnParent $columnParent,
+		cassandra_SlicePredicate $slicePredicate,
+		$startKey,
+		$consistency,
+		$rowCountLimit,
+		$bufferSize
+	) {
+		$this->columnFamily = $columnFamily;
+		$this->columnParent = $columnParent;
+		$this->slicePredicate = $slicePredicate;
+		$this->consistency = $consistency;
+		$this->rowCountLimit = $rowCountLimit;
+		$this->bufferSize = $bufferSize;
+		$this->originalStartKey = $startKey;
+		$this->nextStartKey = $startKey;
+		
+		if ($rowCountLimit !== null) {
+			$this->bufferSize = min($rowCountLimit, $bufferSize);
+		}
+	}
+	
+	public function current() {
+		return current($this->buffer);
+	}
+	
+	public function key() {
+		return key($this->buffer);
+	}
+	
+	public function next() {
+		$beyondLastRow = false;
+		
+		if (!empty($this->buffer)) {
+			$this->nextStartKey = key($this->buffer);
+			
+			next($this->buffer);
+
+			if (count(current($this->buffer)) == 0) {
+				$this->next();
+			} else {
+				$key = key($this->buffer);
+				
+				if (isset($key)) {
+					$this->rowsSeen++;
+					
+					if (
+						$this->rowCountLimit !== null
+						&& $this->rowsSeen > $this->rowCountLimit
+					) {
+						$this->isValid = false;
+						
+						return;
+					}
+				} else {
+					$beyondLastRow = true;
+				}
+			}
+		} else {
+			$beyondLastRow = true;
+		}
+
+		if ($beyondLastRow) {
+			if ($this->currentPageSize < $this->expectedPageSize) {
+				$this->isValid = false;
+			} else {
+				$this->updateBuffer();
+				
+				if (count($this->buffer) == 1) {
+					$this->isValid = false;
+				} else {
+					$this->next();
+				}
+			}
+		}
+	}
+	
+	public function rewind() {
+		$this->rowsSeen = 0;
+		$this->isValid = true;
+		$this->nextStartKey = $this->originalStartKey;
+		
+		$this->updateBuffer();
+		
+		if (count($this->buffer) == 0) {
+			$this->isValid = false;
+			
+			return;
+		}
+		
+		if (count(current($this->buffer)) == 0) {
+			$this->next();
+		} else {
+			$this->rowsSeen++;
+		}
+	}
+	
+	public function valid() {
+		return $this->isValid;
+	}
+	
+	public function getAll() {
+		$results = array();
+		
+		foreach ($this as $key => $row) {
+			$results[$key] = $row;
+		}
+		
+		return $results;
+	}
+	
+	abstract protected function updateBuffer();
+}
+
+class CassandraIndexedDataIterator extends CassandraDataIterator {
+	
+	protected $indexClause;
+
+	public function __construct(
+		CassandraColumnFamily $columnFamily,
+		cassandra_ColumnParent $columnParent,
+		cassandra_IndexClause $indexClause,
+		cassandra_SlicePredicate $slicePredicate,
+		$consistency,
+		$rowCountLimit,
+		$bufferSize
+	) {
+		parent::__construct(
+			$columnFamily,
+			$columnParent,
+			$slicePredicate,
+			$indexClause->start_key,
+			$consistency,
+			$rowCountLimit, 
+			$bufferSize
+		);
+		
+		$this->indexClause = $indexClause;
+	}
+	
+	protected function updateBuffer() {
+		if ($this->rowCountLimit !== null) {
+			$this->indexClause->count = min(
+				$this->rowCountLimit - $this->rowsSeen + 1,
+				$this->bufferSize
+			);
+		} else {
+			$this->indexClause->count = $this->bufferSize;
+		}
+		
+		$this->expectedPageSize = $this->indexClause->count;
+		$this->indexClause->start_key = $this->nextStartKey;
+		
+		$result = $this->columnFamily->getCassandra()->call(
+			'get_indexed_slices',
+			$this->columnParent,
+			$this->indexClause,
+			$this->slicePredicate,
+			$this->consistency
+		);
+		
+		if (count($result) == 0) {
+			$this->buffer = array();
+		} else {
+			$this->buffer = $this->columnFamily->parseSlicesResponse($result);
+		}
+		
+		$this->currentPageSize = count($this->buffer);
+	}
+}
+
 class CassandraMaxRetriesException extends Exception {};
 class CassandraConnectionClosedException extends Exception {};
 class CassandraConnectionFailedException extends Exception {};
@@ -1743,3 +1943,4 @@ class CassandraSettingKeyspaceFailedException extends Exception {};
 class CassandraColumnFamilyNotFoundException extends Exception {};
 class CassandraInvalidRequestException extends Exception {};
 class CassandraInvalidPatternException extends Exception {};
+class CassandraUnsupportedException extends Exception {};

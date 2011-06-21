@@ -50,7 +50,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 					),
 					array(
 						'name' => 'age',
-						'type' => Cassandra::TYPE_UTF8,
+						'type' => Cassandra::TYPE_INTEGER,
 						'index-type' => Cassandra::INDEX_KEYS,
 						'index-name' => 'AgeIdx'
 					)
@@ -63,7 +63,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				array(
 					array(
 						'name' => 'population',
-						'type' => Cassandra::TYPE_UTF8
+						'type' => Cassandra::TYPE_INTEGER
 					),
 					array(
 						'name' => 'comment',
@@ -482,12 +482,12 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			'cities.Estonia',
 			array(
 				'Tallinn' => array(
-					'population' => '411 980',
+					'population' => '411980',
 					'comment' => 'Capital of Estonia',
 					'size' => 'big'
 				),
 				'Tartu' => array(
-					'population' => '98 589',
+					'population' => '98589',
 					'comment' => 'City of good thoughts',
 					'size' => 'medium'
 				)
@@ -496,7 +496,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals(
 			array(
-				'population' => '98 589',
+				'population' => '98589',
 				'comment' => 'City of good thoughts',
 				'size' => 'medium'
 			),
@@ -525,12 +525,12 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			'cities.Estonia',
 			array(
 				'Tallinn' => array(
-					'population' => '411 980',
+					'population' => '411980',
 					'comment' => 'Capital of Estonia',
 					'size' => 'big'
 				),
 				'Tartu' => array(
-					'population' => '98 589',
+					'population' => '98589',
 					'comment' => 'City of good thoughts',
 					'size' => 'medium'
 				)
@@ -539,7 +539,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals(
 			array(
-				'population' => '98 589',
+				'population' => '98589',
 				'comment' => 'City of good thoughts',
 				'size' => 'medium'
 			),
@@ -548,7 +548,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals(
 			array(
-				'population' => '98 589',
+				'population' => '98589',
 				'size' => 'medium'
 			),
 			$this->c->get('cities.Estonia.Tartu:population,size')
@@ -557,12 +557,12 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(
 			array(
 				'Tallinn' => array(
-					'population' => '411 980',
+					'population' => '411980',
 					'comment' => 'Capital of Estonia',
 					'size' => 'big'
 				),
 				'Tartu' => array(
-					'population' => '98 589',
+					'population' => '98589',
 					'comment' => 'City of good thoughts',
 					'size' => 'medium'
 				)
@@ -604,7 +604,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			array(
 				'email' => 'sheldon@cooper.com',
 				'name' => 'Sheldon Cooper',
-				'age' => 22
+				'age' => 34
 			)
 		);
 		
@@ -619,27 +619,67 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 					'email' => 'john.smith@gmail.com',
 					'name' => 'John Smith',
 					'age' => 34
-				)
-			),
-			$this->c->cf('user')->getWhere(array('age' => 34))
-		);
-		
-		/* WIP
-		$this->assertEquals(
-			array(
-				'jane' => array(
-					'email' => 'jane.doe@gmail.com',
-					'name' => 'Jane Doe',
-					'age' => 24
 				),
 				'sheldon' => array(
 					'email' => 'sheldon@cooper.com',
 					'name' => 'Sheldon Cooper',
-					'age' => 22
+					'age' => 34
 				)
 			),
-			$this->c->cf('user')->getWhere(array(array('age', Cassandra::OP_EQ, 24)))
+			$this->c->cf('user')->getWhere(array('age' => 34))->getAll()
 		);
-		*/
+		
+		$this->assertEquals(
+			array(
+				'chuck' => array(
+					'email' => 'chuck.norris@gmail.com',
+					'name' => 'Chuck Norris'
+				),
+				'john' => array(
+					'email' => 'john.smith@gmail.com',
+					'name' => 'John Smith'
+				)
+			),
+			$this->c->cf('user')->getWhere(
+				array(
+					array(
+						'age',
+						Cassandra::OP_EQ,
+						34
+					),
+					array(
+						'name',
+						Cassandra::OP_LTE,
+						'K'
+					)
+				),
+				array(
+					'name',
+					'email'
+				)
+			)->getAll()
+		);
+	}
+	
+	public function testGetWhereCanReturnManyRows() {
+		for ($i = 0; $i < 2010; $i++) {
+			$this->c->set(
+				'user.test'.$i,
+				array(
+					'email' => 'test'.$i.'@test.com',
+					'name' => 'Test #'.$i,
+					'age' => 50
+				)
+			);
+		}
+		
+		$results = array();
+		$iterator = $this->c->cf('user')->getWhere(array('age' => 50));
+		
+		foreach ($iterator as $key => $row) {
+			$results[$key] = $row;
+		}
+
+		$this->assertEquals(2010, count($results));
 	}
 }
