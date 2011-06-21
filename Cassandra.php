@@ -1129,10 +1129,10 @@ class CassandraColumnFamily {
 	public function getWhere(
 		array $where,
 		$columns = null,
-		$rowCountLimit = null,
 		$startColumn = null,
 		$endColumn = null,
 		$columnsReversed = false,
+		$rowCountLimit = null,
 		$columnCount = 100,
 		$superColumn = null,
 		$consistency = null,
@@ -1159,7 +1159,6 @@ class CassandraColumnFamily {
 			$columnCount
 		);
 		
-		
 		$indexClause = $this->createIndexClause(
 			$where,
 			$startColumn,
@@ -1174,6 +1173,199 @@ class CassandraColumnFamily {
 			$consistency,
 			$rowCountLimit,
 			$bufferSize
+		);
+	}
+	
+	public function getMultiple(
+		array $keys,
+		$columns = null,
+		$startColumn = null,
+		$endColumn = null,
+		$columnsReversed = false,
+		$columnCount = 100,
+		$superColumn = null,
+		$consistency = null,
+		$bufferSize = 512
+	) {
+		if ($columns !== null && $startColumn !== null) {
+			throw new CassandraInvalidRequestException(
+				'You can define either a list of columns or the start and end '.
+				'columns for a range but not both at the same time'
+			);
+		}
+		
+		if ($consistency === null) {
+			$consistency = $this->defaultReadConsistency;
+		}
+		
+		$columnParent = $this->createColumnParent($superColumn);
+
+		$slicePredicate = $this->createSlicePredicate(
+			$columns,
+			$startColumn,
+			$endColumn,
+			$columnsReversed,
+			$columnCount
+		);
+		
+		$results = array();
+		$responses = array();
+		
+		foreach ($keys as $key) {
+			$results[$key] = null;
+		}
+		
+		$keyCount = count($keys);
+		$setCount = ceil($keyCount / $bufferSize);
+		
+		for ($i = 0; $i < $setCount; $i++) {
+			$setKeys = array_slice($keys, $i * $bufferSize, $bufferSize);
+			
+			$setResponse = $this->cassandra->call(
+				'multiget_slice',
+				$setKeys,
+				$columnParent,
+				$slicePredicate,
+				$consistency
+			);
+
+			$responses = array_merge($responses, $setResponse);
+		}
+
+		foreach ($responses as $key => $response) {
+			$results[$key] = $this->parseSliceResponse($response);
+		}
+
+		return $results;
+	}
+	
+	public function getRange(
+		$startKey = null,
+		$endKey = null,
+		$rowCountLimit = null,
+		$columns = null,
+		$startColumn = null,
+		$endColumn = null,
+		$columnsReversed = false,
+		$columnCount = 100,
+		$superColumn = null,
+		$consistency = null,
+		$bufferSize = 512
+	) {
+		if ($columns !== null && $startColumn !== null) {
+			throw new CassandraInvalidRequestException(
+				'You can define either a list of columns or the start and end '.
+				'columns for a range but not both at the same time'
+			);
+		}
+		
+		if ($consistency === null) {
+			$consistency = $this->defaultReadConsistency;
+		}
+		
+		if ($startKey === null) {
+			$startKey = '';
+		}
+		
+		if ($endKey === null) {
+			$endKey = '';
+		}
+		
+		$columnParent = $this->createColumnParent($superColumn);
+
+		$slicePredicate = $this->createSlicePredicate(
+			$columns,
+			$startColumn,
+			$endColumn,
+			$columnsReversed,
+			$columnCount
+		);
+		
+		return new CassandraRangeDataIterator(
+			$this,
+			$columnParent,
+			$slicePredicate,
+			$startKey,
+			$endKey,
+			$consistency,
+			$rowCountLimit,
+			$bufferSize
+		);
+	}
+	
+	public function getColumnCount(
+		$key,
+		$columns = null,
+		$startColumn = null,
+		$endColumn = null,
+		$superColumn = null,
+		$consistency = null	
+	) {
+		if ($columns !== null && $startColumn !== null) {
+			throw new CassandraInvalidRequestException(
+				'You can define either a list of columns or the start and end '.
+				'columns for a range but not both at the same time'
+			);
+		}
+		
+		if ($consistency === null) {
+			$consistency = $this->defaultReadConsistency;
+		}
+		
+		$columnParent = $this->createColumnParent($superColumn);
+
+		$slicePredicate = $this->createSlicePredicate(
+			$columns,
+			$startColumn,
+			$endColumn,
+			false,
+			2147483647
+		);
+
+		return $this->cassandra->call(
+			'get_count',
+			$key,
+			$columnParent,
+			$slicePredicate,
+			$consistency
+		);
+	}
+	
+	public function getColumnCounts(
+		array $keys,
+		$columns = null,
+		$startColumn = null,
+		$endColumn = null,
+		$superColumn = null,
+		$consistency = null	
+	) {
+		if ($columns !== null && $startColumn !== null) {
+			throw new CassandraInvalidRequestException(
+				'You can define either a list of columns or the start and end '.
+				'columns for a range but not both at the same time'
+			);
+		}
+		
+		if ($consistency === null) {
+			$consistency = $this->defaultReadConsistency;
+		}
+		
+		$columnParent = $this->createColumnParent($superColumn);
+
+		$slicePredicate = $this->createSlicePredicate(
+			$columns,
+			$startColumn,
+			$endColumn,
+			false,
+			2147483647
+		);
+
+		return $this->cassandra->call(
+			'multiget_count',
+			$keys,
+			$columnParent,
+			$slicePredicate,
+			$consistency
 		);
 	}
 	
@@ -1462,12 +1654,12 @@ class CassandraColumnFamily {
 	
 	public function parseSlicesResponse(array $response) {
 		$results = array();
-		
-		foreach ($response as $response) {
-			$key = $response->key;
+
+		foreach ($response as $row) {
+			$key = $row->key;
 			$results[$key] = array();
 			
-			foreach ($response->columns as $row) {
+			foreach ($row->columns as $row) {
 				$results[$key] = array_merge(
 					$results[$key],
 					$this->parseSliceRow($row)
@@ -1932,6 +2124,65 @@ class CassandraIndexedDataIterator extends CassandraDataIterator {
 			$this->buffer = $this->columnFamily->parseSlicesResponse($result);
 		}
 		
+		$this->currentPageSize = count($this->buffer);
+	}
+}
+
+class CassandraRangeDataIterator extends CassandraDataIterator {
+	
+	protected $startKey;
+	protected $endKey;
+
+	public function __construct(
+		CassandraColumnFamily $columnFamily,
+		cassandra_ColumnParent $columnParent,
+		cassandra_SlicePredicate $slicePredicate,
+		$startKey,
+		$endKey,
+		$consistency,
+		$rowCountLimit,
+		$bufferSize
+	) {
+		parent::__construct(
+			$columnFamily,
+			$columnParent,
+			$slicePredicate,
+			$startKey,
+			$consistency,
+			$rowCountLimit, 
+			$bufferSize
+		);
+		
+		$this->startKey = $startKey;
+		$this->endKey = $endKey;
+	}
+	
+	protected function updateBuffer() {
+		$bufferSize = $this->bufferSize;
+		
+		if ($this->rowCountLimit !== null) {
+			$bufferSize = min(
+				$this->rowCountLimit - $this->rowsSeen + 1,
+				$this->bufferSize
+			);
+		}
+		
+		$this->expectedPageSize = $bufferSize;
+		
+		$keyRange = new cassandra_KeyRange();
+		$keyRange->start_key = $this->nextStartKey;
+		$keyRange->end_key = $this->endKey;
+		$keyRange->count = $bufferSize;
+		
+		$result = $this->columnFamily->getCassandra()->call(
+			'get_range_slices',
+			$this->columnParent,
+			$this->slicePredicate,
+			$keyRange,
+			$this->consistency
+		);
+		
+		$this->buffer = $this->columnFamily->parseSlicesResponse($result);
 		$this->currentPageSize = count($this->buffer);
 	}
 }

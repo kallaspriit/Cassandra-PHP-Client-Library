@@ -682,4 +682,94 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(2010, count($results));
 	}
+	
+	public function testGetMultipleReturnsSeveralKeysData() {
+		$keys = array();
+		$expected = array();
+		
+		for ($i = 0; $i < 501; $i++) {
+			$key = 'user.test'.$i;
+			
+			$userData = array(
+				'email' => 'test'.$i.'@test.com',
+				'name' => 'Test #'.$i,
+				'age' => 70
+			);
+			
+			$this->c->set(
+				$key,
+				$userData
+			);
+			
+			$expected['test'.$i] = $userData;
+			$keys[] = 'test'.$i;
+		}
+		
+		$this->assertEquals(array(
+			'email' => 'test0@test.com',
+			'name' => 'Test #0',
+			'age' => 70
+		), $this->c->get('user.test0'));
+		
+		$data = $this->c->cf('user')->getMultiple($keys);
+		
+		$this->assertEquals($expected, $data);
+	}
+	
+	public function testRowColumnsCanBeCounted() {
+		$this->c->set(
+			'user.sheldon',
+			array(
+				'email' => 'sheldon@cooper.com',
+				'name' => 'Sheldon Cooper',
+				'age' => 34
+			)
+		);
+		
+		$this->c->set(
+			'user.john',
+			array(
+				'email' => 'john@wayne.com',
+				'name' => 'John Wayne',
+				'age' => 34,
+				'profession' => 'actor'
+			)
+		);
+		
+		$this->assertEquals(
+			array(
+				'sheldon' => 3,
+				'john' => 4
+			),
+			$this->c->cf('user')->getColumnCounts(array('sheldon', 'john'))
+		);
+	}
+	
+	/* Run only with
+	 * partitioner: org.apache.cassandra.dht.CollatingOrderPreservingPartitioner
+	public function testKeysCanBeFetchedByRange() {
+		$expected = array();
+		
+		for ($i = ord('a'); $i < ord('z'); $i++) {
+			$testData = array(
+				'email' => 'test'.$i.'@test.com',
+				'name' => 'Test #'.$i,
+				'age' => 50
+			);
+			
+			$this->c->set(
+				'user.test-'.chr($i),
+				$testData
+			);
+			
+			if ($i >= 101 && $i <= 107) {
+				$expected['test-'.chr($i)] = $testData;
+			}
+		}
+		
+		$data = $this->c->cf('user')->getRange('test-'.chr(101), 'test-'.(chr(107)));
+		
+		$this->assertEquals($expected, $data->getAll());
+	}
+	*/
 }
