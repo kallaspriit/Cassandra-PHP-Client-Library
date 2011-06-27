@@ -92,7 +92,7 @@ class CassandraConnection {
 	) {
 		$attempts = 3;
 		$success = false;
-		
+
 		while($attempts-- > 0 && !$success) {
 			try {
 				$this->client->set_keyspace($keyspace);
@@ -196,6 +196,8 @@ class CassandraCluster {
 		$this->username = $username;
 		$this->password = $password;
 		
+		$this->getConnection();
+
 		foreach ($this->connections as $connection) {
 			$connection->useKeyspace(
 				$keyspace,
@@ -783,6 +785,10 @@ class Cassandra {
 		$def->memtable_operations_in_millions = $memtableFlushAfterOpsMillions;
 
 		return $this->call('system_add_column_family', $def);
+	}
+	
+	public function truncate($columnFamilyName) {
+		return $this->call('truncate', $columnFamilyName);
 	}
 	
 	public static function getKeyspaceRequiredMethods() {
@@ -1973,6 +1979,7 @@ abstract class CassandraDataIterator implements Iterator {
 		$this->bufferSize = $bufferSize;
 		$this->originalStartKey = $startKey;
 		$this->nextStartKey = $startKey;
+		$this->buffer = null;
 		
 		if ($rowCountLimit !== null) {
 			$this->bufferSize = min($rowCountLimit, $bufferSize);
@@ -2061,8 +2068,15 @@ abstract class CassandraDataIterator implements Iterator {
 	public function getAll() {
 		$results = array();
 		
-		foreach ($this as $key => $row) {
-			$results[$key] = $row;
+		$this->rewind();
+		
+		while ($this->valid()) {
+			$key = $this->key();
+			$value = $this->current();
+			
+			$results[$key] = $value;
+			
+			$this->next();
 		}
 		
 		return $results;
@@ -2187,11 +2201,11 @@ class CassandraRangeDataIterator extends CassandraDataIterator {
 	}
 }
 
-class CassandraMaxRetriesException extends Exception {};
-class CassandraConnectionClosedException extends Exception {};
-class CassandraConnectionFailedException extends Exception {};
-class CassandraSettingKeyspaceFailedException extends Exception {};
-class CassandraColumnFamilyNotFoundException extends Exception {};
-class CassandraInvalidRequestException extends Exception {};
-class CassandraInvalidPatternException extends Exception {};
-class CassandraUnsupportedException extends Exception {};
+class CassandraMaxRetriesException				extends Exception {};
+class CassandraConnectionClosedException		extends Exception {};
+class CassandraConnectionFailedException		extends Exception {};
+class CassandraSettingKeyspaceFailedException	extends Exception {};
+class CassandraColumnFamilyNotFoundException	extends Exception {};
+class CassandraInvalidRequestException			extends Exception {};
+class CassandraInvalidPatternException			extends Exception {};
+class CassandraUnsupportedException				extends Exception {};

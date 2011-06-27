@@ -148,6 +148,106 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		$connection->getClient();
 	}
 	
+	/**
+	 * @expectedException CassandraUnsupportedException
+	 */
+	public function testExceptionThrownUsingIndexesOnSuperColumns() {
+		$this->c->createSuperColumnFamily(
+			'CassandraTest',
+			'cities2',
+			array(
+				array(
+					'name' => 'population',
+					'type' => Cassandra::TYPE_INTEGER,
+					'index-type' => Cassandra::INDEX_KEYS,
+					'index-name' => 'PopulationIdx'
+				),
+				array(
+					'name' => 'comment',
+					'type' => Cassandra::TYPE_UTF8
+				)
+			),
+			Cassandra::TYPE_UTF8,
+			Cassandra::TYPE_UTF8,
+			Cassandra::TYPE_UTF8,
+			'Capitals supercolumn test',
+			1000,
+			1000,
+			0.5
+		);
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidRequestException
+	 */
+	public function testExceptionThrownOnInvalidColumnsRequest() {
+		$this->c->cf('user')->getWhere(
+			array('age' => 20),
+			array('name', 'email'),
+			'name',
+			'email'
+		);
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidRequestException
+	 */
+	public function testExceptionThrownOnInvalidColumnsRequest2() {
+		$this->c->cf('user')->getWhere(
+			array(array('age', -1, 20))
+		);
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidRequestException
+	 */
+	public function testExceptionThrownOnInvalidColumnsRequest3() {
+		$this->c->cf('user')->getMultiple(
+			array('user1', 'user2'),
+			array('name', 'email'),
+			'name',
+			'email'
+		);
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidRequestException
+	 */
+	public function testExceptionThrownOnInvalidColumnsRequest4() {
+		$this->c->cf('user')->getRange(
+			'user1',
+			'userN',
+			100,
+			array('name', 'email'),
+			'name',
+			'email'
+		);
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidRequestException
+	 */
+	public function testExceptionThrownOnInvalidColumnsRequest5() {
+		$this->c->cf('user')->getColumnCount(
+			'sheldon',
+			array('name', 'email'),
+			'name',
+			'email'
+		);
+	}
+	
+	/**
+	 * @expectedException CassandraInvalidRequestException
+	 */
+	public function testExceptionThrownOnInvalidColumnsRequest6() {
+		$this->c->cf('user')->getColumnCounts(
+			array('sheldon', 'john'),
+			array('name', 'email'),
+			'name',
+			'email'
+		);
+	}
+	
 	public function testFramedOrBufferedTransportIsAvailable() {
 		$framed = new CassandraConnection('127.0.0.1', 9160, true, 1000, 1000);
 		$buffered = new CassandraConnection('127.0.0.1', 9160, false);
@@ -726,6 +826,22 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
+		$this->assertEquals(
+			3,
+			$this->c->cf('user')->getColumnCount('sheldon')
+		);
+	}
+	
+	public function testRowColumnsCanBeCounted2() {
+		$this->c->set(
+			'user.sheldon',
+			array(
+				'email' => 'sheldon@cooper.com',
+				'name' => 'Sheldon Cooper',
+				'age' => 34
+			)
+		);
+		
 		$this->c->set(
 			'user.john',
 			array(
@@ -745,16 +861,19 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 	
-	/* Run only with
-	 * partitioner: org.apache.cassandra.dht.CollatingOrderPreservingPartitioner
+	//* Run only with
+	// * partitioner: org.apache.cassandra.dht.CollatingOrderPreservingPartitioner
 	public function testKeysCanBeFetchedByRange() {
 		$expected = array();
+		$expected2 = array();
+		
+		$this->c->truncate('user');
 		
 		for ($i = ord('a'); $i < ord('z'); $i++) {
 			$testData = array(
+				'age' => 50,
 				'email' => 'test'.$i.'@test.com',
-				'name' => 'Test #'.$i,
-				'age' => 50
+				'name' => 'Test #'.$i
 			);
 			
 			$this->c->set(
@@ -768,8 +887,34 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		}
 		
 		$data = $this->c->cf('user')->getRange('test-'.chr(101), 'test-'.(chr(107)));
-		
-		$this->assertEquals($expected, $data->getAll());
+		$results = $data->getAll();
+
+		$this->assertEquals($expected, $results);
 	}
-	*/
+	
+	public function testKeysCanBeFetchedByRange2() {
+		$expected = array();
+		
+		$this->c->truncate('user');
+		
+		for ($i = ord('a'); $i < ord('z'); $i++) {
+			$testData = array(
+				'age' => 50,
+				'email' => 'test'.$i.'@test.com',
+				'name' => 'Test #'.$i
+			);
+			
+			$this->c->set(
+				'user.test-'.chr($i),
+				$testData
+			);
+			$expected['test-'.chr($i)] = $testData;
+		}
+		
+		$data = $this->c->cf('user')->getRange();
+		$results = $data->getAll();
+		
+		$this->assertEquals($expected, $results);
+	}
+
 }
