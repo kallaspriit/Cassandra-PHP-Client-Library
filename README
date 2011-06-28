@@ -20,6 +20,9 @@ The following example covers most of what you need to know to use this library.
 It should work out-of-box on a machine with default cassandra setup running. The
 example file is contained in the download.
 
+Open https://github.com/kallaspriit/Cassandra-PHP-Client/blob/master/example.php
+for prettier code.
+
 <?php
 
 // the only file that needs including into your project
