@@ -9,7 +9,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @var Cassandra
 	 */
-	protected $c;
+	protected $cassandra;
 	
 	protected static $setupComplete = false;
 	
@@ -23,18 +23,18 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
-		$this->c = Cassandra::createInstance($this->servers);
+		$this->cassandra = Cassandra::createInstance($this->servers);
 		
 		if (!self::$setupComplete) {
 			try {
-				$this->c->dropKeyspace('CassandraTest');
+				$this->cassandra->dropKeyspace('CassandraTest');
 			} catch (Exception $e) {}
 
-			$this->c->setMaxCallRetries(5);
-			$this->c->createKeyspace('CassandraTest');
-			$this->c->useKeyspace('CassandraTest');
+			$this->cassandra->setMaxCallRetries(5);
+			$this->cassandra->createKeyspace('CassandraTest');
+			$this->cassandra->useKeyspace('CassandraTest');
 			
-			$this->c->createStandardColumnFamily(
+			$this->cassandra->createStandardColumnFamily(
 				'CassandraTest',
 				'user',
 				array(
@@ -57,7 +57,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				)
 			);
 			
-			$this->c->createSuperColumnFamily(
+			$this->cassandra->createSuperColumnFamily(
 				'CassandraTest',
 				'cities',
 				array(
@@ -81,21 +81,21 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			
 			self::$setupComplete = true;
 		} else {
-			$this->c->useKeyspace('CassandraTest');
+			$this->cassandra->useKeyspace('CassandraTest');
 		}
 	}
 	
 	public function tearDown() {
-		unset($this->c);
+		unset($this->cassandra);
 		apc_clear_cache();
 	}
 	
 	public function testKeyspaceCanBeUpdated() {
 		try {
-			$this->c->dropKeyspace('CassandraTest2');
+			$this->cassandra->dropKeyspace('CassandraTest2');
 		} catch (Exception $e) {}
 		
-		$this->c->createKeyspace('CassandraTest2');
+		$this->cassandra->createKeyspace('CassandraTest2');
 		
 		$this->assertEquals(array(
 			'column-families' => array(),
@@ -103,9 +103,9 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			'placement-strategy' => 'org.apache.cassandra.locator.SimpleStrategy',
 			'placement-strategy-options' => array('replication_factor' => 1),
 			'replication-factor' => 1,
-		), $this->c->getKeyspaceSchema('CassandraTest2', false));
+		), $this->cassandra->getKeyspaceSchema('CassandraTest2', false));
 		
-		$this->c->updateKeyspace(
+		$this->cassandra->updateKeyspace(
 			'CassandraTest2',
 			1,
 			Cassandra::PLACEMENT_NETWORK,
@@ -121,14 +121,14 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'DC1' => 2
 			),
 			'replication-factor' => null
-		), $this->c->getKeyspaceSchema('CassandraTest2', false));
+		), $this->cassandra->getKeyspaceSchema('CassandraTest2', false));
 	}
 	
 	/**
 	 * @expectedException CassandraColumnFamilyNotFoundException
 	 */
 	public function testExceptionThrownOnGetUnexistingSchema() {
-		$cf = new CassandraColumnFamily($this->c, 'foobar');
+		$cf = new CassandraColumnFamily($this->cassandra, 'foobar');
 		$cf->getSchema();
 	}
 	
@@ -136,14 +136,14 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraConnectionClosedException
 	 */
 	public function testGetClientThrowsExceptionIfConnectionClosed() {
-		$connection = $this->c->getConnection();
+		$connection = $this->cassandra->getConnection();
 		$client = $connection->getClient();
 		
 		if (!($client instanceof CassandraClient)) {
 			$this->fail('Instance of CassandraClient expected');
 		}
 		
-		$this->c->closeConnections();
+		$this->cassandra->closeConnections();
 		
 		$connection->getClient();
 	}
@@ -152,7 +152,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraUnsupportedException
 	 */
 	public function testExceptionThrownUsingIndexesOnSuperColumns() {
-		$this->c->createSuperColumnFamily(
+		$this->cassandra->createSuperColumnFamily(
 			'CassandraTest',
 			'cities2',
 			array(
@@ -181,7 +181,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testExceptionThrownOnInvalidColumnsRequest() {
-		$this->c->cf('user')->getWhere(
+		$this->cassandra->cf('user')->getWhere(
 			array('age' => 20),
 			array('name', 'email'),
 			'name',
@@ -193,7 +193,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testExceptionThrownOnInvalidColumnsRequest2() {
-		$this->c->cf('user')->getWhere(
+		$this->cassandra->cf('user')->getWhere(
 			array(array('age', -1, 20))
 		);
 	}
@@ -202,7 +202,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testExceptionThrownOnInvalidColumnsRequest3() {
-		$this->c->cf('user')->getMultiple(
+		$this->cassandra->cf('user')->getMultiple(
 			array('user1', 'user2'),
 			array('name', 'email'),
 			'name',
@@ -214,7 +214,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testExceptionThrownOnInvalidColumnsRequest4() {
-		$this->c->cf('user')->getRange(
+		$this->cassandra->cf('user')->getRange(
 			'user1',
 			'userN',
 			100,
@@ -228,7 +228,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testExceptionThrownOnInvalidColumnsRequest5() {
-		$this->c->cf('user')->getColumnCount(
+		$this->cassandra->cf('user')->getColumnCount(
 			'sheldon',
 			array('name', 'email'),
 			'name',
@@ -240,7 +240,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testExceptionThrownOnInvalidColumnsRequest6() {
-		$this->c->cf('user')->getColumnCounts(
+		$this->cassandra->cf('user')->getColumnCounts(
 			array('sheldon', 'john'),
 			array('name', 'email'),
 			'name',
@@ -262,21 +262,21 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testCanAuthenticateToKeyspace() {
-		$this->c->useKeyspace('CassandraTest', 'admin', 'qwerty');
-		$this->c->getKeyspaceSchema();
+		$this->cassandra->useKeyspace('CassandraTest', 'admin', 'qwerty');
+		$this->cassandra->getKeyspaceSchema();
 	}
 	
 	/**
 	 * @expectedException CassandraSettingKeyspaceFailedException
 	 */
 	public function testExceptionThrownIfUnabletToSelectKeyspace() {
-		$this->c->useKeyspace('foobar');
-		$this->c->getKeyspaceSchema();
+		$this->cassandra->useKeyspace('foobar');
+		$this->cassandra->getKeyspaceSchema();
 	}
 	
 	public function testClusterKnowsActiveKeyspace() {
 		$this->assertEquals(
-			$this->c->getCluster()->getCurrentKeyspace(),
+			$this->cassandra->getCluster()->getCurrentKeyspace(),
 			'CassandraTest'
 		);
 	}
@@ -293,13 +293,13 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		);
 		
 		$this->assertEquals(
-			$this->c->getCluster()->getServers(),
+			$this->cassandra->getCluster()->getServers(),
 			$servers
 		);
 	}
 	
 	public function testReturnsServerVersion() {
-		$this->assertNotEmpty($this->c->getVersion());
+		$this->assertNotEmpty($this->cassandra->getVersion());
 	}
 	
 	/**
@@ -312,11 +312,11 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testClosedConnectionsAreRemovedFromCluster() {
-		$connection = $this->c->getConnection();
+		$connection = $this->cassandra->getConnection();
 		
 		$connection->close();
 		
-		$this->c->getConnection();
+		$this->cassandra->getConnection();
 	}
 	
 	/**
@@ -337,12 +337,12 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	public function testGetInstanceReturnsInstanceByName() {
 		$this->assertEquals(
 			Cassandra::getInstance(),
-			$this->c
+			$this->cassandra
 		);
 		
 		$this->assertEquals(
 			Cassandra::getInstance('main'),
-			$this->c
+			$this->cassandra
 		);
 	}
 	
@@ -354,16 +354,16 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testUseKeyspaceCanSkipAuthOnSecondCall() {
-		$this->c->useKeyspace('CassandraTest', 'admin', 'qwerty');
-		$this->c->useKeyspace('CassandraTest');
+		$this->cassandra->useKeyspace('CassandraTest', 'admin', 'qwerty');
+		$this->cassandra->useKeyspace('CassandraTest');
 	}
 	
 	public function testMaxCallRetriesCanBeSet() {
-		$this->c->setMaxCallRetries(3);
-		$this->c->setDefaultColumnCount(50);
+		$this->cassandra->setMaxCallRetries(3);
+		$this->cassandra->setDefaultColumnCount(50);
 		
 		try {
-			$this->c->call('foobar');
+			$this->cassandra->call('foobar');
 		} catch (Exception $e) {
 			$this->assertEquals(
 				$e->getMessage(),
@@ -382,7 +382,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testReturnsKeyspaceDescription() {
-		$info = $this->c->describeKeyspace();
+		$info = $this->cassandra->describeKeyspace();
 		
 		$this->assertEquals(
 			$info->name,
@@ -391,8 +391,8 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testReturnsKeyspaceSchema() {
-		$info = $this->c->getKeyspaceSchema('CassandraTest', true);
-		$this->c->getKeyspaceSchema(); // coverage
+		$info = $this->cassandra->getKeyspaceSchema('CassandraTest', true);
+		$this->cassandra->getKeyspaceSchema(); // coverage
 		
 		$this->assertEquals(
 			$info['column-families']['user']['name'],
@@ -408,7 +408,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	}
 	
 	public function testStoresAndFetchesStandardColumns() {
-		$this->c->set(
+		$this->cassandra->set(
 			'user.foobar',
 			array(
 				'email' => 'foobar@gmail.com',
@@ -417,7 +417,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
-		$this->c->set(
+		$this->cassandra->set(
 			'user.'.'foo.bar',
 			array(
 				'email' => 'other@gmail.com',
@@ -426,7 +426,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
-		$this->c->set(
+		$this->cassandra->set(
 			'user.'.'foo.bar',
 			array(
 				'email' => 'other@gmail.com',
@@ -441,7 +441,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'John Smith',
 				'age' => 23
 			),
-			$this->c->get('user.foobar')
+			$this->cassandra->get('user.foobar')
 		);
 		
 		$this->assertEquals(
@@ -450,14 +450,14 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'Jane Doe',
 				'age' => 18
 			),
-			$this->c->get('user.'.Cassandra::escape('foo.bar'))
+			$this->cassandra->get('user.'.Cassandra::escape('foo.bar'))
 		);
 		
 		$this->assertEquals(
 			array(
 				'email' => 'foobar@gmail.com'
 			),
-			$this->c->get('user.foobar:email')
+			$this->cassandra->get('user.foobar:email')
 		);
 		
 		$this->assertEquals(
@@ -465,7 +465,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'email' => 'foobar@gmail.com',
 				'age' => 23
 			),
-			$this->c->get('user.foobar:email,age')
+			$this->cassandra->get('user.foobar:email,age')
 		);
 		
 		$this->assertEquals(
@@ -473,16 +473,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'email' => 'foobar@gmail.com',
 				'age' => 23
 			),
-			$this->c->get('user.foobar:email, age')
-		);
-		
-		$this->assertEquals(
-			array(
-				'email' => 'foobar@gmail.com',
-				'name' => 'John Smith',
-				'age' => 23
-			),
-			$this->c->get('user.foobar:age-name')
+			$this->cassandra->get('user.foobar:email, age')
 		);
 		
 		$this->assertEquals(
@@ -491,7 +482,16 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'John Smith',
 				'age' => 23
 			),
-			$this->c->get('user.foobar:a-o')
+			$this->cassandra->get('user.foobar:age-name')
+		);
+		
+		$this->assertEquals(
+			array(
+				'email' => 'foobar@gmail.com',
+				'name' => 'John Smith',
+				'age' => 23
+			),
+			$this->cassandra->get('user.foobar:a-o')
 		);
 		
 		$this->assertEquals(
@@ -499,7 +499,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'email' => 'foobar@gmail.com',
 				'age' => 23
 			),
-			$this->c->get('user.foobar:a-f')
+			$this->cassandra->get('user.foobar:a-f')
 		);
 		
 		$this->assertEquals(
@@ -507,7 +507,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'email' => 'foobar@gmail.com',
 				'age' => 23
 			),
-			$this->c->get('user.foobar:a-z|2')
+			$this->cassandra->get('user.foobar:a-z|2')
 		);
 		
 		
@@ -516,7 +516,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'age' => 23,
 				'email' => 'foobar@gmail.com'
 			),
-			$this->c->get('user.foobar|2')
+			$this->cassandra->get('user.foobar|2')
 		);
 		
 		$this->assertEquals(
@@ -524,7 +524,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'John Smith',
 				'email' => 'foobar@gmail.com',
 			),
-			$this->c->get('user.foobar:z-a|2R')
+			$this->cassandra->get('user.foobar:z-a|2R')
 		);
 		
 		$this->assertEquals(
@@ -532,7 +532,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'John Smith',
 				'email' => 'foobar@gmail.com',
 			),
-			$this->c->get('user.foobar|2R')
+			$this->cassandra->get('user.foobar|2R')
 		);
 	}
 	
@@ -540,32 +540,32 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidPatternException
 	 */
 	public function testInvalidGetPatternThrowsException() {
-		$this->c->get('foo#bar');
+		$this->cassandra->get('foo#bar');
 	}
 	
 	/**
 	 * @expectedException CassandraInvalidPatternException
 	 */
 	public function testInvalidGetPatternThrowsException2() {
-		$this->c->get('user.foobar:a-f-z');
+		$this->cassandra->get('user.foobar:a-f-z');
 	}
 	
 	/**
 	 * @expectedException CassandraInvalidPatternException
 	 */
 	public function testSetWithoutColumnFamilyThrowsException() {
-		$this->c->set('foo', array('foo' => 'bar'));
+		$this->cassandra->set('foo', array('foo' => 'bar'));
 	}
 	
 	/**
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testGetWithColumnsAndColumnRangeThrowsException() {
-		$this->c->cf('user')->get('test', array('col1', 'col2'), 'start');
+		$this->cassandra->cf('user')->get('test', array('col1', 'col2'), 'start');
 	}
 	
 	public function testGettingNonexistingKeyReturnsNull() {
-		$this->assertNull($this->c->get('user.x'));
+		$this->assertNull($this->cassandra->get('user.x'));
 	}
 	
 	public function testGetAllReturnsAllColumns() {
@@ -575,10 +575,10 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'John Smith',
 				'age' => 23
 			),
-			$this->c->cf('user')->getAll('foobar')
+			$this->cassandra->cf('user')->getAll('foobar')
 		);
 		
-		$this->c->set(
+		$this->cassandra->set(
 			'cities.Estonia',
 			array(
 				'Tallinn' => array(
@@ -600,7 +600,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'comment' => 'City of good thoughts',
 				'size' => 'medium'
 			),
-			$this->c->cf('cities')->getAll('Estonia', 'Tartu')
+			$this->cassandra->cf('cities')->getAll('Estonia', 'Tartu')
 		);
 		
 		$this->assertEquals(
@@ -608,7 +608,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'email' => 'foobar@gmail.com',
 				'name' => 'John Smith'
 			),
-			$this->c->cf('user')->getColumns('foobar', array('email', 'name'))
+			$this->cassandra->cf('user')->getColumns('foobar', array('email', 'name'))
 		);
 		
 		$this->assertEquals(
@@ -616,12 +616,12 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'age' => 23,
 				'email' => 'foobar@gmail.com',
 			),
-			$this->c->cf('user')->getColumnRange('foobar', 'age', 'email')
+			$this->cassandra->cf('user')->getColumnRange('foobar', 'age', 'email')
 		);
 	}
 	
 	public function testStoresAndFetchesSuperColumns() {
-		$this->c->set(
+		$this->cassandra->set(
 			'cities.Estonia',
 			array(
 				'Tallinn' => array(
@@ -643,7 +643,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'comment' => 'City of good thoughts',
 				'size' => 'medium'
 			),
-			$this->c->get('cities.Estonia.Tartu')
+			$this->cassandra->get('cities.Estonia.Tartu')
 		);
 		
 		$this->assertEquals(
@@ -651,7 +651,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'population' => '98589',
 				'size' => 'medium'
 			),
-			$this->c->get('cities.Estonia.Tartu:population,size')
+			$this->cassandra->get('cities.Estonia.Tartu:population,size')
 		);
 		
 		$this->assertEquals(
@@ -667,12 +667,12 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 					'size' => 'medium'
 				)
 			),
-			$this->c->get('cities.Estonia[]')
+			$this->cassandra->get('cities.Estonia[]')
 		);
 	}
 	
 	public function testDataCanBeRequestedUsingIndexes() {
-		$this->c->set(
+		$this->cassandra->set(
 			'user.john',
 			array(
 				'email' => 'john.smith@gmail.com',
@@ -681,7 +681,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
-		$this->c->set(
+		$this->cassandra->set(
 			'user.jane',
 			array(
 				'email' => 'jane.doe@gmail.com',
@@ -690,7 +690,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
-		$this->c->set(
+		$this->cassandra->set(
 			'user.chuck',
 			array(
 				'email' => 'chuck.norris@gmail.com',
@@ -699,7 +699,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
-		$this->c->set(
+		$this->cassandra->set(
 			'user.sheldon',
 			array(
 				'email' => 'sheldon@cooper.com',
@@ -726,7 +726,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 					'age' => 34
 				)
 			),
-			$this->c->cf('user')->getWhere(array('age' => 34))->getAll()
+			$this->cassandra->cf('user')->getWhere(array('age' => 34))->getAll()
 		);
 		
 		$this->assertEquals(
@@ -740,7 +740,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 					'name' => 'John Smith'
 				)
 			),
-			$this->c->cf('user')->getWhere(
+			$this->cassandra->cf('user')->getWhere(
 				array(
 					array(
 						'age',
@@ -763,7 +763,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	
 	public function testGetWhereCanReturnManyRows() {
 		for ($i = 0; $i < 2010; $i++) {
-			$this->c->set(
+			$this->cassandra->set(
 				'user.test'.$i,
 				array(
 					'email' => 'test'.$i.'@test.com',
@@ -774,7 +774,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		}
 		
 		$results = array();
-		$iterator = $this->c->cf('user')->getWhere(array('age' => 50));
+		$iterator = $this->cassandra->cf('user')->getWhere(array('age' => 50));
 		
 		foreach ($iterator as $key => $row) {
 			$results[$key] = $row;
@@ -796,7 +796,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'age' => 70
 			);
 			
-			$this->c->set(
+			$this->cassandra->set(
 				$key,
 				$userData
 			);
@@ -809,15 +809,15 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			'email' => 'test0@test.com',
 			'name' => 'Test #0',
 			'age' => 70
-		), $this->c->get('user.test0'));
+		), $this->cassandra->get('user.test0'));
 		
-		$data = $this->c->cf('user')->getMultiple($keys);
+		$data = $this->cassandra->cf('user')->getMultiple($keys);
 		
 		$this->assertEquals($expected, $data);
 	}
 	
 	public function testRowColumnsCanBeCounted() {
-		$this->c->set(
+		$this->cassandra->set(
 			'user.sheldon',
 			array(
 				'email' => 'sheldon@cooper.com',
@@ -828,12 +828,12 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		
 		$this->assertEquals(
 			3,
-			$this->c->cf('user')->getColumnCount('sheldon')
+			$this->cassandra->cf('user')->getColumnCount('sheldon')
 		);
 	}
 	
 	public function testRowColumnsCanBeCounted2() {
-		$this->c->set(
+		$this->cassandra->set(
 			'user.sheldon',
 			array(
 				'email' => 'sheldon@cooper.com',
@@ -842,7 +842,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			)
 		);
 		
-		$this->c->set(
+		$this->cassandra->set(
 			'user.john',
 			array(
 				'email' => 'john@wayne.com',
@@ -857,7 +857,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'sheldon' => 3,
 				'john' => 4
 			),
-			$this->c->cf('user')->getColumnCounts(array('sheldon', 'john'))
+			$this->cassandra->cf('user')->getColumnCounts(array('sheldon', 'john'))
 		);
 	}
 	
@@ -867,7 +867,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		$expected = array();
 		$expected2 = array();
 		
-		$this->c->truncate('user');
+		$this->cassandra->truncate('user');
 		
 		for ($i = ord('a'); $i < ord('z'); $i++) {
 			$testData = array(
@@ -876,7 +876,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'Test #'.$i
 			);
 			
-			$this->c->set(
+			$this->cassandra->set(
 				'user.test-'.chr($i),
 				$testData
 			);
@@ -886,7 +886,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			}
 		}
 		
-		$data = $this->c->cf('user')->getRange('test-'.chr(101), 'test-'.(chr(107)));
+		$data = $this->cassandra->cf('user')->getRange('test-'.chr(101), 'test-'.(chr(107)));
 		$results = $data->getAll();
 
 		$this->assertEquals($expected, $results);
@@ -895,7 +895,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	public function testKeysCanBeFetchedByRange2() {
 		$expected = array();
 		
-		$this->c->truncate('user');
+		$this->cassandra->truncate('user');
 		
 		for ($i = ord('a'); $i < ord('z'); $i++) {
 			$testData = array(
@@ -904,14 +904,14 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'name' => 'Test #'.$i
 			);
 			
-			$this->c->set(
+			$this->cassandra->set(
 				'user.test-'.chr($i),
 				$testData
 			);
 			$expected['test-'.chr($i)] = $testData;
 		}
 		
-		$data = $this->c->cf('user')->getRange();
+		$data = $this->cassandra->cf('user')->getRange();
 		$results = $data->getAll();
 		
 		$this->assertEquals($expected, $results);

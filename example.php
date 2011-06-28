@@ -1,25 +1,3 @@
-Cassandra PHP-based client library for managing and querying your Cassandra
-cluster. It's a high-level library performing all the rather complex low-level
-lifting and providing a simple to learn and use interface.
-
-Features:
-- simple and intuitive interface
-- well covered with unit tests (>90%)
-- support for multiple server pools using named singletons
-- requires including a single file
-- uses reasonable defaults through-out
-- powerful syntax for querying data
-- enables managing keyspaces and column-families
-- automatic packing of datatypes using column metadata
-- retries failed queries using back-off strategy
-- built with performance in mind (caches schema description etc)
-- well documented API and a working example
-
-
-The following example covers most of what you need to know to use this library.
-It should work out-of-box on a machine with default cassandra setup running. The
-example file is contained in the download.
-
 <?php
 
 // the only file that needs including into your project
@@ -262,5 +240,3 @@ $cassandra->truncate('user');
 
 // you may choose to drop an entire keyspace
 $cassandra->dropKeyspace('CassandraExample');
-
-?>

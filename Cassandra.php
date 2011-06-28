@@ -327,6 +327,16 @@ class Cassandra {
 		$this->autopack = $autopack;
 	}
 	
+	/**
+	 * Creates a new named cassandra instance.
+	 * 
+	 * The name can be used in {@see Cassandra::getInstance()} to fetch the
+	 * named singleton anywhere in the project.
+	 * 
+	 * @param array $servers List of seed servers to connect to
+	 * @param type $name Name of the instance
+	 * @return Cassandra New cassandra instance
+	 */
 	public static function createInstance(array $servers, $name = 'main') {
 		self::$instances[$name] = new self($servers);
 		
@@ -540,6 +550,10 @@ class Cassandra {
 		}
 		
 		return $this->columnFamilies[$name];
+	}
+	
+	public function columnFamily($name) {
+		return $this->cf($name);
 	}
 	
 	/**
