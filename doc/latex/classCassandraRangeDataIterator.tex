@@ -1,0 +1,162 @@
+\hypertarget{classCassandraRangeDataIterator}{
+\section{CassandraRangeDataIterator Class Reference}
+\label{classCassandraRangeDataIterator}\index{CassandraRangeDataIterator@{CassandraRangeDataIterator}}
+}
+Inheritance diagram for CassandraRangeDataIterator:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classCassandraRangeDataIterator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraRangeDataIterator_a89ad9afec67135eed73321396c6581b1}{\_\-\_\-construct} (\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} \$columnFamily, cassandra\_\-ColumnParent \$columnParent, cassandra\_\-SlicePredicate \$slicePredicate, \$startKey, \$endKey, \$consistency, \$rowCountLimit, \$bufferSize)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraRangeDataIterator_a743234ebb424200a5c3d7473ce95dbba}{updateBuffer} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandraRangeDataIterator_ac977d1d6c76e705920dc8394a00009c5}{
+{\bfseries \$startKey}}
+\label{classCassandraRangeDataIterator_ac977d1d6c76e705920dc8394a00009c5}
+
+\item 
+\hypertarget{classCassandraRangeDataIterator_acd5cccd82a215f9a2becd2cf4f635a50}{
+{\bfseries \$endKey}}
+\label{classCassandraRangeDataIterator_acd5cccd82a215f9a2becd2cf4f635a50}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Key range data iterator. 
+
+Definition at line 3537 of file Cassandra.php.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classCassandraRangeDataIterator_a89ad9afec67135eed73321396c6581b1}{
+\index{CassandraRangeDataIterator@{CassandraRangeDataIterator}!\_\-\_\-construct@{\_\-\_\-construct}}
+\index{\_\-\_\-construct@{\_\-\_\-construct}!CassandraRangeDataIterator@{CassandraRangeDataIterator}}
+\subsubsection[{\_\-\_\-construct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraRangeDataIterator::\_\-\_\-construct (
+\begin{DoxyParamCaption}
+\item[{{\bf CassandraColumnFamily} \$}]{columnFamily, }
+\item[{cassandra\_\-ColumnParent \$}]{columnParent, }
+\item[{cassandra\_\-SlicePredicate \$}]{slicePredicate, }
+\item[{\$}]{startKey, }
+\item[{\$}]{endKey, }
+\item[{\$}]{consistency, }
+\item[{\$}]{rowCountLimit, }
+\item[{\$}]{bufferSize}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraRangeDataIterator_a89ad9afec67135eed73321396c6581b1}
+Sets the information needed to iterate the data in batches.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} & {\em \$columnFamily} & Column family \\
+\hline
+cassandra\_\-ColumnParent & {\em \$columnParent} & Parent column \\
+\hline
+cassandra\_\-SlicePredicate & {\em \$slicePredicate} & Slice predicate \\
+\hline
+type & {\em \$startKey} & Key to start fetching data from \\
+\hline
+type & {\em \$emdKey} & Last key to fetch in a range \\
+\hline
+type & {\em \$consistency} & Consistency to use \\
+\hline
+type & {\em \$rowCountLimit} & Maximum number or rows to fetch \\
+\hline
+type & {\em \$bufferSize} & How many rows to fetch in a single request \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 3565 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        parent::__construct(
+            $columnFamily,
+            $columnParent,
+            $slicePredicate,
+            $startKey,
+            $consistency,
+            $rowCountLimit, 
+            $bufferSize
+        );
+        
+        $this->startKey = $startKey;
+        $this->endKey = $endKey;
+    }
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandraRangeDataIterator_a743234ebb424200a5c3d7473ce95dbba}{
+\index{CassandraRangeDataIterator@{CassandraRangeDataIterator}!updateBuffer@{updateBuffer}}
+\index{updateBuffer@{updateBuffer}!CassandraRangeDataIterator@{CassandraRangeDataIterator}}
+\subsubsection[{updateBuffer}]{\setlength{\rightskip}{0pt plus 5cm}CassandraRangeDataIterator::updateBuffer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandraRangeDataIterator_a743234ebb424200a5c3d7473ce95dbba}
+Updates the internal buffer, fetching new ranged data.
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classCassandraDataIterator_a20435cd4a3a06df86d62f9975933c808}{CassandraDataIterator}.
+
+
+
+Definition at line 3594 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                      {
+        $bufferSize = $this->bufferSize;
+        
+        if ($this->rowCountLimit !== null) {
+            $bufferSize = min(
+                $this->rowCountLimit - $this->rowsSeen + 1,
+                $this->bufferSize
+            );
+        }
+        
+        $this->expectedPageSize = $bufferSize;
+        
+        $keyRange = new cassandra_KeyRange();
+        $keyRange->start_key = $this->nextStartKey;
+        $keyRange->end_key = $this->endKey;
+        $keyRange->count = $bufferSize;
+        
+        $result = $this->columnFamily->getCassandra()->call(
+            'get_range_slices',
+            $this->columnParent,
+            $this->slicePredicate,
+            $keyRange,
+            $this->consistency
+        );
+        
+        $this->buffer = $this->columnFamily->parseSlicesResponse($result);
+        $this->currentPageSize = count($this->buffer);
+    }
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}

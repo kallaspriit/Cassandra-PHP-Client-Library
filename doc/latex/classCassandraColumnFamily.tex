@@ -1,0 +1,1735 @@
+\hypertarget{classCassandraColumnFamily}{
+\section{CassandraColumnFamily Class Reference}
+\label{classCassandraColumnFamily}\index{CassandraColumnFamily@{CassandraColumnFamily}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraColumnFamily_a1b091f156f08bc69f16ff20a7faae39f}{\_\-\_\-construct} (\hyperlink{classCassandra}{Cassandra} \$cassandra, \$name, \$defaultReadConsistency=\hyperlink{classCassandra_afd35e5b7419ce2915891c349a44b6f22}{Cassandra::CONSISTENCY\_\-ONE}, \$defaultWriteConsistency=\hyperlink{classCassandra_afd35e5b7419ce2915891c349a44b6f22}{Cassandra::CONSISTENCY\_\-ONE}, \$autopack=true)
+\item 
+\hyperlink{classCassandraColumnFamily_a000c9f902dd0a2b7577608b31aaa0085}{getCassandra} ()
+\item 
+\hyperlink{classCassandraColumnFamily_aa5e0d45507ac78641f7df1d0fc7845fd}{getSchema} (\$useCache=true)
+\item 
+\hyperlink{classCassandraColumnFamily_ab41e2e964834570a3cf8ffc6b60eaefa}{getColumnNameType} (\$useCache=true)
+\item 
+\hyperlink{classCassandraColumnFamily_aa62bec66626eba474c8fcf51dbe0eda5}{getColumnValueType} (\$columnName, \$useCache=true)
+\item 
+\hyperlink{classCassandraColumnFamily_a6bb5aa6148e8350990c1a61021974470}{getAll} (\$key, \$superColumn=null, \$consistency=null)
+\item 
+\hyperlink{classCassandraColumnFamily_a06bfbe9d4a44eb9c8b08037ed3b96494}{getColumns} (\$key, array \$columns, \$superColumn=null, \$consistency=null)
+\item 
+\hyperlink{classCassandraColumnFamily_abd1ec26e68a338f18ef1da088574366e}{getColumnRange} (\$key, \$startColumn, \$endColumn, \$superColumn=null, \$columnCount=100, \$consistency=null)
+\item 
+\hyperlink{classCassandraColumnFamily_a0ae94f62112a09cfa34ad55b7c3cc641}{get} (\$key, \$columns=null, \$startColumn=null, \$endColumn=null, \$columnsReversed=false, \$columnCount=100, \$superColumn=null, \$consistency=null)
+\item 
+\hyperlink{classCassandraColumnFamily_a70850301cfaf85c4c170453a8aaeab9b}{getWhere} (array \$where, \$columns=null, \$startColumn=null, \$endColumn=null, \$columnsReversed=false, \$rowCountLimit=null, \$columnCount=100, \$superColumn=null, \$consistency=null, \$bufferSize=1000)
+\item 
+\hyperlink{classCassandraColumnFamily_ac8ac7a1d976bd196678b6985cc93be43}{getMultiple} (array \$keys, \$columns=null, \$startColumn=null, \$endColumn=null, \$columnsReversed=false, \$columnCount=100, \$superColumn=null, \$consistency=null, \$bufferSize=512)
+\item 
+\hyperlink{classCassandraColumnFamily_a327a88ea26f58c75de804a82a2087935}{getKeyRange} (\$startKey=null, \$endKey=null, \$rowCountLimit=null, \$columns=null, \$startColumn=null, \$endColumn=null, \$columnsReversed=false, \$columnCount=100, \$superColumn=null, \$consistency=null, \$bufferSize=512)
+\item 
+\hyperlink{classCassandraColumnFamily_acf742fffdda67cc5e94e984b07def395}{getColumnCount} (\$key, \$columns=null, \$startColumn=null, \$endColumn=null, \$superColumn=null, \$consistency=null)
+\item 
+\hyperlink{classCassandraColumnFamily_a3b2f42e92f480eb254a331431208bd55}{getColumnCounts} (array \$keys, \$columns=null, \$startColumn=null, \$endColumn=null, \$superColumn=null, \$consistency=null)
+\item 
+\hyperlink{classCassandraColumnFamily_ac454829a16d93dbfeab3227a7c25c21b}{set} (\$key, array \$columns, \$consistency=null, \$timestamp=null, \$timeToLiveSeconds=null)
+\item 
+\hyperlink{classCassandraColumnFamily_a24a18b8d29af8c47ee94b1795667e51c}{createColumnParent} (\$superColumnName=null)
+\item 
+\hyperlink{classCassandraColumnFamily_a2ffef14e39bbe06dc8dc04638941268d}{createSlicePredicate} (\$columns, \$startColumn, \$endColumn, \$columnsReversed, \$columnCount)
+\item 
+\hyperlink{classCassandraColumnFamily_a7996d424367e08607847f14f93006cb6}{createIndexClause} (array \$where, \$startKey=null, \$maxRowCount=100)
+\item 
+\hyperlink{classCassandraColumnFamily_a064cc8504629412967fbd51f7b2ea142}{createColumnMutations} (array \$columns, \$timestamp=null, \$timeToLiveSeconds=null)
+\item 
+\hyperlink{classCassandraColumnFamily_adaf083d46ade0120f269254ef8c011cf}{createColumnsOrSuperColumns} (array \$columns, \$timestamp=null, \$timeToLiveSeconds=null)
+\item 
+\hyperlink{classCassandraColumnFamily_a6cb541d3f68ed99bc8c53725f4d95d2c}{createColumns} (array \$columns, \$timestamp=null, \$timeToLiveSeconds=null)
+\item 
+\hyperlink{classCassandraColumnFamily_ae6c7410e7f68a51900a76f807531e062}{parseSlicesResponse} (array \$responses)
+\item 
+\hyperlink{classCassandraColumnFamily_a10f09668871103443fbbe9f6747a95f8}{parseSliceResponse} (array \$response)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraColumnFamily_a38155d2a31e9559cf0fd85c013cd9d44}{parseSliceRow} (cassandra\_\-ColumnOrSuperColumn \$row)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandraColumnFamily_ab593f9dff20817dec6fd102e9254a0d3}{
+{\bfseries \$cassandra}}
+\label{classCassandraColumnFamily_ab593f9dff20817dec6fd102e9254a0d3}
+
+\item 
+\hypertarget{classCassandraColumnFamily_a4a02130f1fc3cd3574129e89c26536cc}{
+{\bfseries \$name}}
+\label{classCassandraColumnFamily_a4a02130f1fc3cd3574129e89c26536cc}
+
+\item 
+\hypertarget{classCassandraColumnFamily_acd65c8a5e0dd5f198cf5a9c17104666e}{
+{\bfseries \$defaultReadConsistency}}
+\label{classCassandraColumnFamily_acd65c8a5e0dd5f198cf5a9c17104666e}
+
+\item 
+\hypertarget{classCassandraColumnFamily_a3444473a7a9ec0357837157b2a4260de}{
+{\bfseries \$defaultWriteConsistency}}
+\label{classCassandraColumnFamily_a3444473a7a9ec0357837157b2a4260de}
+
+\item 
+\hypertarget{classCassandraColumnFamily_a9d71239b9ab5e6b9eb72de4eb6ee2ed9}{
+{\bfseries \$autopack}}
+\label{classCassandraColumnFamily_a9d71239b9ab5e6b9eb72de4eb6ee2ed9}
+
+\item 
+\hypertarget{classCassandraColumnFamily_a52e47e303a47dc60c6d580dacb558338}{
+{\bfseries \$schema}}
+\label{classCassandraColumnFamily_a52e47e303a47dc60c6d580dacb558338}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents a column family.
+
+Provides an interface to insert, update and delete the data.
+
+You generally do not want to create an instance of this classs by yourself but rather use the factory method \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_a4d61f35bafba5e3e2b82b33671ce7831}{Cassandra::cf()}\} or the longer variant \{
+
+\hyperlink{classCassandra_a4e450d22e7ae8575cca647970edb54d5}{Cassandra::columnFamily()}\}. 
+\end{DoxySeeAlso}
+
+
+Definition at line 1720 of file Cassandra.php.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classCassandraColumnFamily_a1b091f156f08bc69f16ff20a7faae39f}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!\_\-\_\-construct@{\_\-\_\-construct}}
+\index{\_\-\_\-construct@{\_\-\_\-construct}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{\_\-\_\-construct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::\_\-\_\-construct (
+\begin{DoxyParamCaption}
+\item[{{\bf Cassandra} \$}]{cassandra, }
+\item[{\$}]{name, }
+\item[{\$}]{defaultReadConsistency = {\ttfamily {\bf Cassandra::CONSISTENCY\_\-ONE}}, }
+\item[{\$}]{defaultWriteConsistency = {\ttfamily {\bf Cassandra::CONSISTENCY\_\-ONE}}, }
+\item[{\$}]{autopack = {\ttfamily true}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a1b091f156f08bc69f16ff20a7faae39f}
+Constructs the object.
+
+You generally do not want to create an instance of this classs by yourself but rather use the factory method \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_a4d61f35bafba5e3e2b82b33671ce7831}{Cassandra::cf()}\} or the longer variant \{
+
+\hyperlink{classCassandra_a4e450d22e7ae8575cca647970edb54d5}{Cassandra::columnFamily()}\}.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+\hyperlink{classCassandra}{Cassandra} & {\em \$cassandra} & \hyperlink{classCassandra}{Cassandra} reference \\
+\hline
+string & {\em \$name} & Name of the column family \\
+\hline
+integer & {\em \$defaultReadConsistency} & Default read consistency level \\
+\hline
+integer & {\em \$defaultWriteConsistency} & Default write consistency level \\
+\hline
+boolean & {\em \$autopack} & Should keys and values be autopacked to type \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 1783 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $this->cassandra = $cassandra;
+        $this->name = $name;
+        $this->defaultReadConsistency = $defaultReadConsistency;
+        $this->defaultWriteConsistency = $defaultWriteConsistency;
+        $this->autopack = $autopack;
+        $this->schema = null;
+    }
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandraColumnFamily_a064cc8504629412967fbd51f7b2ea142}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!createColumnMutations@{createColumnMutations}}
+\index{createColumnMutations@{createColumnMutations}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{createColumnMutations}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::createColumnMutations (
+\begin{DoxyParamCaption}
+\item[{array \$}]{columns, }
+\item[{\$}]{timestamp = {\ttfamily null}, }
+\item[{\$}]{timeToLiveSeconds = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a064cc8504629412967fbd51f7b2ea142}
+Creates column mutations, used in insert/update operations.
+
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$columns} & List of columns and their values \\
+\hline
+integer & {\em \$timestamp} & Operation timestamp \\
+\hline
+integer & {\em \$timeToLiveSeconds} & Data time-\/to-\/live period \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+cassandra\_\-Mutation The mutation object 
+\end{DoxyReturn}
+
+
+Definition at line 2656 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($timestamp === null) {
+            $timestamp = CassandraUtil::getTimestamp();
+        }
+        
+        $columnsOrSuperColumns = $this->createColumnsOrSuperColumns(
+            $columns,
+            $timestamp,
+            $timeToLiveSeconds
+        );
+        
+        $mutations = array();
+        
+        foreach ($columnsOrSuperColumns as $columnOrSuperColumn) {
+            $mutation = new cassandra_Mutation();
+            $mutation->column_or_supercolumn = $columnOrSuperColumn;
+            
+            $mutations[] = $mutation;
+        }
+        
+        return $mutations;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a24a18b8d29af8c47ee94b1795667e51c}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!createColumnParent@{createColumnParent}}
+\index{createColumnParent@{createColumnParent}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{createColumnParent}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::createColumnParent (
+\begin{DoxyParamCaption}
+\item[{\$}]{superColumnName = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a24a18b8d29af8c47ee94b1795667e51c}
+Creates a new low-\/level \hyperlink{classCassandra}{Cassandra} column parent definition.
+
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$superColumName} & Name of the super column \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+cassandra\_\-ColumnParent Column parent definition 
+\end{DoxyReturn}
+
+
+Definition at line 2469 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                {
+        $schema = $this->getSchema();
+        
+        $columnParent = new cassandra_ColumnParent();
+        $columnParent->column_family = $this->name;
+        
+        if ($superColumnName !== null) {
+            if ($this->autopack) {
+                $columnParent->super_column = CassandraUtil::pack(
+                    $superColumnName,
+                    $schema['super-type']
+                );
+            } else {
+                $columnParent->super_column = $superColumnName;
+            }
+        }
+        
+        return $columnParent;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a6cb541d3f68ed99bc8c53725f4d95d2c}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!createColumns@{createColumns}}
+\index{createColumns@{createColumns}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{createColumns}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::createColumns (
+\begin{DoxyParamCaption}
+\item[{array \$}]{columns, }
+\item[{\$}]{timestamp = {\ttfamily null}, }
+\item[{\$}]{timeToLiveSeconds = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a6cb541d3f68ed99bc8c53725f4d95d2c}
+Creates a list of \{\begin{DoxySeeAlso}{See also}
+cassandra\_\-Column\} from list of columns and their values.
+\end{DoxySeeAlso}
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$columns} & Array of columns and their values \\
+\hline
+integer & {\em \$timestamp} & Operation timestamp \\
+\hline
+integer & {\em \$timeToLiveSeconds} & Data time-\/to-\/live period \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array List of cassandra\_\-Column 
+\end{DoxyReturn}
+
+
+Definition at line 2754 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($timestamp === null) {
+            $timestamp = CassandraUtil::getTimestamp();
+        }
+        
+        $results = array();
+        
+        foreach ($columns as $name => $value) {
+            $column = new cassandra_Column();
+            $column->name = CassandraUtil::pack(
+                $name,
+                $this->getColumnNameType()
+            );
+            $column->value = CassandraUtil::pack(
+                $value,
+                $this->getColumnValueType($name)
+            );
+            $column->timestamp = $timestamp;
+            $column->ttl = $timeToLiveSeconds;
+            
+            $results[] = $column;
+        }
+        
+        return $results;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_adaf083d46ade0120f269254ef8c011cf}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!createColumnsOrSuperColumns@{createColumnsOrSuperColumns}}
+\index{createColumnsOrSuperColumns@{createColumnsOrSuperColumns}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{createColumnsOrSuperColumns}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::createColumnsOrSuperColumns (
+\begin{DoxyParamCaption}
+\item[{array \$}]{columns, }
+\item[{\$}]{timestamp = {\ttfamily null}, }
+\item[{\$}]{timeToLiveSeconds = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_adaf083d46ade0120f269254ef8c011cf}
+Creates a list of columns or super-\/columns.
+
+Returns a list of \{\begin{DoxySeeAlso}{See also}
+cassandra\_\-ColumnOrSuperColumn\}
+\end{DoxySeeAlso}
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$columns} & Array of columns and their values \\
+\hline
+integer & {\em \$timestamp} & Operation timestamp \\
+\hline
+integer & {\em \$timeToLiveSeconds} & Data time-\/to-\/live period \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array List of cassandra\_\-ColumnOrSuperColumn 
+\end{DoxyReturn}
+
+
+Definition at line 2696 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($timestamp === null) {
+            $timestamp = CassandraUtil::getTimestamp();
+        }
+        
+        $results = array();
+        
+        foreach ($columns as $columnName => $columnValue) {
+            $column = new cassandra_ColumnOrSuperColumn();
+            
+            if (is_array($columnValue)) {
+                $column->super_column = new cassandra_SuperColumn();
+                $column->super_column->name = CassandraUtil::pack(
+                    $columnName,
+                    $this->getColumnNameType()
+                );
+                $column->super_column->columns = $this->createColumns(
+                    $columnValue,
+                    $timestamp,
+                    $timeToLiveSeconds
+                );
+                $column->super_column->timestamp = $timestamp;
+            } else {
+                $column->column = new cassandra_Column();
+                $column->column->name = CassandraUtil::pack(
+                    $columnName,
+                    $this->getColumnNameType()
+                );
+                $column->column->value = CassandraUtil::pack(
+                    $columnValue,
+                    $this->getColumnValueType($columnName)
+                );
+                $column->column->timestamp = $timestamp;
+                $column->column->ttl = $timeToLiveSeconds;
+            }
+            
+            $results[] = $column;
+        }
+        
+        return $results;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a7996d424367e08607847f14f93006cb6}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!createIndexClause@{createIndexClause}}
+\index{createIndexClause@{createIndexClause}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{createIndexClause}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::createIndexClause (
+\begin{DoxyParamCaption}
+\item[{array \$}]{where, }
+\item[{\$}]{startKey = {\ttfamily null}, }
+\item[{\$}]{maxRowCount = {\ttfamily 100}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a7996d424367e08607847f14f93006cb6}
+Creates a new index clause.
+
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$where} & Where conditions \\
+\hline
+string & {\em \$startKey} & Key to start fetching from \\
+\hline
+integer & {\em \$maxRowCount} & Maximum number of rows to fetch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+cassandra\_\-IndexClause The index clause 
+\end{DoxyReturn}
+
+
+Definition at line 2581 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $indexClause = new cassandra_IndexClause();
+        $expressions = array();
+        
+        foreach ($where as $columnName => $value) {
+            $indexExpression = new cassandra_IndexExpression();
+            
+            if (is_array($value)) {
+                $supportedOperators = array(
+                    Cassandra::OP_EQ,
+                    Cassandra::OP_LT,
+                    Cassandra::OP_GT,
+                    Cassandra::OP_LTE,
+                    Cassandra::OP_GTE
+                );
+                
+                if (
+                    count($value) != 3
+                    || !in_array($value[1], $supportedOperators)
+                ) {
+                    throw new CassandraInvalidRequestException(
+                        'Invalid where clause: '.serialize($value)
+                    );
+                }
+                
+                $indexExpression->column_name = CassandraUtil::pack(
+                    $value[0],
+                    $this->getColumnNameType()
+                );
+                
+                $indexExpression->op = $value[1];
+                
+                $indexExpression->value = CassandraUtil::pack(
+                    $value[2],
+                    $this->getColumnValueType($value[0])
+                );
+            } else {
+                $indexExpression->column_name = CassandraUtil::pack(
+                    $columnName,
+                    $this->getColumnNameType()
+                );
+                
+                $indexExpression->op = Cassandra::OP_EQ;
+                
+                $indexExpression->value = CassandraUtil::pack(
+                    $value,
+                    $this->getColumnValueType($columnName)
+                );
+            }
+            
+            $expressions[] = $indexExpression;
+        }
+        
+        $indexClause->expressions = $expressions;
+        $indexClause->start_key = $startKey !== null ? $startKey : '';
+        $indexClause->count = $maxRowCount;
+        
+        return $indexClause;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a2ffef14e39bbe06dc8dc04638941268d}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!createSlicePredicate@{createSlicePredicate}}
+\index{createSlicePredicate@{createSlicePredicate}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{createSlicePredicate}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::createSlicePredicate (
+\begin{DoxyParamCaption}
+\item[{\$}]{columns, }
+\item[{\$}]{startColumn, }
+\item[{\$}]{endColumn, }
+\item[{\$}]{columnsReversed, }
+\item[{\$}]{columnCount}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a2ffef14e39bbe06dc8dc04638941268d}
+Creates a slice predicate.
+
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$columns} & List of column names \\
+\hline
+string & {\em \$startColumn} & Column range start \\
+\hline
+string & {\em \$endColumn} & Column range end \\
+\hline
+boolean & {\em \$columnsReversed} & Should column order be reversed \\
+\hline
+integer & {\em \$columnCount} & Max number of columns to fetch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+cassandra\_\-SlicePredicate Slice predicate 
+\end{DoxyReturn}
+
+
+Definition at line 2502 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $predicate = new cassandra_SlicePredicate();
+        $schema = $this->getSchema();
+        
+        if (is_array($columns)) {
+            if ($this->autopack) {
+                $packedColumns = array();
+
+                foreach ($columns as $columnName) {
+                    $columnType = $this->getColumnNameType();
+                    
+                    $packedColumns[] = CassandraUtil::pack(
+                        $columnName,
+                        $columnType
+                    );
+                }
+                
+                $predicate->column_names = $packedColumns;
+            } else {
+                $predicate->column_names = $columns;
+            }
+        } else {
+            if ($this->autopack) {
+                if ($startColumn === null) {
+                    $startColumn = '';
+                }
+                
+                if ($endColumn === null) {
+                    $endColumn = '';
+                }
+                
+                if (!empty($startColumn)) {
+                    $columnType = $this->getColumnNameType();
+                    
+                    $startColumn = CassandraUtil::pack(
+                        $startColumn,
+                        $columnType
+                    );
+                }
+                
+                if (!empty($endColumn)) {
+                    $columnType = $this->getColumnNameType();
+                    
+                    $endColumn = CassandraUtil::pack(
+                        $endColumn,
+                        $columnType
+                    );
+                }
+            }
+            
+            $sliceRange = new cassandra_SliceRange();
+            $sliceRange->count = $columnCount;
+            $sliceRange->reversed = $columnsReversed;
+            $sliceRange->start = $startColumn;
+            $sliceRange->finish = $endColumn;
+            
+            $predicate->slice_range = $sliceRange;
+        }
+        
+        return $predicate;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a0ae94f62112a09cfa34ad55b7c3cc641}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!get@{get}}
+\index{get@{get}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::get (
+\begin{DoxyParamCaption}
+\item[{\$}]{key, }
+\item[{\$}]{columns = {\ttfamily null}, }
+\item[{\$}]{startColumn = {\ttfamily null}, }
+\item[{\$}]{endColumn = {\ttfamily null}, }
+\item[{\$}]{columnsReversed = {\ttfamily false}, }
+\item[{\$}]{columnCount = {\ttfamily 100}, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a0ae94f62112a09cfa34ad55b7c3cc641}
+Lower level method for fetching row data by key.
+
+Consider using the high-\/level \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_ad2f8866d598ac0f696cb0c87258133fb}{Cassandra::get()}\} or one of:
+\begin{DoxyItemize}
+\item \{
+\end{DoxyItemize}
+
+\hyperlink{classCassandraColumnFamily_a6bb5aa6148e8350990c1a61021974470}{CassandraColumnFamily::getAll()}\}
+\begin{DoxyItemize}
+\item \{
+\end{DoxyItemize}
+
+\hyperlink{classCassandraColumnFamily_a06bfbe9d4a44eb9c8b08037ed3b96494}{CassandraColumnFamily::getColumns()}\}
+\begin{DoxyItemize}
+\item \{
+\end{DoxyItemize}
+
+\hyperlink{classCassandraColumnFamily_abd1ec26e68a338f18ef1da088574366e}{CassandraColumnFamily::getColumnRange()}\}
+\end{DoxySeeAlso}
+If no consistency level is given, the default set in constructor is used.
+
+The start end end columns do not have to actually exists, just \char`\"{}a\char`\"{} and \char`\"{}z\char`\"{} would work for example, they're used just for comparison.
+
+You should not set bot the list of columns and range of columns at the same time.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$key} & Key name to fetch data of \\
+\hline
+array & {\em \$columns} & List of column names to fetch data of \\
+\hline
+string & {\em \$startColumn} & Name of the first column in range \\
+\hline
+string & {\em \$endColumn} & Name of the last column in range \\
+\hline
+boolean & {\em \$columnsReversed} & Should reversed order of columns be used \\
+\hline
+integer & {\em \$columnCount} & Maximum number of columns to return \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Override default consistency level \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Array of column names and their values 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1994 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($columns !== null && $startColumn !== null) {
+            throw new CassandraInvalidRequestException(
+                'You can define either a list of columns or the start and end '.
+                'columns for a range but not both at the same time'
+            );
+        }
+        
+        if ($consistency === null) {
+            $consistency = $this->defaultReadConsistency;
+        }
+        
+        $columnParent = $this->createColumnParent($superColumn);
+
+        $slicePredicate = $this->createSlicePredicate(
+            $columns,
+            $startColumn,
+            $endColumn,
+            $columnsReversed,
+            $columnCount
+        );
+        
+        $result = $this->cassandra->call(
+            'get_slice',
+            $key,
+            $columnParent,
+            $slicePredicate,
+            $consistency
+        );
+                
+        if (count($result) == 0) {
+            return null;
+        }
+        
+        return $this->parseSliceResponse($result);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a6bb5aa6148e8350990c1a61021974470}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getAll@{getAll}}
+\index{getAll@{getAll}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getAll}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getAll (
+\begin{DoxyParamCaption}
+\item[{\$}]{key, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a6bb5aa6148e8350990c1a61021974470}
+Fetches all columns of given key at given consistency level.
+
+If no consistency level is given, the default set in constructor is used.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$key} & Key name to fetch data of \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Override default consistency level \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Array of column names and their values 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1884 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                           {
+        return $this->get(
+            $key,
+            null,
+            null,
+            null,
+            false,
+            100,
+            $superColumn,
+            $consistency
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a000c9f902dd0a2b7577608b31aaa0085}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getCassandra@{getCassandra}}
+\index{getCassandra@{getCassandra}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getCassandra}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getCassandra (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a000c9f902dd0a2b7577608b31aaa0085}
+Returns the used \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra}{Cassandra}\} reference.
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandra}{Cassandra} 
+\end{DoxyReturn}
+
+
+Definition at line 1803 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                   {
+        return $this->cassandra;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_acf742fffdda67cc5e94e984b07def395}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getColumnCount@{getColumnCount}}
+\index{getColumnCount@{getColumnCount}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getColumnCount}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getColumnCount (
+\begin{DoxyParamCaption}
+\item[{\$}]{key, }
+\item[{\$}]{columns = {\ttfamily null}, }
+\item[{\$}]{startColumn = {\ttfamily null}, }
+\item[{\$}]{endColumn = {\ttfamily null}, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_acf742fffdda67cc5e94e984b07def395}
+Returns the number of columns a key has that may match additional list and range requirements.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$key} & Row key to get info about \\
+\hline
+array & {\em \$columns} & List of columns to fetch \\
+\hline
+string & {\em \$startColumn} & Name of the first column in range \\
+\hline
+string & {\em \$endColumn} & Name of the last column in range \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Consistency level to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer Number of colums for given key and conditions 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 2322 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($columns !== null && $startColumn !== null) {
+            throw new CassandraInvalidRequestException(
+                'You can define either a list of columns or the start and end '.
+                'columns for a range but not both at the same time'
+            );
+        }
+        
+        if ($consistency === null) {
+            $consistency = $this->defaultReadConsistency;
+        }
+        
+        $columnParent = $this->createColumnParent($superColumn);
+
+        $slicePredicate = $this->createSlicePredicate(
+            $columns,
+            $startColumn,
+            $endColumn,
+            false,
+            2147483647
+        );
+
+        return $this->cassandra->call(
+            'get_count',
+            $key,
+            $columnParent,
+            $slicePredicate,
+            $consistency
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a3b2f42e92f480eb254a331431208bd55}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getColumnCounts@{getColumnCounts}}
+\index{getColumnCounts@{getColumnCounts}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getColumnCounts}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getColumnCounts (
+\begin{DoxyParamCaption}
+\item[{array \$}]{keys, }
+\item[{\$}]{columns = {\ttfamily null}, }
+\item[{\$}]{startColumn = {\ttfamily null}, }
+\item[{\$}]{endColumn = {\ttfamily null}, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a3b2f42e92f480eb254a331431208bd55}
+Returns the number of columns of a set of keys key has that may match additional list and range requirements.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$keys} & List of row keys to get info about \\
+\hline
+array & {\em \$columns} & List of columns to fetch \\
+\hline
+string & {\em \$startColumn} & Name of the first column in range \\
+\hline
+string & {\em \$endColumn} & Name of the last column in range \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Consistency level to use \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer Number of colums for given key and conditions 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 2373 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($columns !== null && $startColumn !== null) {
+            throw new CassandraInvalidRequestException(
+                'You can define either a list of columns or the start and end '.
+                'columns for a range but not both at the same time'
+            );
+        }
+        
+        if ($consistency === null) {
+            $consistency = $this->defaultReadConsistency;
+        }
+        
+        $columnParent = $this->createColumnParent($superColumn);
+
+        $slicePredicate = $this->createSlicePredicate(
+            $columns,
+            $startColumn,
+            $endColumn,
+            false,
+            2147483647
+        );
+
+        return $this->cassandra->call(
+            'multiget_count',
+            $keys,
+            $columnParent,
+            $slicePredicate,
+            $consistency
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_ab41e2e964834570a3cf8ffc6b60eaefa}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getColumnNameType@{getColumnNameType}}
+\index{getColumnNameType@{getColumnNameType}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getColumnNameType}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getColumnNameType (
+\begin{DoxyParamCaption}
+\item[{\$}]{useCache = {\ttfamily true}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_ab41e2e964834570a3cf8ffc6b60eaefa}
+Returns the column name data type.
+
+Used for packing to correct datatype. Use the Cassandra::TYPE\_\-.. constants to compare.
+
+
+\begin{DoxyParams}[1]{Parameters}
+boolean & {\em \$useCache} & Should cache be used if possible \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Column name type 
+\end{DoxyReturn}
+
+
+Definition at line 1842 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                        {
+        $schema = $this->getSchema($useCache);
+        
+        if ($schema['super']) {
+            return $schema['super-type'];
+        } else {
+            return $schema['column-type'];
+        }
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_abd1ec26e68a338f18ef1da088574366e}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getColumnRange@{getColumnRange}}
+\index{getColumnRange@{getColumnRange}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getColumnRange}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getColumnRange (
+\begin{DoxyParamCaption}
+\item[{\$}]{key, }
+\item[{\$}]{startColumn, }
+\item[{\$}]{endColumn, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{columnCount = {\ttfamily 100}, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_abd1ec26e68a338f18ef1da088574366e}
+Fetches a range columns of given key at given consistency level.
+
+If no consistency level is given, the default set in constructor is used.
+
+The start end end columns do not have to actually exists, just \char`\"{}a\char`\"{} and \char`\"{}z\char`\"{} would work for example, they're used just for comparison.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$key} & Key name to fetch data of \\
+\hline
+string & {\em \$startColumn} & Name of the first column in range \\
+\hline
+string & {\em \$endColumn} & Name of the last column in range \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$columnCount} & Maximum number of columns to return \\
+\hline
+integer & {\em \$consistency} & Override default consistency level \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Array of column names and their values 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1946 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        return $this->get(
+            $key,
+            null,
+            $startColumn,
+            $endColumn,
+            false,
+            $columnCount,
+            $superColumn,
+            $consistency
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a06bfbe9d4a44eb9c8b08037ed3b96494}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getColumns@{getColumns}}
+\index{getColumns@{getColumns}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getColumns}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getColumns (
+\begin{DoxyParamCaption}
+\item[{\$}]{key, }
+\item[{array \$}]{columns, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a06bfbe9d4a44eb9c8b08037ed3b96494}
+Fetches listed columns of given key at given consistency level.
+
+If no consistency level is given, the default set in constructor is used.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$key} & Key name to fetch data of \\
+\hline
+array & {\em \$columns} & List of column names to fetch data of \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Override default consistency level \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Array of column names and their values 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1910 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        return $this->get(
+            $key,
+            $columns,
+            null,
+            null,
+            false,
+            100,
+            $superColumn,
+            $consistency
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_aa62bec66626eba474c8fcf51dbe0eda5}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getColumnValueType@{getColumnValueType}}
+\index{getColumnValueType@{getColumnValueType}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getColumnValueType}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getColumnValueType (
+\begin{DoxyParamCaption}
+\item[{\$}]{columnName, }
+\item[{\$}]{useCache = {\ttfamily true}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_aa62bec66626eba474c8fcf51dbe0eda5}
+Returns the value data type of given column.
+
+Used for packing to correct datatype. Use the Cassandra::TYPE\_\-.. constants to compare. Returns \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_ab75de9aa0588c7665f1c9d8cf8d4e8ff}{Cassandra::TYPE\_\-BYTES}\} if not found.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$columnName} & Name of the column to get info about \\
+\hline
+boolean & {\em \$useCache} & Should cache be used to fetch this if possible \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string The type name 
+\end{DoxyReturn}
+
+
+Definition at line 1862 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                      {
+        $schema = $this->getSchema($useCache);
+            
+        if (isset($schema['column-data-types'][$columnName])) {
+            return $schema['column-data-types'][$columnName];
+        }
+        
+        return Cassandra::TYPE_BYTES;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a327a88ea26f58c75de804a82a2087935}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getKeyRange@{getKeyRange}}
+\index{getKeyRange@{getKeyRange}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getKeyRange}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getKeyRange (
+\begin{DoxyParamCaption}
+\item[{\$}]{startKey = {\ttfamily null}, }
+\item[{\$}]{endKey = {\ttfamily null}, }
+\item[{\$}]{rowCountLimit = {\ttfamily null}, }
+\item[{\$}]{columns = {\ttfamily null}, }
+\item[{\$}]{startColumn = {\ttfamily null}, }
+\item[{\$}]{endColumn = {\ttfamily null}, }
+\item[{\$}]{columnsReversed = {\ttfamily false}, }
+\item[{\$}]{columnCount = {\ttfamily 100}, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}, }
+\item[{\$}]{bufferSize = {\ttfamily 512}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a327a88ea26f58c75de804a82a2087935}
+Fetches a range of keys in a single request.
+
+This method will only returns meaningful ordered results if you are using an order-\/preserving partitioner such as org.apache.cassandra.dht.CollatingOrderPreservingPartitioner. The default cassandra partitioner is random and wont fetch the keys in order.
+
+As there may be very many rows in the given range, the whole result is not fetched in a single request but rather an iterator is returned that you can go over using a foreach loop or if you know you don't have very many rows, use the \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandraDataIterator_abc2745605d011776a747505aafff43b3}{CassandraDataIterator::getAll()}\} that does the iteration for you, returning a single array with all the data.
+\end{DoxySeeAlso}
+The data is fetched in batches of size \$bufferSize.
+
+The start end end key and columns do not have to actually exists, just \char`\"{}a\char`\"{} and \char`\"{}z\char`\"{} would work for example, they're used just for comparison.
+
+Leave the \$rowCountLimit empty to fetch all.
+
+You should not set bot the list of columns and range of columns at the same time.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$startKey} & Key to start fetching data from \\
+\hline
+array & {\em \$endKey} & Final key to fetch in the range \\
+\hline
+integer & {\em \$rowCountLimit} & How many rows to fetch at maximum \\
+\hline
+array & {\em \$columns} & List of columns to fetch \\
+\hline
+string & {\em \$startColumn} & Name of the first column in range \\
+\hline
+string & {\em \$endColumn} & Name of the last column in range \\
+\hline
+boolean & {\em \$columnsReversed} & Should reversed order of columns be used \\
+\hline
+integer & {\em \$columnCount} & Maximum number of columns to return \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Override default consistency level \\
+\hline
+integer & {\em \$bufferSize} & How many rows to fetch in a single batch. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraRangeDataIterator}{CassandraRangeDataIterator} Iterator to range data 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 2255 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($columns !== null && $startColumn !== null) {
+            throw new CassandraInvalidRequestException(
+                'You can define either a list of columns or the start and end '.
+                'columns for a range but not both at the same time'
+            );
+        }
+        
+        if ($consistency === null) {
+            $consistency = $this->defaultReadConsistency;
+        }
+        
+        if ($startKey === null) {
+            $startKey = '';
+        }
+        
+        if ($endKey === null) {
+            $endKey = '';
+        }
+        
+        $columnParent = $this->createColumnParent($superColumn);
+
+        $slicePredicate = $this->createSlicePredicate(
+            $columns,
+            $startColumn,
+            $endColumn,
+            $columnsReversed,
+            $columnCount
+        );
+        
+        return new CassandraRangeDataIterator(
+            $this,
+            $columnParent,
+            $slicePredicate,
+            $startKey,
+            $endKey,
+            $consistency,
+            $rowCountLimit,
+            $bufferSize
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_ac8ac7a1d976bd196678b6985cc93be43}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getMultiple@{getMultiple}}
+\index{getMultiple@{getMultiple}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getMultiple}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getMultiple (
+\begin{DoxyParamCaption}
+\item[{array \$}]{keys, }
+\item[{\$}]{columns = {\ttfamily null}, }
+\item[{\$}]{startColumn = {\ttfamily null}, }
+\item[{\$}]{endColumn = {\ttfamily null}, }
+\item[{\$}]{columnsReversed = {\ttfamily false}, }
+\item[{\$}]{columnCount = {\ttfamily 100}, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}, }
+\item[{\$}]{bufferSize = {\ttfamily 512}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_ac8ac7a1d976bd196678b6985cc93be43}
+Fetches multiple keys in a single request.
+
+You should use this when you know that you will need several rows in a single place as this is cheaper than making a seperate request for each of the rows.
+
+If no consistency level is given, the default set in constructor is used.
+
+The start end end columns do not have to actually exists, just \char`\"{}a\char`\"{} and \char`\"{}z\char`\"{} would work for example, they're used just for comparison.
+
+You should not set bot the list of columns and range of columns at the same time.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$keys} & Names of the keys to fetch \\
+\hline
+array & {\em \$columns} & List of column names to fetch data of \\
+\hline
+string & {\em \$startColumn} & Name of the first column in range \\
+\hline
+string & {\em \$endColumn} & Name of the last column in range \\
+\hline
+boolean & {\em \$columnsReversed} & Should reversed order of columns be used \\
+\hline
+integer & {\em \$columnCount} & Maximum number of columns to return \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Override default consistency level \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Array of rows of column names and their values 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 2154 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($columns !== null && $startColumn !== null) {
+            throw new CassandraInvalidRequestException(
+                'You can define either a list of columns or the start and end '.
+                'columns for a range but not both at the same time'
+            );
+        }
+        
+        if ($consistency === null) {
+            $consistency = $this->defaultReadConsistency;
+        }
+        
+        $columnParent = $this->createColumnParent($superColumn);
+
+        $slicePredicate = $this->createSlicePredicate(
+            $columns,
+            $startColumn,
+            $endColumn,
+            $columnsReversed,
+            $columnCount
+        );
+        
+        $results = array();
+        $responses = array();
+        
+        foreach ($keys as $key) {
+            $results[$key] = null;
+        }
+        
+        $keyCount = count($keys);
+        $setCount = ceil($keyCount / $bufferSize);
+        
+        for ($i = 0; $i < $setCount; $i++) {
+            $setKeys = array_slice($keys, $i * $bufferSize, $bufferSize);
+            
+            $setResponse = $this->cassandra->call(
+                'multiget_slice',
+                $setKeys,
+                $columnParent,
+                $slicePredicate,
+                $consistency
+            );
+
+            $responses = array_merge($responses, $setResponse);
+        }
+
+        foreach ($responses as $key => $response) {
+            $results[$key] = $this->parseSliceResponse($response);
+        }
+
+        return $results;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_aa5e0d45507ac78641f7df1d0fc7845fd}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getSchema@{getSchema}}
+\index{getSchema@{getSchema}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getSchema}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getSchema (
+\begin{DoxyParamCaption}
+\item[{\$}]{useCache = {\ttfamily true}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_aa5e0d45507ac78641f7df1d0fc7845fd}
+Returns the schema description of current column family.
+
+
+\begin{DoxyParams}[1]{Parameters}
+boolean & {\em \$useCache} & Should cache be used if possible \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Schema description 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \hyperlink{classCassandraColumnFamilyNotFoundException}{CassandraColumnFamilyNotFoundException}} & If not found \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1814 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                {
+        if ($this->schema === null) {
+            $keyspaceSchema = $this->cassandra->getKeyspaceSchema(
+                null,
+                $useCache
+            );
+
+            if (!isset($keyspaceSchema['column-families'][$this->name])) {
+                throw new CassandraColumnFamilyNotFoundException(
+                    'Schema for column family "'.$this->name.'" not found'
+                );
+            }
+            
+            $this->schema = $keyspaceSchema['column-families'][$this->name];
+        }
+        
+        return $this->schema;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a70850301cfaf85c4c170453a8aaeab9b}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!getWhere@{getWhere}}
+\index{getWhere@{getWhere}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{getWhere}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::getWhere (
+\begin{DoxyParamCaption}
+\item[{array \$}]{where, }
+\item[{\$}]{columns = {\ttfamily null}, }
+\item[{\$}]{startColumn = {\ttfamily null}, }
+\item[{\$}]{endColumn = {\ttfamily null}, }
+\item[{\$}]{columnsReversed = {\ttfamily false}, }
+\item[{\$}]{rowCountLimit = {\ttfamily null}, }
+\item[{\$}]{columnCount = {\ttfamily 100}, }
+\item[{\$}]{superColumn = {\ttfamily null}, }
+\item[{\$}]{consistency = {\ttfamily null}, }
+\item[{\$}]{bufferSize = {\ttfamily 1000}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a70850301cfaf85c4c170453a8aaeab9b}
+Fetch a set of rows filtered by secondary index where clause.
+
+To use this method, at least one of the columns present in the where clause need to have a secondary index defined on it.
+
+The where array can be a mix of two formats: 1. For simplest equality comparison -\/ column value must equal something exactly, the format array('column-\/name' =$>$ 'required value') can be used. 2. For any other supported comparison operators, use the slightly longer syntax array(array('column-\/name', \hyperlink{classCassandra_acf59b31536a8a886422ef7335020f99d}{Cassandra::OP\_\-LT}, 'value')) where each component is an array with three values, the first one being the column name, second comparison operator and third the value. Use the Cassandra::OP\_\-.. constants for operators. You can mix the two variants.
+
+If no consistency level is given, the default set in constructor is used.
+
+The start end end columns do not have to actually exists, just \char`\"{}a\char`\"{} and \char`\"{}z\char`\"{} would work for example, they're used just for comparison.
+
+You should not set bot the list of columns and range of columns at the same time.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$where} & The where index conditions \\
+\hline
+array & {\em \$columns} & List of column names to fetch data of \\
+\hline
+string & {\em \$startColumn} & Name of the first column in range \\
+\hline
+string & {\em \$endColumn} & Name of the last column in range \\
+\hline
+boolean & {\em \$columnsReversed} & Should reversed order of columns be used \\
+\hline
+integer & {\em \$columnCount} & Maximum number of columns to return \\
+\hline
+string & {\em \$superColumn} & Optional super column name \\
+\hline
+integer & {\em \$consistency} & Override default consistency level \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraIndexedDataIterator}{CassandraIndexedDataIterator} Iterator to indexed data 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 2077 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($columns !== null && $startColumn !== null) {
+            throw new CassandraInvalidRequestException(
+                'You can define either a list of columns or the start and end '.
+                'columns for a range but not both at the same time'
+            );
+        }
+        
+        if ($consistency === null) {
+            $consistency = $this->defaultReadConsistency;
+        }
+        
+        $columnParent = $this->createColumnParent($superColumn);
+
+        $slicePredicate = $this->createSlicePredicate(
+            $columns,
+            $startColumn,
+            $endColumn,
+            $columnsReversed,
+            $columnCount
+        );
+        
+        $indexClause = $this->createIndexClause(
+            $where,
+            $startColumn,
+            $columnCount
+        );
+        
+        return new CassandraIndexedDataIterator(
+            $this,
+            $columnParent,
+            $indexClause,
+            $slicePredicate,
+            $consistency,
+            $rowCountLimit,
+            $bufferSize
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a10f09668871103443fbbe9f6747a95f8}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!parseSliceResponse@{parseSliceResponse}}
+\index{parseSliceResponse@{parseSliceResponse}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{parseSliceResponse}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::parseSliceResponse (
+\begin{DoxyParamCaption}
+\item[{array \$}]{response}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_a10f09668871103443fbbe9f6747a95f8}
+Parses the result of a single slice request into a simple array of data.
+
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$response} & The response to parse \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array List of data 
+\end{DoxyReturn}
+
+
+Definition at line 2820 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                        {
+        $results = array();
+        
+        foreach ($response as $row) {
+            $results = array_merge(
+                $results,
+                $this->parseSliceRow($row)
+            );
+        }
+        
+        return $results;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_a38155d2a31e9559cf0fd85c013cd9d44}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!parseSliceRow@{parseSliceRow}}
+\index{parseSliceRow@{parseSliceRow}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{parseSliceRow}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::parseSliceRow (
+\begin{DoxyParamCaption}
+\item[{cassandra\_\-ColumnOrSuperColumn \$}]{row}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandraColumnFamily_a38155d2a31e9559cf0fd85c013cd9d44}
+Parses a slice row or \{\begin{DoxySeeAlso}{See also}
+cassandra\_\-ColumnOrSuperColumn\} into a plain array of data.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+cassandra\_\-ColumnOrSuperColumn & {\em \$row} & Row to parse \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Parsed plain array of data 
+\end{DoxyReturn}
+
+
+Definition at line 2840 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                         {
+        $result = array();
+        
+        if ($row->column !== null) {
+            $nameType = $this->getColumnNameType();
+            $valueType = $this->getColumnValueType($row->column->name);
+
+            $name = CassandraUtil::unpack($row->column->name, $nameType);
+            $value = CassandraUtil::unpack($row->column->value, $valueType);
+
+            $result[$name] = $value;
+        } else if($row->super_column !== null) {
+            $superNameType = null;
+
+            $superName = CassandraUtil::unpack(
+                $row->super_column->name,
+                $superNameType
+            );
+
+            $values = array();
+
+            foreach ($row->super_column->columns as $column) {
+                $nameType = $this->getColumnNameType();
+                $valueType = $this->getColumnValueType($column->name);
+
+                $name = CassandraUtil::unpack($column->name, $nameType);
+                $value = CassandraUtil::unpack($column->value, $valueType);
+
+                $values[$name] = $value;
+            }
+
+            $result[$superName] = $values;
+        } else {
+            // @codeCoverageIgnoreStart
+            throw new Exception('Expected either normal or super column');
+            // @codeCoverageIgnoreEnd
+        }
+
+        return $result;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_ae6c7410e7f68a51900a76f807531e062}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!parseSlicesResponse@{parseSlicesResponse}}
+\index{parseSlicesResponse@{parseSlicesResponse}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{parseSlicesResponse}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::parseSlicesResponse (
+\begin{DoxyParamCaption}
+\item[{array \$}]{responses}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_ae6c7410e7f68a51900a76f807531e062}
+Parses the result of slice requests into a simple array of data.
+
+This is a low-\/level method used internally but kept public in case you may need it.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$responses} & The responses to parse \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array List of data 
+\end{DoxyReturn}
+
+
+Definition at line 2793 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                          {
+        $results = array();
+
+        foreach ($responses as $row) {
+            $key = $row->key;
+            $results[$key] = array();
+            
+            foreach ($row->columns as $row) {
+                $results[$key] = array_merge(
+                    $results[$key],
+                    $this->parseSliceRow($row)
+                );
+            }
+        }
+        
+        return $results;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraColumnFamily_ac454829a16d93dbfeab3227a7c25c21b}{
+\index{CassandraColumnFamily@{CassandraColumnFamily}!set@{set}}
+\index{set@{set}!CassandraColumnFamily@{CassandraColumnFamily}}
+\subsubsection[{set}]{\setlength{\rightskip}{0pt plus 5cm}CassandraColumnFamily::set (
+\begin{DoxyParamCaption}
+\item[{\$}]{key, }
+\item[{array \$}]{columns, }
+\item[{\$}]{consistency = {\ttfamily null}, }
+\item[{\$}]{timestamp = {\ttfamily null}, }
+\item[{\$}]{timeToLiveSeconds = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraColumnFamily_ac454829a16d93dbfeab3227a7c25c21b}
+Inserts a new row or updates an existing one.
+
+If a key already exists with some columns and you update it, any columns not listed in the update statement will not be changed or deleted.
+
+If not set, default consistency level set in the constructor is used.
+
+You generally do not need to provide a timestamp, it is generated for you.
+
+You may optionally provide the time-\/to-\/live period in seconds after which the entry will appear deleted.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$key} & Key to set or update \\
+\hline
+array & {\em \$columns} & Array of column names and their values \\
+\hline
+integer & {\em \$consistency} & Consistency level to use \\
+\hline
+integer & {\em \$timestamp} & Optional timestamp to use. \\
+\hline
+integer & {\em \$timeToLiveSeconds} & Optional time-\/to-\/live period \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If something goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 2432 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        if ($timestamp === null) {
+            $timestamp = CassandraUtil::getTimestamp();
+        }
+        
+        if ($consistency === null) {
+            $consistency = $this->defaultWriteConsistency;
+        }
+        
+        $mutationMap = array(
+            $key => array(
+                $this->name => $this->createColumnMutations(
+                    $columns,
+                    $timestamp,
+                    $timeToLiveSeconds
+                )
+            )
+        );
+        
+        $this->cassandra->call('batch_mutate', $mutationMap, $consistency);
+    }
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}

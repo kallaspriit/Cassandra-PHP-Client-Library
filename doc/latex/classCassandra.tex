@@ -1,0 +1,1980 @@
+\hypertarget{classCassandra}{
+\section{Cassandra Class Reference}
+\label{classCassandra}\index{Cassandra@{Cassandra}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandra_abb13b5073e065e8f2a60b1c6f18c573e}{\_\-\_\-clone} ()
+\item 
+\hyperlink{classCassandra_a4502befdb4278113462bc7fcfbafa09f}{useKeyspace} (\$keyspace, \$username=null, \$password=null)
+\item 
+\hyperlink{classCassandra_ad8fe43e1ceb9841cca92cf981fb566b3}{getCluster} ()
+\item 
+\hyperlink{classCassandra_ac300f4b8ed3a2d80388225e0ec990883}{getConnection} ()
+\item 
+\hyperlink{classCassandra_a382ebe135b67bddef1e0a9fa21448cde}{closeConnections} ()
+\item 
+\hyperlink{classCassandra_a4eaaed3e996a26cc145057487036584b}{getClient} ()
+\item 
+\hyperlink{classCassandra_aea614dd2c8170609c0ec9e81607983a0}{setMaxCallRetries} (\$retryCount)
+\item 
+\hyperlink{classCassandra_af62c6e8771c55cfe9a94e8a6551a5e1b}{setDefaultColumnCount} (\$columnCountLimit)
+\item 
+\hyperlink{classCassandra_a5a83ae74dca462d6d7527c2a682ae550}{call} ()
+\item 
+\hyperlink{classCassandra_a6ba87c8d96b73a8b13f61711c5df9e52}{describeKeyspace} (\$keyspace=null)
+\item 
+\hyperlink{classCassandra_a67612b010f1a48882ca0ad6888fab31f}{getKeyspaceSchema} (\$keyspace=null, \$useCache=true)
+\item 
+\hyperlink{classCassandra_a3291b2ab3dc093e22df8a428321f2492}{getVersion} ()
+\item 
+\hyperlink{classCassandra_a4d61f35bafba5e3e2b82b33671ce7831}{cf} (\$name)
+\item 
+\hyperlink{classCassandra_a4e450d22e7ae8575cca647970edb54d5}{columnFamily} (\$name)
+\item 
+\hyperlink{classCassandra_ad2f8866d598ac0f696cb0c87258133fb}{get} (\$request, \$consistency=null)
+\item 
+\hyperlink{classCassandra_ada5af7349bbec677ea2b068b4f426707}{set} (\$key, array \$columns, \$consistency=null)
+\item 
+\hyperlink{classCassandra_ab249eab7f62e3076829c1f4e376dbc18}{createKeyspace} (\$name, \$replicationFactor=1, \$placementStrategyClass=self::PLACEMENT\_\-SIMPLE, \$placementStrategyOptions=null)
+\item 
+\hyperlink{classCassandra_a4b0b56e3354e7d59efa5a0fdda488be1}{updateKeyspace} (\$name, \$replicationFactor=1, \$placementStrategyClass=self::PLACEMENT\_\-SIMPLE, \$placementStrategyOptions=null)
+\item 
+\hyperlink{classCassandra_a1422aecd02d9727bc26f1d6546a10151}{dropKeyspace} (\$name)
+\item 
+\hyperlink{classCassandra_a382ac999e181b0d0f735a76ddf28d0ff}{createStandardColumnFamily} (\$keyspace, \$name, \$columns=array(), \$comparatorType=\hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{Cassandra::TYPE\_\-UTF8}, \$defaultValidationClass=\hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{Cassandra::TYPE\_\-UTF8}, \$comment=null, \$rowCacheSize=null, \$keyCacheSize=null, \$readRepairChance=null, \$cgGraceSeconds=null, \$minCompactionThreshold=null, \$maxCompactionThreshold=null, \$rowCacheSavePeriodSeconds=null, \$keyCacheSavePeriodSeconds=null, \$memtableFlushAfterMins=null, \$memtableFlushAfterThroughputMb=null, \$memtableFlushAfterOpsMillions=null)
+\item 
+\hyperlink{classCassandra_a121a87352eb88b7dc8de38188ecdd8c6}{createSuperColumnFamily} (\$keyspace, \$name, \$columns=array(), \$comparatorType=\hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{Cassandra::TYPE\_\-UTF8}, \$subcomparatorType=\hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{Cassandra::TYPE\_\-UTF8}, \$defaultValidationClass=\hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{Cassandra::TYPE\_\-UTF8}, \$comment=null, \$rowCacheSize=null, \$keyCacheSize=null, \$readRepairChance=null, \$cgGraceSeconds=null, \$minCompactionThreshold=null, \$maxCompactionThreshold=null, \$rowCacheSavePeriodSeconds=null, \$keyCacheSavePeriodSeconds=null, \$memtableFlushAfterMins=null, \$memtableFlushAfterThroughputMb=null, \$memtableFlushAfterOpsMillions=null)
+\item 
+\hyperlink{classCassandra_a19f2f88752029346ee737805a0d3c022}{createColumnFamily} (\$keyspace, \$name, \$columnType=\hyperlink{classCassandra_a5b7fd78b8f044623445d9e9a8f175790}{Cassandra::COLUMN\_\-STANDARD}, \$columns=array(), \$comparatorType=\hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{Cassandra::TYPE\_\-UTF8}, \$subcomparatorType=null, \$defaultValidationClass=\hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{Cassandra::TYPE\_\-UTF8}, \$comment=null, \$rowCacheSize=null, \$keyCacheSize=null, \$readRepairChance=null, \$cgGraceSeconds=null, \$minCompactionThreshold=null, \$maxCompactionThreshold=null, \$rowCacheSavePeriodSeconds=null, \$keyCacheSavePeriodSeconds=null, \$memtableFlushAfterMins=null, \$memtableFlushAfterThroughputMb=null, \$memtableFlushAfterOpsMillions=null)
+\item 
+\hyperlink{classCassandra_ad5b9ce7720a1c4b015abaaea988edfe1}{truncate} (\$columnFamilyName)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classCassandra_a0eb2d8394ec9b98363eb2ea13c3390a6}{createInstance} (array \$servers, \$name= 'main')
+\item 
+static \hyperlink{classCassandra_accae5522cc54a2f679f7925752d14c01}{getInstance} (\$name= 'main')
+\item 
+static \hyperlink{classCassandra_add0d5cd1c9ce26092db0124971e39d11}{escape} (\$value)
+\item 
+static \hyperlink{classCassandra_add4a1aed054f96ad74938e149b0ed0ef}{unescape} (\$value)
+\end{DoxyCompactItemize}
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{classCassandra_afd35e5b7419ce2915891c349a44b6f22}{CONSISTENCY\_\-ONE} = cassandra\_\-ConsistencyLevel::ONE
+\item 
+const \hyperlink{classCassandra_a58c08b49c2434526a62f74248c8b959d}{CONSISTENCY\_\-QUORUM} = cassandra\_\-ConsistencyLevel::QUORUM
+\item 
+const \hyperlink{classCassandra_a94fdd09de0798393d86a9965482cefa7}{CONSISTENCY\_\-ANY} = cassandra\_\-ConsistencyLevel::ANY
+\item 
+const \hyperlink{classCassandra_ac7e4763d615ce200970153894d53219a}{CONSISTENCY\_\-ALL} = cassandra\_\-ConsistencyLevel::ALL
+\item 
+const \hyperlink{classCassandra_a5b7fd78b8f044623445d9e9a8f175790}{COLUMN\_\-STANDARD} = 'Standard'
+\item 
+const \hyperlink{classCassandra_abf8e49b590d1e1b83d3e13cc133cd672}{COLUMN\_\-SUPER} = 'Super'
+\item 
+const \hyperlink{classCassandra_acc917786b5bbbdd6eb4783856bd5580c}{TYPE\_\-ASCII} = 'AsciiType'
+\item 
+const \hyperlink{classCassandra_ab75de9aa0588c7665f1c9d8cf8d4e8ff}{TYPE\_\-BYTES} = 'BytesType'
+\item 
+const \hyperlink{classCassandra_a2af16bdea44f4e16ba5c5baa5380b9f0}{TYPE\_\-LEXICAL\_\-UUID} = 'LexicalUUIDType'
+\item 
+const \hyperlink{classCassandra_a42861ad94788ba940228767a79f1c4c7}{TYPE\_\-TIME\_\-UUID} = 'TimeUUIDType'
+\item 
+const \hyperlink{classCassandra_acf64f8105c4bfe0c95f868437299442f}{TYPE\_\-LONG} = 'LongType'
+\item 
+const \hyperlink{classCassandra_a4160c654a18aead3a642fd1f3f2415e9}{TYPE\_\-INTEGER} = 'IntegerType'
+\item 
+const \hyperlink{classCassandra_ac03a89bd430178d9bce987eba8001b82}{TYPE\_\-UTF8} = 'UTF8Type'
+\item 
+const \hyperlink{classCassandra_a33b81650dd46405f23e6d469eeb1bd5b}{OP\_\-EQ} = cassandra\_\-IndexOperator::EQ
+\item 
+const \hyperlink{classCassandra_acf59b31536a8a886422ef7335020f99d}{OP\_\-LT} = cassandra\_\-IndexOperator::LT
+\item 
+const \hyperlink{classCassandra_a660ca00d7f33558017e15ccc1f8f5d29}{OP\_\-GT} = cassandra\_\-IndexOperator::GT
+\item 
+const \hyperlink{classCassandra_ab633158313b4f7f785910884d950f945}{OP\_\-LTE} = cassandra\_\-IndexOperator::LTE
+\item 
+const \hyperlink{classCassandra_a60a245248555c96cadec6977014c27df}{OP\_\-GTE} = cassandra\_\-IndexOperator::GTE
+\item 
+const \hyperlink{classCassandra_acae99f4717a1b6a2fb14343b9ca02806}{PLACEMENT\_\-SIMPLE} = 'org.apache.cassandra.locator.SimpleStrategy'
+\item 
+const \hyperlink{classCassandra_a82e1fae7c469b0983ad1d38b309273fd}{PLACEMENT\_\-NETWORK} = 'org.apache.cassandra.locator.NetworkTopologyStrategy'
+\item 
+const \hyperlink{classCassandra_a3ea159c9a7ead7fa56cac7f8ebe9bc74}{PLACEMENT\_\-OLD\_\-NETWORK} = 'org.apache.cassandra.locator.OldNetworkTopologyStrategy'
+\item 
+const \hyperlink{classCassandra_aa3d7e3c4c9454133e7b21165bb7c3953}{INDEX\_\-KEYS} = 0
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandra_a22c9c1782896b9ee47117643c89f0052}{registerKeyspace} (\$keyspace, \$username=null, \$password=null)
+\item 
+\hyperlink{classCassandra_a960d23553468532df3d4c6bf712bb2f7}{parseRequest} (\$request)
+\item 
+\hyperlink{classCassandra_a48c9d0cb51ea0ac56949b7865760ed5e}{createColumnDefinition} (array \$info)
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classCassandra_ad051f9ef0cdc597c5838124c58e9f962}{getKeyspaceRequiredMethods} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandra_a06be00e38d48ede339c5c46b37967a60}{
+{\bfseries \$cluster}}
+\label{classCassandra_a06be00e38d48ede339c5c46b37967a60}
+
+\item 
+\hypertarget{classCassandra_a717596cba1c3cef69e259c852196ec82}{
+{\bfseries \$maxCallRetries} = 5}
+\label{classCassandra_a717596cba1c3cef69e259c852196ec82}
+
+\item 
+\hypertarget{classCassandra_a1a993bec38a0a1802388011500b21157}{
+{\bfseries \$defaultColumnCount} = 100}
+\label{classCassandra_a1a993bec38a0a1802388011500b21157}
+
+\item 
+\hypertarget{classCassandra_a54b0de1fe5ee18a9362a26ea78b1abc3}{
+{\bfseries \$columnFamilies} = array()}
+\label{classCassandra_a54b0de1fe5ee18a9362a26ea78b1abc3}
+
+\item 
+\hypertarget{classCassandra_a3aa3bbd7c414054287c8c1898a927b1d}{
+{\bfseries \$keyspaceAuthentication} = array()}
+\label{classCassandra_a3aa3bbd7c414054287c8c1898a927b1d}
+
+\item 
+\hypertarget{classCassandra_a1e4f7ff20a81e62a72ededbaef50fbac}{
+{\bfseries \$autopack} = true}
+\label{classCassandra_a1e4f7ff20a81e62a72ededbaef50fbac}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandra_a96554e1c0455dd8e952630cf4f222b66}{
+static {\bfseries \$instances} = array()}
+\label{classCassandra_a96554e1c0455dd8e952630cf4f222b66}
+
+\item 
+\hypertarget{classCassandra_a50fd67e22e2cc47e36171ae23b7139cd}{
+static {\bfseries \$keyspaceRequiredMethods}}
+\label{classCassandra_a50fd67e22e2cc47e36171ae23b7139cd}
+
+\item 
+\hypertarget{classCassandra_a2a7936715f303ae92e9d6923e456d371}{
+static {\bfseries \$requestKeyTokens} = array('.', ':', ',', '-\/', '$|$')}
+\label{classCassandra_a2a7936715f303ae92e9d6923e456d371}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandra_a92574efcf6569a6e2e6f82b6101e83d2}{\_\-\_\-construct} (array \$servers=array(), \$autopack=true)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The main \hyperlink{classCassandra}{Cassandra} client class providing means to manage keyspaces and column families, get info about schema, fetch and store data. 
+
+Definition at line 555 of file Cassandra.php.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classCassandra_a92574efcf6569a6e2e6f82b6101e83d2}{
+\index{Cassandra@{Cassandra}!\_\-\_\-construct@{\_\-\_\-construct}}
+\index{\_\-\_\-construct@{\_\-\_\-construct}!Cassandra@{Cassandra}}
+\subsubsection[{\_\-\_\-construct}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::\_\-\_\-construct (
+\begin{DoxyParamCaption}
+\item[{array \$}]{servers = {\ttfamily array()}, }
+\item[{\$}]{autopack = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}private\mbox{]}}}}
+\label{classCassandra_a92574efcf6569a6e2e6f82b6101e83d2}
+Sets the list of servers to use and whether keys and values should be automatically packed to the correct format as defined by column families column metadata.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$servers} & Array of server connection details. \\
+\hline
+type & {\em \$autopack} & Should keys and data be autopacked. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 779 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                             {
+        $this->cluster = new CassandraCluster($servers);
+        $this->autopack = $autopack;
+    }
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandra_abb13b5073e065e8f2a60b1c6f18c573e}{
+\index{Cassandra@{Cassandra}!\_\-\_\-clone@{\_\-\_\-clone}}
+\index{\_\-\_\-clone@{\_\-\_\-clone}!Cassandra@{Cassandra}}
+\subsubsection[{\_\-\_\-clone}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::\_\-\_\-clone (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_abb13b5073e065e8f2a60b1c6f18c573e}
+Prevent users cloning the instance. 
+
+Definition at line 787 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                              {
+        trigger_error('Clone is not allowed.', E_USER_ERROR);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a5a83ae74dca462d6d7527c2a682ae550}{
+\index{Cassandra@{Cassandra}!call@{call}}
+\index{call@{call}!Cassandra@{Cassandra}}
+\subsubsection[{call}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::call (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a5a83ae74dca462d6d7527c2a682ae550}
+Makes a call to a \hyperlink{classCassandra}{Cassandra} node.
+
+This method accepts a variable number of parameters where the first one is the \hyperlink{classCassandra}{Cassandra} client method name and the rest the parameters to pass to it.
+
+If a call fails, it will be retried for \{\begin{DoxySeeAlso}{See also}
+Cassandra::\$maxCallRetries\} times, backing off (waiting) a bit more each time to prevent flooding.
+\end{DoxySeeAlso}
+\begin{DoxyReturn}{Returns}
+mixed The returned value 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \hyperlink{classCassandraInvalidRequestException}{CassandraInvalidRequestException}} & If the request is invalid \\
+\hline
+{\em \hyperlink{classCassandraMaxRetriesException}{CassandraMaxRetriesException}} & If The call failed all retries \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 943 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                            {
+        $args = func_get_args();
+        $methodName = array_shift($args);
+        
+        $tries = $this->maxCallRetries;
+        $lastException = null;
+        
+        $keyspaceRequiredMethods = self::getKeyspaceRequiredMethods();
+        
+        if (
+            in_array($methodName, $keyspaceRequiredMethods)
+            && $this->cluster->getCurrentKeyspace() === null
+        ) {
+            throw new CassandraInvalidRequestException(
+                'Unable to call "'.$methodName.'", no keyspace has been set'
+            );
+        }
+        
+        $try = 0;
+        
+        while($tries-- > 0) {
+            $client = $this->getClient();
+            $try++;
+            
+            try {
+                return call_user_func_array(array($client, $methodName), $args);
+            } catch (Exception $e) {
+                $lastException = $e;
+                
+                usleep(0.1 * pow(2, $try) * 1000000);
+            }
+        }
+
+        throw new CassandraMaxRetriesException(
+            'Failed calling "'.$methodName.'" the maximum of '.
+            $this->maxCallRetries.' times',
+            $lastException->getCode(),
+            $lastException
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a4d61f35bafba5e3e2b82b33671ce7831}{
+\index{Cassandra@{Cassandra}!cf@{cf}}
+\index{cf@{cf}!Cassandra@{Cassandra}}
+\subsubsection[{cf}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::cf (
+\begin{DoxyParamCaption}
+\item[{\$}]{name}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a4d61f35bafba5e3e2b82b33671ce7831}
+Column family factory for manipulating a specific column family.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$name} & Name of the column family. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} 
+\end{DoxyReturn}
+
+
+Definition at line 1100 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                              {
+        if (!isset($this->columnFamilies[$name])) {
+            $this->columnFamilies[$name] = new CassandraColumnFamily(
+                $this,
+                $name,
+                Cassandra::CONSISTENCY_ONE,
+                Cassandra::CONSISTENCY_ONE,
+                $this->autopack
+            );
+        }
+        
+        return $this->columnFamilies[$name];
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a382ebe135b67bddef1e0a9fa21448cde}{
+\index{Cassandra@{Cassandra}!closeConnections@{closeConnections}}
+\index{closeConnections@{closeConnections}!Cassandra@{Cassandra}}
+\subsubsection[{closeConnections}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::closeConnections (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a382ebe135b67bddef1e0a9fa21448cde}
+Closes all open connections to nodes.
+
+Proxies the call to cluster. 
+
+Definition at line 894 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                       {
+        $this->cluster->closeConnections();
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a4e450d22e7ae8575cca647970edb54d5}{
+\index{Cassandra@{Cassandra}!columnFamily@{columnFamily}}
+\index{columnFamily@{columnFamily}!Cassandra@{Cassandra}}
+\subsubsection[{columnFamily}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::columnFamily (
+\begin{DoxyParamCaption}
+\item[{\$}]{name}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a4e450d22e7ae8575cca647970edb54d5}
+Column family factory for manipulating a specific column family.
+
+Alias to \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_a4d61f35bafba5e3e2b82b33671ce7831}{Cassandra::cf()}\} for people preferring full names.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$name} & Name of the column family. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} 
+\end{DoxyReturn}
+
+
+Definition at line 1122 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                        {
+        return $this->cf($name);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a48c9d0cb51ea0ac56949b7865760ed5e}{
+\index{Cassandra@{Cassandra}!createColumnDefinition@{createColumnDefinition}}
+\index{createColumnDefinition@{createColumnDefinition}!Cassandra@{Cassandra}}
+\subsubsection[{createColumnDefinition}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::createColumnDefinition (
+\begin{DoxyParamCaption}
+\item[{array \$}]{info}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandra_a48c9d0cb51ea0ac56949b7865760ed5e}
+Creates column definition.
+
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$info} & Column info \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+cassandra\_\-ColumnDef Column definition 
+\end{DoxyReturn}
+
+
+Definition at line 1690 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                           {
+        $def = new cassandra_ColumnDef();
+
+        $def->name = $info['name'];
+        
+        if (!empty($info['type'])) {
+            $def->validation_class = $info['type'];
+        }
+        
+        if (isset($info['index-type'])) {
+            $def->index_type = $info['index-type'];
+        }
+        
+        if (!empty($info['index-name'])) {
+            $def->index_type = $info['index-name'];
+        }
+        
+        return $def;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a19f2f88752029346ee737805a0d3c022}{
+\index{Cassandra@{Cassandra}!createColumnFamily@{createColumnFamily}}
+\index{createColumnFamily@{createColumnFamily}!Cassandra@{Cassandra}}
+\subsubsection[{createColumnFamily}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::createColumnFamily (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace, }
+\item[{\$}]{name, }
+\item[{\$}]{columnType = {\ttfamily {\bf Cassandra::COLUMN\_\-STANDARD}}, }
+\item[{\$}]{columns = {\ttfamily array()}, }
+\item[{\$}]{comparatorType = {\ttfamily {\bf Cassandra::TYPE\_\-UTF8}}, }
+\item[{\$}]{subcomparatorType = {\ttfamily null}, }
+\item[{\$}]{defaultValidationClass = {\ttfamily {\bf Cassandra::TYPE\_\-UTF8}}, }
+\item[{\$}]{comment = {\ttfamily null}, }
+\item[{\$}]{rowCacheSize = {\ttfamily null}, }
+\item[{\$}]{keyCacheSize = {\ttfamily null}, }
+\item[{\$}]{readRepairChance = {\ttfamily null}, }
+\item[{\$}]{cgGraceSeconds = {\ttfamily null}, }
+\item[{\$}]{minCompactionThreshold = {\ttfamily null}, }
+\item[{\$}]{maxCompactionThreshold = {\ttfamily null}, }
+\item[{\$}]{rowCacheSavePeriodSeconds = {\ttfamily null}, }
+\item[{\$}]{keyCacheSavePeriodSeconds = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterMins = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterThroughputMb = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterOpsMillions = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a19f2f88752029346ee737805a0d3c022}
+Creates a new column family, either standard or super.
+
+You might want to use the \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_a382ac999e181b0d0f735a76ddf28d0ff}{Cassandra::createStandardColumnFamily()}\} and \{
+
+\hyperlink{classCassandra_a121a87352eb88b7dc8de38188ecdd8c6}{Cassandra::createSuperColumnFamily()}\} that proxy to this method.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Keyspace to create in \\
+\hline
+string & {\em \$name} & Name of the column family \\
+\hline
+array & {\em \$columns} & Column metadata \\
+\hline
+string & {\em \$comparatorType} & Key comparator type \\
+\hline
+string & {\em \$defaultValidationClass} & Default column value type \\
+\hline
+string & {\em \$comment} & Free text comment \\
+\hline
+integer & {\em \$rowCacheSize} & Row cache size \\
+\hline
+integer & {\em \$keyCacheSize} & Key cache size \\
+\hline
+float & {\em \$readRepairChance} & Change for read repair 0..1 \\
+\hline
+integer & {\em \$cgGraceSeconds} & Carbage collection period \\
+\hline
+integer & {\em \$minCompactionThreshold} & Minimum compaction threshold \\
+\hline
+integer & {\em \$maxCompactionThreshold} & Maximum compaction threshold \\
+\hline
+integer & {\em \$rowCacheSavePeriodSeconds} & Row cache saving period \\
+\hline
+integer & {\em \$keyCacheSavePeriodSeconds} & Key cache saving period \\
+\hline
+integer & {\em \$memtableFlushAfterMins} & Memtable flush after minutes \\
+\hline
+integer & {\em \$memtableFlushAfterThroughputMb} & Memtable flush after data \\
+\hline
+integer & {\em \$memtableFlushAfterOpsMillions} & Flush after operations \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean Was creating the column family successful 
+\end{DoxyReturn}
+
+
+Definition at line 1433 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $columnMetadata = null;
+        
+        if (!empty($columns)) {
+            $columnMetadata = array();
+            
+            foreach ($columns as $column) {
+                $columnMetadata[] = $this->createColumnDefinition($column);
+            }
+        }
+        
+        $def = new cassandra_CfDef();
+        
+        $def->keyspace = $keyspace;
+        $def->name = $name;
+        $def->column_type = $columnType;
+        $def->comparator_type = $comparatorType;
+        $def->subcomparator_type = $subcomparatorType;
+        $def->comment = $comment;
+        $def->row_cache_size = $rowCacheSize;
+        
+        if ($keyCacheSize !== null) {
+            $def->key_cache_size = $keyCacheSize;
+        }
+        
+        $def->read_repair_chance = $readRepairChance;
+        $def->column_metadata = $columnMetadata;
+        $def->gc_grace_seconds = $cgGraceSeconds;
+        $def->default_validation_class = $defaultValidationClass;
+        $def->min_compaction_threshold = $minCompactionThreshold;
+        $def->max_compaction_threshold = $maxCompactionThreshold;
+        $def->row_cache_save_period_in_seconds = $rowCacheSavePeriodSeconds;
+        $def->key_cache_save_period_in_seconds = $keyCacheSavePeriodSeconds;
+        $def->memtable_flush_after_mins = $memtableFlushAfterMins;
+        $def->memtable_throughput_in_mb = $memtableFlushAfterThroughputMb;
+        $def->memtable_operations_in_millions = $memtableFlushAfterOpsMillions;
+
+        return $this->call('system_add_column_family', $def);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a0eb2d8394ec9b98363eb2ea13c3390a6}{
+\index{Cassandra@{Cassandra}!createInstance@{createInstance}}
+\index{createInstance@{createInstance}!Cassandra@{Cassandra}}
+\subsubsection[{createInstance}]{\setlength{\rightskip}{0pt plus 5cm}static Cassandra::createInstance (
+\begin{DoxyParamCaption}
+\item[{array \$}]{servers, }
+\item[{\$}]{name = {\ttfamily 'main'}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandra_a0eb2d8394ec9b98363eb2ea13c3390a6}
+Creates a new named cassandra instance.
+
+The name can be used in \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_accae5522cc54a2f679f7925752d14c01}{Cassandra::getInstance()}\} to fetch the named singleton anywhere in the project.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$servers} & List of seed servers to connect to \\
+\hline
+type & {\em \$name} & Name of the instance \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandra}{Cassandra} New cassandra instance 
+\end{DoxyReturn}
+
+
+Definition at line 801 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                          {
+        self::$instances[$name] = new self($servers);
+        
+        return self::$instances[$name];
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_ab249eab7f62e3076829c1f4e376dbc18}{
+\index{Cassandra@{Cassandra}!createKeyspace@{createKeyspace}}
+\index{createKeyspace@{createKeyspace}!Cassandra@{Cassandra}}
+\subsubsection[{createKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::createKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{name, }
+\item[{\$}]{replicationFactor = {\ttfamily 1}, }
+\item[{\$}]{placementStrategyClass = {\ttfamily self::PLACEMENT\_\-SIMPLE}, }
+\item[{\$}]{placementStrategyOptions = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_ab249eab7f62e3076829c1f4e376dbc18}
+Creates a new keyspace.
+
+Note that the replication factor means how many nodes hold a single piece of information, not to how many nodes its replicated to so a replication factor of one means that a single node has data and no replication is performed.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$name} & Name of the keyspace \\
+\hline
+integer & {\em \$replicationFactor} & How many nodes hold each piece of data \\
+\hline
+string & {\em \$placementStrategyClass} & Data placement strategy \\
+\hline
+array & {\em \$placementStrategyOptions} & Strategy options \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean Was creating the keyspace successful 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If anything goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1207 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $def = new cassandra_KsDef();
+        
+        $def->name = $name;
+        $def->strategy_class = $placementStrategyClass;
+        $def->strategy_options = $placementStrategyOptions;
+        $def->cf_defs = array();
+        $def->replication_factor = $replicationFactor;
+        
+        return $this->call('system_add_keyspace', $def);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a382ac999e181b0d0f735a76ddf28d0ff}{
+\index{Cassandra@{Cassandra}!createStandardColumnFamily@{createStandardColumnFamily}}
+\index{createStandardColumnFamily@{createStandardColumnFamily}!Cassandra@{Cassandra}}
+\subsubsection[{createStandardColumnFamily}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::createStandardColumnFamily (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace, }
+\item[{\$}]{name, }
+\item[{\$}]{columns = {\ttfamily array()}, }
+\item[{\$}]{comparatorType = {\ttfamily {\bf Cassandra::TYPE\_\-UTF8}}, }
+\item[{\$}]{defaultValidationClass = {\ttfamily {\bf Cassandra::TYPE\_\-UTF8}}, }
+\item[{\$}]{comment = {\ttfamily null}, }
+\item[{\$}]{rowCacheSize = {\ttfamily null}, }
+\item[{\$}]{keyCacheSize = {\ttfamily null}, }
+\item[{\$}]{readRepairChance = {\ttfamily null}, }
+\item[{\$}]{cgGraceSeconds = {\ttfamily null}, }
+\item[{\$}]{minCompactionThreshold = {\ttfamily null}, }
+\item[{\$}]{maxCompactionThreshold = {\ttfamily null}, }
+\item[{\$}]{rowCacheSavePeriodSeconds = {\ttfamily null}, }
+\item[{\$}]{keyCacheSavePeriodSeconds = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterMins = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterThroughputMb = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterOpsMillions = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a382ac999e181b0d0f735a76ddf28d0ff}
+Creates a new standard column family.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Keyspace to create in \\
+\hline
+string & {\em \$name} & Name of the column family \\
+\hline
+array & {\em \$columns} & Column metadata \\
+\hline
+string & {\em \$comparatorType} & Key comparator type \\
+\hline
+string & {\em \$defaultValidationClass} & Default column value type \\
+\hline
+string & {\em \$comment} & Free text comment \\
+\hline
+integer & {\em \$rowCacheSize} & Row cache size \\
+\hline
+integer & {\em \$keyCacheSize} & Key cache size \\
+\hline
+float & {\em \$readRepairChance} & Change for read repair 0..1 \\
+\hline
+integer & {\em \$cgGraceSeconds} & Carbage collection period \\
+\hline
+integer & {\em \$minCompactionThreshold} & Minimum compaction threshold \\
+\hline
+integer & {\em \$maxCompactionThreshold} & Maximum compaction threshold \\
+\hline
+integer & {\em \$rowCacheSavePeriodSeconds} & Row cache saving period \\
+\hline
+integer & {\em \$keyCacheSavePeriodSeconds} & Key cache saving period \\
+\hline
+integer & {\em \$memtableFlushAfterMins} & Memtable flush after minutes \\
+\hline
+integer & {\em \$memtableFlushAfterThroughputMb} & Memtable flush after data \\
+\hline
+integer & {\em \$memtableFlushAfterOpsMillions} & Flush after operations \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean Was creating the column family successful 
+\end{DoxyReturn}
+
+
+Definition at line 1289 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        return $this->createColumnFamily(
+            $keyspace,
+            $name,
+            Cassandra::COLUMN_STANDARD,
+            $columns,
+            $comparatorType,
+            null,
+            $defaultValidationClass,
+            $comment,
+            $rowCacheSize,
+            $keyCacheSize,
+            $readRepairChance,
+            $cgGraceSeconds,
+            $minCompactionThreshold,
+            $maxCompactionThreshold,
+            $rowCacheSavePeriodSeconds,
+            $keyCacheSavePeriodSeconds,
+            $memtableFlushAfterMins,
+            $memtableFlushAfterThroughputMb,
+            $memtableFlushAfterOpsMillions
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a121a87352eb88b7dc8de38188ecdd8c6}{
+\index{Cassandra@{Cassandra}!createSuperColumnFamily@{createSuperColumnFamily}}
+\index{createSuperColumnFamily@{createSuperColumnFamily}!Cassandra@{Cassandra}}
+\subsubsection[{createSuperColumnFamily}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::createSuperColumnFamily (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace, }
+\item[{\$}]{name, }
+\item[{\$}]{columns = {\ttfamily array()}, }
+\item[{\$}]{comparatorType = {\ttfamily {\bf Cassandra::TYPE\_\-UTF8}}, }
+\item[{\$}]{subcomparatorType = {\ttfamily {\bf Cassandra::TYPE\_\-UTF8}}, }
+\item[{\$}]{defaultValidationClass = {\ttfamily {\bf Cassandra::TYPE\_\-UTF8}}, }
+\item[{\$}]{comment = {\ttfamily null}, }
+\item[{\$}]{rowCacheSize = {\ttfamily null}, }
+\item[{\$}]{keyCacheSize = {\ttfamily null}, }
+\item[{\$}]{readRepairChance = {\ttfamily null}, }
+\item[{\$}]{cgGraceSeconds = {\ttfamily null}, }
+\item[{\$}]{minCompactionThreshold = {\ttfamily null}, }
+\item[{\$}]{maxCompactionThreshold = {\ttfamily null}, }
+\item[{\$}]{rowCacheSavePeriodSeconds = {\ttfamily null}, }
+\item[{\$}]{keyCacheSavePeriodSeconds = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterMins = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterThroughputMb = {\ttfamily null}, }
+\item[{\$}]{memtableFlushAfterOpsMillions = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a121a87352eb88b7dc8de38188ecdd8c6}
+Creates a new super column family.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Keyspace to create in \\
+\hline
+string & {\em \$name} & Name of the column family \\
+\hline
+array & {\em \$columns} & Column metadata \\
+\hline
+string & {\em \$comparatorType} & Key comparator type \\
+\hline
+string & {\em \$defaultValidationClass} & Default column value type \\
+\hline
+string & {\em \$comment} & Free text comment \\
+\hline
+integer & {\em \$rowCacheSize} & Row cache size \\
+\hline
+integer & {\em \$keyCacheSize} & Key cache size \\
+\hline
+float & {\em \$readRepairChance} & Change for read repair 0..1 \\
+\hline
+integer & {\em \$cgGraceSeconds} & Carbage collection period \\
+\hline
+integer & {\em \$minCompactionThreshold} & Minimum compaction threshold \\
+\hline
+integer & {\em \$maxCompactionThreshold} & Maximum compaction threshold \\
+\hline
+integer & {\em \$rowCacheSavePeriodSeconds} & Row cache saving period \\
+\hline
+integer & {\em \$keyCacheSavePeriodSeconds} & Key cache saving period \\
+\hline
+integer & {\em \$memtableFlushAfterMins} & Memtable flush after minutes \\
+\hline
+integer & {\em \$memtableFlushAfterThroughputMb} & Memtable flush after data \\
+\hline
+integer & {\em \$memtableFlushAfterOpsMillions} & Flush after operations \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean Was creating the column family successful 
+\end{DoxyReturn}
+
+
+Definition at line 1353 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        foreach ($columns as $column) {
+            if (
+                array_key_exists('index-type', $column)
+                || array_key_exists('index-name', $column)
+            ) {
+                throw new CassandraUnsupportedException(
+                    'Secondary indexes are not supported by supercolumns'
+                );
+            }
+        }
+        
+        return $this->createColumnFamily(
+            $keyspace,
+            $name,
+            Cassandra::COLUMN_SUPER,
+            $columns,
+            $comparatorType,
+            $subcomparatorType,
+            $defaultValidationClass,
+            $comment,
+            $rowCacheSize,
+            $keyCacheSize,
+            $readRepairChance,
+            $cgGraceSeconds,
+            $minCompactionThreshold,
+            $maxCompactionThreshold,
+            $rowCacheSavePeriodSeconds,
+            $keyCacheSavePeriodSeconds,
+            $memtableFlushAfterMins,
+            $memtableFlushAfterThroughputMb,
+            $memtableFlushAfterOpsMillions
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a6ba87c8d96b73a8b13f61711c5df9e52}{
+\index{Cassandra@{Cassandra}!describeKeyspace@{describeKeyspace}}
+\index{describeKeyspace@{describeKeyspace}!Cassandra@{Cassandra}}
+\subsubsection[{describeKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::describeKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a6ba87c8d96b73a8b13f61711c5df9e52}
+Returns ow-\/level keyspace description as returned by \hyperlink{classCassandra}{Cassandra}.
+
+Returns the result of \char`\"{}describe\_\-keyspace\char`\"{} call without any processing and does not use cache. Generally you want to use the more friendly version \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandra_a67612b010f1a48882ca0ad6888fab31f}{Cassandra::getKeyspaceSchema()}\}.
+\end{DoxySeeAlso}
+If no keyspace name is defined, the currently active keyspace is used.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Optional keyspace name. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Keyspace description as given by \hyperlink{classCassandra}{Cassandra} 
+\end{DoxyReturn}
+
+
+Definition at line 996 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                       {
+        if ($keyspace === null) {
+            $keyspace = $this->cluster->getCurrentKeyspace();
+        }
+        
+        return $this->call('describe_keyspace', $keyspace);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a1422aecd02d9727bc26f1d6546a10151}{
+\index{Cassandra@{Cassandra}!dropKeyspace@{dropKeyspace}}
+\index{dropKeyspace@{dropKeyspace}!Cassandra@{Cassandra}}
+\subsubsection[{dropKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::dropKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{name}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a1422aecd02d9727bc26f1d6546a10151}
+Drops an entire keyspace.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$name} & Name of the keyspace \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean Was dropping successful 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If anything goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1263 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                        {
+        return $this->call('system_drop_keyspace', $name);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_add0d5cd1c9ce26092db0124971e39d11}{
+\index{Cassandra@{Cassandra}!escape@{escape}}
+\index{escape@{escape}!Cassandra@{Cassandra}}
+\subsubsection[{escape}]{\setlength{\rightskip}{0pt plus 5cm}static Cassandra::escape (
+\begin{DoxyParamCaption}
+\item[{\$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandra_add0d5cd1c9ce26092db0124971e39d11}
+Escapes keys used in get requests.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$value} & Value to escape \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string escaped value 
+\end{DoxyReturn}
+
+
+Definition at line 1645 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                          {
+        foreach(self::$requestKeyTokens as $keyToken) {
+            $value = str_replace(
+                $keyToken,
+                '\\'.$keyToken,
+                $value
+            );
+        }
+        
+        return $value;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_ad2f8866d598ac0f696cb0c87258133fb}{
+\index{Cassandra@{Cassandra}!get@{get}}
+\index{get@{get}!Cassandra@{Cassandra}}
+\subsubsection[{get}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::get (
+\begin{DoxyParamCaption}
+\item[{\$}]{request, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_ad2f8866d598ac0f696cb0c87258133fb}
+Requests some data as a single request string.
+
+Supported patterns:
+\begin{DoxyItemize}
+\item family.key
+\item family.key:col1,col2,coln
+\item family.key:col1-\/col2
+\item family.key:col1-\/col2$|$100
+\item family$\backslash$.name:key$\backslash$:name:col$\backslash$.1,col$\backslash$$|$2$|$100
+\end{DoxyItemize}
+
+In all of the parts, the following characters shoudl be escaped ($\backslash$. etc) '.', ':', ',', '-\/', '$|$'
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$request} & The request string, see patterns above \\
+\hline
+integer & {\em \$consistency} & Consistency level, use constants, has default \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \hyperlink{classCassandraInvalidPatternException}{CassandraInvalidPatternException}} & If equest pattern is invalid \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1143 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                       {
+        $details = $this->parseRequest($request);
+
+        return $this->cf($details['column-family'])->get(
+            $details['key'],
+            $details['columns'],
+            $details['start-column'],
+            $details['end-column'],
+            $details['reversed'],
+            $details['column-count'],
+            $details['super-column'],
+            $consistency
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a4eaaed3e996a26cc145057487036584b}{
+\index{Cassandra@{Cassandra}!getClient@{getClient}}
+\index{getClient@{getClient}!Cassandra@{Cassandra}}
+\subsubsection[{getClient}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::getClient (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a4eaaed3e996a26cc145057487036584b}
+Return the low-\/level thrift client.
+
+\begin{DoxyReturn}{Returns}
+CassandraClient 
+\end{DoxyReturn}
+
+
+Definition at line 903 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                {
+        return $this->cluster->getConnection()->getClient();
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_ad8fe43e1ceb9841cca92cf981fb566b3}{
+\index{Cassandra@{Cassandra}!getCluster@{getCluster}}
+\index{getCluster@{getCluster}!Cassandra@{Cassandra}}
+\subsubsection[{getCluster}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::getCluster (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_ad8fe43e1ceb9841cca92cf981fb566b3}
+Returns the \hyperlink{classCassandra}{Cassandra} cluster of servers.
+
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraCluster}{CassandraCluster} 
+\end{DoxyReturn}
+
+
+Definition at line 876 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                 {
+        return $this->cluster;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_ac300f4b8ed3a2d80388225e0ec990883}{
+\index{Cassandra@{Cassandra}!getConnection@{getConnection}}
+\index{getConnection@{getConnection}!Cassandra@{Cassandra}}
+\subsubsection[{getConnection}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::getConnection (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_ac300f4b8ed3a2d80388225e0ec990883}
+Returns random connection to a node.
+
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraConnection}{CassandraConnection} 
+\end{DoxyReturn}
+
+
+Definition at line 885 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                    {
+        return $this->cluster->getConnection();
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_accae5522cc54a2f679f7925752d14c01}{
+\index{Cassandra@{Cassandra}!getInstance@{getInstance}}
+\index{getInstance@{getInstance}!Cassandra@{Cassandra}}
+\subsubsection[{getInstance}]{\setlength{\rightskip}{0pt plus 5cm}static Cassandra::getInstance (
+\begin{DoxyParamCaption}
+\item[{\$}]{name = {\ttfamily 'main'}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandra_accae5522cc54a2f679f7925752d14c01}
+Returns named singleton instance.
+
+Name defaults to \char`\"{}main\char`\"{} the same as \hyperlink{classCassandra_a0eb2d8394ec9b98363eb2ea13c3390a6}{createInstance()} so when using a single connection pool, the name needs not to be set on neither.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$name} & Name of the instance to fetch \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandra}{Cassandra} The instance 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \hyperlink{classCassandraInvalidRequestException}{CassandraInvalidRequestException}} & If no such instance exists \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 817 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                       {
+        if (!isset(self::$instances[$name])) {
+            throw new CassandraInvalidRequestException(
+                'Instance called "'.$name.'" does not exist'
+            );
+        }
+        
+        return self::$instances[$name];
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_ad051f9ef0cdc597c5838124c58e9f962}{
+\index{Cassandra@{Cassandra}!getKeyspaceRequiredMethods@{getKeyspaceRequiredMethods}}
+\index{getKeyspaceRequiredMethods@{getKeyspaceRequiredMethods}!Cassandra@{Cassandra}}
+\subsubsection[{getKeyspaceRequiredMethods}]{\setlength{\rightskip}{0pt plus 5cm}static Cassandra::getKeyspaceRequiredMethods (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static, protected\mbox{]}}}}
+\label{classCassandra_ad051f9ef0cdc597c5838124c58e9f962}
+Returns the list of low-\/level cassandra methods that require keyspace to be selected.
+
+\begin{DoxyReturn}{Returns}
+array 
+\end{DoxyReturn}
+
+
+Definition at line 1509 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                           {
+        if (self::$keyspaceRequiredMethods === null) {
+            self::$keyspaceRequiredMethods = array(
+                'login',
+                'get',
+                'get_slice',
+                'get_count',
+                'multiget_slice',
+                'multiget_count',
+                'get_indexed_slices',
+                'insert',
+                'remove',
+                'batch_mutate',
+                'truncate',
+                'describe_splits'
+            );
+        }
+        
+        return self::$keyspaceRequiredMethods;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a67612b010f1a48882ca0ad6888fab31f}{
+\index{Cassandra@{Cassandra}!getKeyspaceSchema@{getKeyspaceSchema}}
+\index{getKeyspaceSchema@{getKeyspaceSchema}!Cassandra@{Cassandra}}
+\subsubsection[{getKeyspaceSchema}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::getKeyspaceSchema (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace = {\ttfamily null}, }
+\item[{\$}]{useCache = {\ttfamily true}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a67612b010f1a48882ca0ad6888fab31f}
+Returns processed keyspace schema description that is also cached if possible (APC caching enabled).
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Optional keyspace, current used if not set \\
+\hline
+boolean & {\em \$useCache} & Should caching be used if possible \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Keyspace schema description with column families metadata 
+\end{DoxyReturn}
+
+
+Definition at line 1012 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                          {
+        if ($keyspace === null) {
+            $keyspace = $this->cluster->getCurrentKeyspace();
+        }
+        
+        $cacheKey = 'cassandra.schema|'.$keyspace;
+
+        $schema = false;
+        $storeSchema = false;
+        
+        if ($useCache && function_exists('apc_fetch')) {
+            $schema = apc_fetch($cacheKey);
+            $storeSchema = true;
+        }
+
+        if ($schema !== false) {
+            return $schema;
+        }
+
+        $info = $this->describeKeyspace($keyspace);
+        
+        $schema = array(
+            'name' => $info->name,
+            'placement-strategy' => $info->strategy_class,
+            'placement-strategy-options' => $info->strategy_options,
+            'replication-factor' => $info->replication_factor,
+            'column-families' => array()
+        );
+        
+        foreach ($info->cf_defs as $columnFamily) {
+            $isSuper = $columnFamily->column_type == 'Super' ? true : false;
+            
+            $schema['column-families'][$columnFamily->name] = array(
+                'name' => $columnFamily->name,
+                'super' => $isSuper,
+                'column-type' =>
+                    $isSuper
+                        ? CassandraUtil::extractType(
+                            $columnFamily->subcomparator_type
+                        )
+                        : CassandraUtil::extractType(
+                            $columnFamily->comparator_type
+                        ),
+                'super-type' =>
+                    $isSuper
+                        ? CassandraUtil::extractType(
+                            $columnFamily->comparator_type
+                        )
+                        : null,
+                'data-type' => CassandraUtil::extractType(
+                    $columnFamily->default_validation_class
+                ),
+                'column-data-types' => array()
+            );
+
+            if (
+                is_array($columnFamily->column_metadata)
+                && !empty($columnFamily->column_metadata)
+            ) {
+                foreach ($columnFamily->column_metadata as $column) {
+                    $schema['column-families'][$columnFamily->name]['column-data-
+      types'][$column->name]
+                        = CassandraUtil::extractType($column->validation_class);
+                }
+            }
+        }
+        
+        if ($storeSchema) {
+            apc_store($cacheKey, $schema, 3600);
+        }
+        
+        return $schema;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a3291b2ab3dc093e22df8a428321f2492}{
+\index{Cassandra@{Cassandra}!getVersion@{getVersion}}
+\index{getVersion@{getVersion}!Cassandra@{Cassandra}}
+\subsubsection[{getVersion}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::getVersion (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a3291b2ab3dc093e22df8a428321f2492}
+Returns the version of the \hyperlink{classCassandra}{Cassandra} node.
+
+\begin{DoxyReturn}{Returns}
+string 
+\end{DoxyReturn}
+
+
+Definition at line 1090 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                 {
+        return $this->call('describe_version');
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a960d23553468532df3d4c6bf712bb2f7}{
+\index{Cassandra@{Cassandra}!parseRequest@{parseRequest}}
+\index{parseRequest@{parseRequest}!Cassandra@{Cassandra}}
+\subsubsection[{parseRequest}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::parseRequest (
+\begin{DoxyParamCaption}
+\item[{\$}]{request}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandra_a960d23553468532df3d4c6bf712bb2f7}
+Parses a get request.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$request} & Request to parse \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+array Request components 
+\end{DoxyReturn}
+
+
+Definition at line 1536 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                              {
+        foreach(self::$requestKeyTokens as $tokenKey => $keyToken) {
+            $request = str_replace(
+                '\\'.$keyToken,
+                '[/'.$tokenKey.'\\]',
+                $request
+            );
+        }
+        
+        $components = array();
+        
+        $matchSuccessful = preg_match(
+            '/^(.+)\.(.+)((\.(.*))|\[\])?(:(.*))?(\|(\d*)(R)?)?$/U',
+            // 1     2   34  5           6 7     8  9    10        
+            $request,
+            $components
+        );
+
+        if (!$matchSuccessful || empty($components)) {
+            throw new CassandraInvalidPatternException(
+                'Invalid get request "'.$request.'" provided'
+            );
+        }
+
+        $result = array(
+            'column-family' => $components[1],
+            'key' => $components[2],
+            'columns' => null,
+            'start-column' => null,
+            'end-column' => null,
+            'reversed' => false,
+            'column-count' => $this->defaultColumnCount,
+            'super-column' => null
+        );
+        
+        $componentCount = count($components);
+        
+        // @codeCoverageIgnoreStart
+        if ($componentCount < 3 || $componentCount > 11) {
+            throw new CassandraInvalidPatternException(
+                'Invalid pattern, expected between 3 and 11 components, got '.
+                $componentCount.', this should not happen'
+            );
+        }
+        // @codeCoverageIgnoreEnd
+        
+        if ($componentCount >= 6) {
+            if (
+                !empty($components[5])
+                && $components[5] != '[]'
+            ) {
+                $result['super-column'] = $components[5];
+            }
+            
+            if ($componentCount >= 8) {
+                if (!empty($components[7])) {
+                    if (strpos($components[7], ',') !== false) {
+                        $columns = explode(',', $components[7]);
+
+                        foreach ($columns as $columnIndex => $columnName) {
+                            $columns[$columnIndex] = trim($columnName);
+                        }
+
+                        $result['columns'] = $columns;
+                    } else if (strpos($components[7], '-') !== false) {
+                        $rangeColumns = explode('-', $components[7]);
+
+                        if (count($rangeColumns) > 2) {
+                            throw new CassandraInvalidPatternException(
+                                'Expected no more than 2 columns '.
+                                'to define a range'
+                            );
+                        }
+
+                        $result['start-column'] = trim($rangeColumns[0]);
+                        $result['end-column'] = trim($rangeColumns[1]);
+                    } else {
+                        $result['columns'] = array(trim($components[7]));
+                    }
+                }
+
+                if ($componentCount >= 10 && !empty($components[9])) {
+                    $columnCount = (int)$components[9];
+
+                    $result['column-count'] = $columnCount;
+                }
+
+                if (
+                    $componentCount == 11
+                    && strtoupper($components[10]) == 'R'
+                ) {
+                    $result['reversed'] = true;
+                }
+            }
+        }
+        
+        foreach ($result as $key => $item) {
+            $result[$key] = self::unescape($item);
+        }
+    
+        return $result;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a22c9c1782896b9ee47117643c89f0052}{
+\index{Cassandra@{Cassandra}!registerKeyspace@{registerKeyspace}}
+\index{registerKeyspace@{registerKeyspace}!Cassandra@{Cassandra}}
+\subsubsection[{registerKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::registerKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace, }
+\item[{\$}]{username = {\ttfamily null}, }
+\item[{\$}]{password = {\ttfamily null}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandra_a22c9c1782896b9ee47117643c89f0052}
+Registers a keyspace with authentication info.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Keyspace name \\
+\hline
+string & {\em \$username} & The username \\
+\hline
+string & {\em \$password} & Password \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 834 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $this->keyspaceAuthentication[$keyspace] = array(
+            'username' => $username,
+            'password' => $password
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_ada5af7349bbec677ea2b068b4f426707}{
+\index{Cassandra@{Cassandra}!set@{set}}
+\index{set@{set}!Cassandra@{Cassandra}}
+\subsubsection[{set}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::set (
+\begin{DoxyParamCaption}
+\item[{\$}]{key, }
+\item[{array \$}]{columns, }
+\item[{\$}]{consistency = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_ada5af7349bbec677ea2b068b4f426707}
+Sets a key value. The key should include column family name as first part before fullstop so key \char`\"{}user.john\char`\"{} would set key \char`\"{}john\char`\"{} in column family called \char`\"{}user\char`\"{}.
+
+Used for both inserting new data and updating existing. The columns is expected to be key-\/value pairs with keys as column names and values as column values.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$key} & The key containing column family and row key \\
+\hline
+array & {\em \$columns} & Column names and their values \\
+\hline
+integer & {\em \$consistency} & Consistency to use, default used if not set \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer Timestamp of the insterted/updated item 
+\end{DoxyReturn}
+
+
+Definition at line 1172 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                   {
+        $dotPosition = mb_strpos($key, '.');
+        
+        if ($dotPosition === false) {
+            throw new CassandraInvalidPatternException(
+                'Unable to set "'.$key.'", expected the column family name and'.
+                'key name seperated by a fullstop'
+            );
+        }
+        
+        $columnFamilyName = mb_substr($key, 0, $dotPosition);
+        $keyName = mb_substr($key, $dotPosition + 1);
+        
+        return $this->cf($columnFamilyName)->set(
+            $keyName,
+            $columns,
+            $consistency
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_af62c6e8771c55cfe9a94e8a6551a5e1b}{
+\index{Cassandra@{Cassandra}!setDefaultColumnCount@{setDefaultColumnCount}}
+\index{setDefaultColumnCount@{setDefaultColumnCount}!Cassandra@{Cassandra}}
+\subsubsection[{setDefaultColumnCount}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::setDefaultColumnCount (
+\begin{DoxyParamCaption}
+\item[{\$}]{columnCountLimit}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_af62c6e8771c55cfe9a94e8a6551a5e1b}
+Sets the default number of columns to fetch at maximum.
+
+
+\begin{DoxyParams}[1]{Parameters}
+integer & {\em \$columnCountLimit} & The limit \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 925 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                             {
+        $this->defaultColumnCount = $columnCountLimit;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_aea614dd2c8170609c0ec9e81607983a0}{
+\index{Cassandra@{Cassandra}!setMaxCallRetries@{setMaxCallRetries}}
+\index{setMaxCallRetries@{setMaxCallRetries}!Cassandra@{Cassandra}}
+\subsubsection[{setMaxCallRetries}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::setMaxCallRetries (
+\begin{DoxyParamCaption}
+\item[{\$}]{retryCount}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_aea614dd2c8170609c0ec9e81607983a0}
+Sets the maximum number of times a call to \hyperlink{classCassandra}{Cassandra} will be retried should it fail for any reason.
+
+
+\begin{DoxyParams}[1]{Parameters}
+integer & {\em \$retryCount} & Number of times to retry, defaults to 5. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandra}{Cassandra} Self for call chaining 
+\end{DoxyReturn}
+
+
+Definition at line 914 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                   {
+        $this->maxCallRetries = $retryCount;
+        
+        return $this;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_ad5b9ce7720a1c4b015abaaea988edfe1}{
+\index{Cassandra@{Cassandra}!truncate@{truncate}}
+\index{truncate@{truncate}!Cassandra@{Cassandra}}
+\subsubsection[{truncate}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::truncate (
+\begin{DoxyParamCaption}
+\item[{\$}]{columnFamilyName}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_ad5b9ce7720a1c4b015abaaea988edfe1}
+Truncates a column family of all of its data (entries).
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$columnFamilyName} & Name of the column family \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean Was truncating successful 
+\end{DoxyReturn}
+
+
+Definition at line 1499 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                {
+        return $this->call('truncate', $columnFamilyName);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_add4a1aed054f96ad74938e149b0ed0ef}{
+\index{Cassandra@{Cassandra}!unescape@{unescape}}
+\index{unescape@{unescape}!Cassandra@{Cassandra}}
+\subsubsection[{unescape}]{\setlength{\rightskip}{0pt plus 5cm}static Cassandra::unescape (
+\begin{DoxyParamCaption}
+\item[{\$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandra_add4a1aed054f96ad74938e149b0ed0ef}
+Unescapes keys used in get requests.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$value} & Value to unescape \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string unescaped value 
+\end{DoxyReturn}
+
+
+Definition at line 1663 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                            {
+        if (empty($value)) {
+            return $value;
+        }
+        else if (is_array($value)) {
+            foreach ($value as $key => $item) {
+                $value[$key] = self::unescape($item);
+            }
+        } else if (is_string($value)) {
+            foreach(self::$requestKeyTokens as $tokenKey => $keyToken) {
+                $value = str_replace(
+                    '[/'.$tokenKey.'\\]',
+                    $keyToken,
+                    $value
+                );
+            }
+        }
+        
+        return $value;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a4b0b56e3354e7d59efa5a0fdda488be1}{
+\index{Cassandra@{Cassandra}!updateKeyspace@{updateKeyspace}}
+\index{updateKeyspace@{updateKeyspace}!Cassandra@{Cassandra}}
+\subsubsection[{updateKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::updateKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{name, }
+\item[{\$}]{replicationFactor = {\ttfamily 1}, }
+\item[{\$}]{placementStrategyClass = {\ttfamily self::PLACEMENT\_\-SIMPLE}, }
+\item[{\$}]{placementStrategyOptions = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a4b0b56e3354e7d59efa5a0fdda488be1}
+Updates keyspace information.
+
+Note that the replication factor means how many nodes hold a single piece of information, not to how many nodes its replicated to so a replication factor of one means that a single node has data and no replication is performed.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$name} & Name of the keyspace \\
+\hline
+integer & {\em \$replicationFactor} & How many nodes hold each piece of data \\
+\hline
+string & {\em \$placementStrategyClass} & Data placement strategy \\
+\hline
+array & {\em \$placementStrategyOptions} & Strategy options \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+boolean Was creating the keyspace successful 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Exception} & If anything goes wrong \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 1239 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $def = new cassandra_KsDef();
+        
+        $def->name = $name;
+        $def->strategy_class = $placementStrategyClass;
+        $def->strategy_options = $placementStrategyOptions;
+        $def->cf_defs = array();
+        $def->replication_factor = $replicationFactor;
+        
+        return $this->call('system_update_keyspace', $def);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandra_a4502befdb4278113462bc7fcfbafa09f}{
+\index{Cassandra@{Cassandra}!useKeyspace@{useKeyspace}}
+\index{useKeyspace@{useKeyspace}!Cassandra@{Cassandra}}
+\subsubsection[{useKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}Cassandra::useKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace, }
+\item[{\$}]{username = {\ttfamily null}, }
+\item[{\$}]{password = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandra_a4502befdb4278113462bc7fcfbafa09f}
+Start using a new keyspace.
+
+If the keyspace requires authentication, the username and password of it should be provided the first time this method is called. The username and password are stored so on next calls, they are used automatically if exist.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Keyspace name \\
+\hline
+string & {\em \$username} & The username \\
+\hline
+string & {\em \$password} & Password \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandra}{Cassandra} Self for call chaining 
+\end{DoxyReturn}
+
+
+Definition at line 858 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                               {
+        if (!empty($username)) {
+            $this->registerKeyspace($keyspace, $username, $password);
+        } else if (isset($this->keyspaceAuthentication[$keyspace])) {
+            $username = $this->keyspaceAuthentication[$keyspace]['username'];
+            $password = $this->keyspaceAuthentication[$keyspace]['password'];
+        }
+        
+        $this->cluster->useKeyspace($keyspace, $username, $password);
+        
+        return $this;
+    }
+\end{DoxyCode}
+
+
+\subsection{Field Documentation}
+\hypertarget{classCassandra_a5b7fd78b8f044623445d9e9a8f175790}{
+\index{Cassandra@{Cassandra}!COLUMN\_\-STANDARD@{COLUMN\_\-STANDARD}}
+\index{COLUMN\_\-STANDARD@{COLUMN\_\-STANDARD}!Cassandra@{Cassandra}}
+\subsubsection[{COLUMN\_\-STANDARD}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::COLUMN\_\-STANDARD} = 'Standard'}}
+\label{classCassandra_a5b7fd78b8f044623445d9e9a8f175790}
+Standard column type. 
+
+Definition at line 672 of file Cassandra.php.
+
+\hypertarget{classCassandra_abf8e49b590d1e1b83d3e13cc133cd672}{
+\index{Cassandra@{Cassandra}!COLUMN\_\-SUPER@{COLUMN\_\-SUPER}}
+\index{COLUMN\_\-SUPER@{COLUMN\_\-SUPER}!Cassandra@{Cassandra}}
+\subsubsection[{COLUMN\_\-SUPER}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::COLUMN\_\-SUPER} = 'Super'}}
+\label{classCassandra_abf8e49b590d1e1b83d3e13cc133cd672}
+Super column type. 
+
+Definition at line 677 of file Cassandra.php.
+
+\hypertarget{classCassandra_ac7e4763d615ce200970153894d53219a}{
+\index{Cassandra@{Cassandra}!CONSISTENCY\_\-ALL@{CONSISTENCY\_\-ALL}}
+\index{CONSISTENCY\_\-ALL@{CONSISTENCY\_\-ALL}!Cassandra@{Cassandra}}
+\subsubsection[{CONSISTENCY\_\-ALL}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::CONSISTENCY\_\-ALL} = cassandra\_\-ConsistencyLevel::ALL}}
+\label{classCassandra_ac7e4763d615ce200970153894d53219a}
+Returns success only if all the nodes holding the data respond.
+
+This makes sure that all the nodes get the same data, but includes a performance penalty and also if a single node of the replication group is down, it's not possible to read or write the data as the requirement can not be fulfilled. 
+
+Definition at line 667 of file Cassandra.php.
+
+\hypertarget{classCassandra_a94fdd09de0798393d86a9965482cefa7}{
+\index{Cassandra@{Cassandra}!CONSISTENCY\_\-ANY@{CONSISTENCY\_\-ANY}}
+\index{CONSISTENCY\_\-ANY@{CONSISTENCY\_\-ANY}!Cassandra@{Cassandra}}
+\subsubsection[{CONSISTENCY\_\-ANY}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::CONSISTENCY\_\-ANY} = cassandra\_\-ConsistencyLevel::ANY}}
+\label{classCassandra_a94fdd09de0798393d86a9965482cefa7}
+Only meaningful for writes and means as soon as a write is received by any node, the call returns success.
+
+This occurs when your client might be connecting to node 5 but the nodes responsible for it are 6-\/8. The difference between ONE and ANY is that with ANY, as soon as node 5 receives the write, it returns success (but nodes 6-\/8 could be down or whatever). CL::ONE means that if you write to node 5, either 6, 7, or 8 have to return success before node 5 returns success. 
+
+Definition at line 657 of file Cassandra.php.
+
+\hypertarget{classCassandra_afd35e5b7419ce2915891c349a44b6f22}{
+\index{Cassandra@{Cassandra}!CONSISTENCY\_\-ONE@{CONSISTENCY\_\-ONE}}
+\index{CONSISTENCY\_\-ONE@{CONSISTENCY\_\-ONE}!Cassandra@{Cassandra}}
+\subsubsection[{CONSISTENCY\_\-ONE}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::CONSISTENCY\_\-ONE} = cassandra\_\-ConsistencyLevel::ONE}}
+\label{classCassandra_afd35e5b7419ce2915891c349a44b6f22}
+It is enough if a single node replies.
+
+This makes reads and writes fast, but it also means that depending on what else is reading and writing, it's possible that they could briefly give conflicting answers. 
+
+Definition at line 634 of file Cassandra.php.
+
+\hypertarget{classCassandra_a58c08b49c2434526a62f74248c8b959d}{
+\index{Cassandra@{Cassandra}!CONSISTENCY\_\-QUORUM@{CONSISTENCY\_\-QUORUM}}
+\index{CONSISTENCY\_\-QUORUM@{CONSISTENCY\_\-QUORUM}!Cassandra@{Cassandra}}
+\subsubsection[{CONSISTENCY\_\-QUORUM}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::CONSISTENCY\_\-QUORUM} = cassandra\_\-ConsistencyLevel::QUORUM}}
+\label{classCassandra_a58c08b49c2434526a62f74248c8b959d}
+Majority of the nodes holding the data must reply.
+
+If you have replication factor of 3 then it's enough if two of the nodes holding the data are up and reply. You need to have a replication factor of atleast three for this to work differently from all and should use odd number for replication factor. 
+
+Definition at line 644 of file Cassandra.php.
+
+\hypertarget{classCassandra_aa3d7e3c4c9454133e7b21165bb7c3953}{
+\index{Cassandra@{Cassandra}!INDEX\_\-KEYS@{INDEX\_\-KEYS}}
+\index{INDEX\_\-KEYS@{INDEX\_\-KEYS}!Cassandra@{Cassandra}}
+\subsubsection[{INDEX\_\-KEYS}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::INDEX\_\-KEYS} = 0}}
+\label{classCassandra_aa3d7e3c4c9454133e7b21165bb7c3953}
+Keys index type, currently only one supported. 
+
+Definition at line 769 of file Cassandra.php.
+
+\hypertarget{classCassandra_a33b81650dd46405f23e6d469eeb1bd5b}{
+\index{Cassandra@{Cassandra}!OP\_\-EQ@{OP\_\-EQ}}
+\index{OP\_\-EQ@{OP\_\-EQ}!Cassandra@{Cassandra}}
+\subsubsection[{OP\_\-EQ}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::OP\_\-EQ} = cassandra\_\-IndexOperator::EQ}}
+\label{classCassandra_a33b81650dd46405f23e6d469eeb1bd5b}
+Equality comparator used in where queries. 
+
+Definition at line 726 of file Cassandra.php.
+
+\hypertarget{classCassandra_a660ca00d7f33558017e15ccc1f8f5d29}{
+\index{Cassandra@{Cassandra}!OP\_\-GT@{OP\_\-GT}}
+\index{OP\_\-GT@{OP\_\-GT}!Cassandra@{Cassandra}}
+\subsubsection[{OP\_\-GT}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::OP\_\-GT} = cassandra\_\-IndexOperator::GT}}
+\label{classCassandra_a660ca00d7f33558017e15ccc1f8f5d29}
+Strict greater-\/than comparator. 
+
+Definition at line 736 of file Cassandra.php.
+
+\hypertarget{classCassandra_a60a245248555c96cadec6977014c27df}{
+\index{Cassandra@{Cassandra}!OP\_\-GTE@{OP\_\-GTE}}
+\index{OP\_\-GTE@{OP\_\-GTE}!Cassandra@{Cassandra}}
+\subsubsection[{OP\_\-GTE}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::OP\_\-GTE} = cassandra\_\-IndexOperator::GTE}}
+\label{classCassandra_a60a245248555c96cadec6977014c27df}
+Greater-\/than-\/equals comparator. 
+
+Definition at line 746 of file Cassandra.php.
+
+\hypertarget{classCassandra_acf59b31536a8a886422ef7335020f99d}{
+\index{Cassandra@{Cassandra}!OP\_\-LT@{OP\_\-LT}}
+\index{OP\_\-LT@{OP\_\-LT}!Cassandra@{Cassandra}}
+\subsubsection[{OP\_\-LT}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::OP\_\-LT} = cassandra\_\-IndexOperator::LT}}
+\label{classCassandra_acf59b31536a8a886422ef7335020f99d}
+Strict less-\/than comparator. 
+
+Definition at line 731 of file Cassandra.php.
+
+\hypertarget{classCassandra_ab633158313b4f7f785910884d950f945}{
+\index{Cassandra@{Cassandra}!OP\_\-LTE@{OP\_\-LTE}}
+\index{OP\_\-LTE@{OP\_\-LTE}!Cassandra@{Cassandra}}
+\subsubsection[{OP\_\-LTE}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::OP\_\-LTE} = cassandra\_\-IndexOperator::LTE}}
+\label{classCassandra_ab633158313b4f7f785910884d950f945}
+Less-\/than-\/equals comparator. 
+
+Definition at line 741 of file Cassandra.php.
+
+\hypertarget{classCassandra_a82e1fae7c469b0983ad1d38b309273fd}{
+\index{Cassandra@{Cassandra}!PLACEMENT\_\-NETWORK@{PLACEMENT\_\-NETWORK}}
+\index{PLACEMENT\_\-NETWORK@{PLACEMENT\_\-NETWORK}!Cassandra@{Cassandra}}
+\subsubsection[{PLACEMENT\_\-NETWORK}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::PLACEMENT\_\-NETWORK} = 'org.apache.cassandra.locator.NetworkTopologyStrategy'}}
+\label{classCassandra_a82e1fae7c469b0983ad1d38b309273fd}
+Network topology aware placement strategy. 
+
+Definition at line 758 of file Cassandra.php.
+
+\hypertarget{classCassandra_a3ea159c9a7ead7fa56cac7f8ebe9bc74}{
+\index{Cassandra@{Cassandra}!PLACEMENT\_\-OLD\_\-NETWORK@{PLACEMENT\_\-OLD\_\-NETWORK}}
+\index{PLACEMENT\_\-OLD\_\-NETWORK@{PLACEMENT\_\-OLD\_\-NETWORK}!Cassandra@{Cassandra}}
+\subsubsection[{PLACEMENT\_\-OLD\_\-NETWORK}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::PLACEMENT\_\-OLD\_\-NETWORK} = 'org.apache.cassandra.locator.OldNetworkTopologyStrategy'}}
+\label{classCassandra_a3ea159c9a7ead7fa56cac7f8ebe9bc74}
+Old network topology aware placement strategy. 
+
+Definition at line 764 of file Cassandra.php.
+
+\hypertarget{classCassandra_acae99f4717a1b6a2fb14343b9ca02806}{
+\index{Cassandra@{Cassandra}!PLACEMENT\_\-SIMPLE@{PLACEMENT\_\-SIMPLE}}
+\index{PLACEMENT\_\-SIMPLE@{PLACEMENT\_\-SIMPLE}!Cassandra@{Cassandra}}
+\subsubsection[{PLACEMENT\_\-SIMPLE}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::PLACEMENT\_\-SIMPLE} = 'org.apache.cassandra.locator.SimpleStrategy'}}
+\label{classCassandra_acae99f4717a1b6a2fb14343b9ca02806}
+Default simple placement strategy not taking network topology into account. 
+
+Definition at line 752 of file Cassandra.php.
+
+\hypertarget{classCassandra_acc917786b5bbbdd6eb4783856bd5580c}{
+\index{Cassandra@{Cassandra}!TYPE\_\-ASCII@{TYPE\_\-ASCII}}
+\index{TYPE\_\-ASCII@{TYPE\_\-ASCII}!Cassandra@{Cassandra}}
+\subsubsection[{TYPE\_\-ASCII}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::TYPE\_\-ASCII} = 'AsciiType'}}
+\label{classCassandra_acc917786b5bbbdd6eb4783856bd5580c}
+ASCII text type. 
+
+Definition at line 682 of file Cassandra.php.
+
+\hypertarget{classCassandra_ab75de9aa0588c7665f1c9d8cf8d4e8ff}{
+\index{Cassandra@{Cassandra}!TYPE\_\-BYTES@{TYPE\_\-BYTES}}
+\index{TYPE\_\-BYTES@{TYPE\_\-BYTES}!Cassandra@{Cassandra}}
+\subsubsection[{TYPE\_\-BYTES}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::TYPE\_\-BYTES} = 'BytesType'}}
+\label{classCassandra_ab75de9aa0588c7665f1c9d8cf8d4e8ff}
+Simplest binary type 
+
+Definition at line 687 of file Cassandra.php.
+
+\hypertarget{classCassandra_a4160c654a18aead3a642fd1f3f2415e9}{
+\index{Cassandra@{Cassandra}!TYPE\_\-INTEGER@{TYPE\_\-INTEGER}}
+\index{TYPE\_\-INTEGER@{TYPE\_\-INTEGER}!Cassandra@{Cassandra}}
+\subsubsection[{TYPE\_\-INTEGER}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::TYPE\_\-INTEGER} = 'IntegerType'}}
+\label{classCassandra_a4160c654a18aead3a642fd1f3f2415e9}
+Simple integer data type. 
+
+Definition at line 716 of file Cassandra.php.
+
+\hypertarget{classCassandra_a2af16bdea44f4e16ba5c5baa5380b9f0}{
+\index{Cassandra@{Cassandra}!TYPE\_\-LEXICAL\_\-UUID@{TYPE\_\-LEXICAL\_\-UUID}}
+\index{TYPE\_\-LEXICAL\_\-UUID@{TYPE\_\-LEXICAL\_\-UUID}!Cassandra@{Cassandra}}
+\subsubsection[{TYPE\_\-LEXICAL\_\-UUID}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::TYPE\_\-LEXICAL\_\-UUID} = 'LexicalUUIDType'}}
+\label{classCassandra_a2af16bdea44f4e16ba5c5baa5380b9f0}
+Used for a non-\/time based comparison. It is compared lexically, by byte value.
+
+(UUID) are a standardized unique indentifier in the form of a 128 bit number. In it's canonical form UUIDs are represented by a 32 digit hexadecimal number in the form of xxxxxxxx-\/xxxx-\/xxxx-\/xxxx-\/xxxxxxxxxxxx. 
+
+Definition at line 697 of file Cassandra.php.
+
+\hypertarget{classCassandra_acf64f8105c4bfe0c95f868437299442f}{
+\index{Cassandra@{Cassandra}!TYPE\_\-LONG@{TYPE\_\-LONG}}
+\index{TYPE\_\-LONG@{TYPE\_\-LONG}!Cassandra@{Cassandra}}
+\subsubsection[{TYPE\_\-LONG}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::TYPE\_\-LONG} = 'LongType'}}
+\label{classCassandra_acf64f8105c4bfe0c95f868437299442f}
+Long data type. 
+
+Definition at line 711 of file Cassandra.php.
+
+\hypertarget{classCassandra_a42861ad94788ba940228767a79f1c4c7}{
+\index{Cassandra@{Cassandra}!TYPE\_\-TIME\_\-UUID@{TYPE\_\-TIME\_\-UUID}}
+\index{TYPE\_\-TIME\_\-UUID@{TYPE\_\-TIME\_\-UUID}!Cassandra@{Cassandra}}
+\subsubsection[{TYPE\_\-TIME\_\-UUID}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::TYPE\_\-TIME\_\-UUID} = 'TimeUUIDType'}}
+\label{classCassandra_a42861ad94788ba940228767a79f1c4c7}
+Used for a time based comparison. It uses a version 1 UUID.
+
+(UUID) are a standardized unique indentifier in the form of a 128 bit number. In it's canonical form UUIDs are represented by a 32 digit hexadecimal number in the form of xxxxxxxx-\/xxxx-\/xxxx-\/xxxx-\/xxxxxxxxxxxx. 
+
+Definition at line 706 of file Cassandra.php.
+
+\hypertarget{classCassandra_ac03a89bd430178d9bce987eba8001b82}{
+\index{Cassandra@{Cassandra}!TYPE\_\-UTF8@{TYPE\_\-UTF8}}
+\index{TYPE\_\-UTF8@{TYPE\_\-UTF8}!Cassandra@{Cassandra}}
+\subsubsection[{TYPE\_\-UTF8}]{\setlength{\rightskip}{0pt plus 5cm}const {\bf Cassandra::TYPE\_\-UTF8} = 'UTF8Type'}}
+\label{classCassandra_ac03a89bd430178d9bce987eba8001b82}
+UTF8 international text data type. 
+
+Definition at line 721 of file Cassandra.php.
+
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}

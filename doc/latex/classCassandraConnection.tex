@@ -1,0 +1,482 @@
+\hypertarget{classCassandraConnection}{
+\section{CassandraConnection Class Reference}
+\label{classCassandraConnection}\index{CassandraConnection@{CassandraConnection}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraConnection_a7f75a298bf9fb6362d38f4aeb42ceb28}{\_\-\_\-construct} (\$host= '127.0.0.1', \$port=9160, \$useFramedTransport=true, \$sendTimeoutMs=null, \$receiveTimeoutMs=null)
+\item 
+\hyperlink{classCassandraConnection_ab491ef3fe8550d70856e708e528cb570}{\_\-\_\-destruct} ()
+\item 
+\hyperlink{classCassandraConnection_abd8bbd3ef94126f1e6a274b5ad512ece}{close} ()
+\item 
+\hyperlink{classCassandraConnection_aed004bd39c88a8aea40292f9c5271512}{isOpen} ()
+\item 
+\hyperlink{classCassandraConnection_a9333243e248f73414e25d5fe143250df}{getClient} ()
+\item 
+\hyperlink{classCassandraConnection_a7f12a9a108ea4d89083a48bbebdb8a60}{getTransport} ()
+\item 
+\hyperlink{classCassandraConnection_adb1d52d166f36506ab94605b260e821f}{getProtocol} ()
+\item 
+\hyperlink{classCassandraConnection_a9bb32ec133d74c18a5ab142a33b96539}{useKeyspace} (\$keyspace, \$username=null, \$password=null)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraConnection_a6886c992c6b7cbc24deb801fb8ee52db}{createSocket} (\$host, \$port, \$sendTimeoutMs, \$receiveTimeoutMs)
+\item 
+\hyperlink{classCassandraConnection_a00c2d10e54028d15cfb5ef8bde3468d3}{createFramedTransport} (TSocket \$socket)
+\item 
+\hyperlink{classCassandraConnection_a3e3b2e2318ff07ee56bcae235634c2e4}{createBufferedTransport} (TSocket \$socket)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandraConnection_a7ac95fc265637f0043ed4a1751d4073d}{
+{\bfseries \$host}}
+\label{classCassandraConnection_a7ac95fc265637f0043ed4a1751d4073d}
+
+\item 
+\hypertarget{classCassandraConnection_a36f082a05939ae4532bff76878f6e66b}{
+{\bfseries \$port}}
+\label{classCassandraConnection_a36f082a05939ae4532bff76878f6e66b}
+
+\item 
+\hypertarget{classCassandraConnection_a3fcb133a131b3836b91908a7495e215e}{
+{\bfseries \$useFramedTransport}}
+\label{classCassandraConnection_a3fcb133a131b3836b91908a7495e215e}
+
+\item 
+\hypertarget{classCassandraConnection_ac293faec52dd505e5c9a18f5ed31ed99}{
+{\bfseries \$sendTimeoutMs}}
+\label{classCassandraConnection_ac293faec52dd505e5c9a18f5ed31ed99}
+
+\item 
+\hypertarget{classCassandraConnection_ac73bb080eca4394141343841ac3c45cd}{
+{\bfseries \$receiveTimeoutMs}}
+\label{classCassandraConnection_ac73bb080eca4394141343841ac3c45cd}
+
+\item 
+\hypertarget{classCassandraConnection_a6aac74a2193fb8a8d223b5ec8d5793a2}{
+{\bfseries \$socket}}
+\label{classCassandraConnection_a6aac74a2193fb8a8d223b5ec8d5793a2}
+
+\item 
+\hypertarget{classCassandraConnection_a709c8b7fdbd7f90bce67a400466a410b}{
+{\bfseries \$transport}}
+\label{classCassandraConnection_a709c8b7fdbd7f90bce67a400466a410b}
+
+\item 
+\hypertarget{classCassandraConnection_afcb5feee11548cac9e50b81b0c79bc97}{
+{\bfseries \$protocol}}
+\label{classCassandraConnection_afcb5feee11548cac9e50b81b0c79bc97}
+
+\item 
+\hypertarget{classCassandraConnection_a0a8d7d42cb84e49f715905e9859266ab}{
+{\bfseries \$client}}
+\label{classCassandraConnection_a0a8d7d42cb84e49f715905e9859266ab}
+
+\item 
+\hypertarget{classCassandraConnection_ab014396c373813e451be830993f05f76}{
+{\bfseries \$isOpen}}
+\label{classCassandraConnection_ab014396c373813e451be830993f05f76}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents a connection to a single \hyperlink{classCassandra}{Cassandra} node.
+
+Provides direct access to the low-\/level \hyperlink{classCassandra}{Cassandra} client. 
+
+Definition at line 50 of file Cassandra.php.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classCassandraConnection_a7f75a298bf9fb6362d38f4aeb42ceb28}{
+\index{CassandraConnection@{CassandraConnection}!\_\-\_\-construct@{\_\-\_\-construct}}
+\index{\_\-\_\-construct@{\_\-\_\-construct}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{\_\-\_\-construct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::\_\-\_\-construct (
+\begin{DoxyParamCaption}
+\item[{\$}]{host = {\ttfamily '127.0.0.1'}, }
+\item[{\$}]{port = {\ttfamily 9160}, }
+\item[{\$}]{useFramedTransport = {\ttfamily true}, }
+\item[{\$}]{sendTimeoutMs = {\ttfamily null}, }
+\item[{\$}]{receiveTimeoutMs = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_a7f75a298bf9fb6362d38f4aeb42ceb28}
+Constructs the connection, setting access parameters.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$host} & Hostname or IP of the node \\
+\hline
+integer & {\em \$port} & Port of the instance \\
+\hline
+boolean & {\em \$useFramedTransport} & Use framed or buffered transport \\
+\hline
+integer & {\em \$sendTimeoutMs} & Timeout of send operations in milliseconds \\
+\hline
+integer & {\em \$receiveTimeoutMs} & Timeout of receive operations \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 131 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $this->host = $host;
+        $this->port = $port;
+        $this->useFramedTransport = $useFramedTransport;
+        $this->sendTimeoutMs = $sendTimeoutMs;
+        $this->receiveTimeoutMs = $receiveTimeoutMs;
+        $this->isOpen = false;
+        
+        $this->socket = $this->createSocket(
+            $host,
+            $port,
+            $sendTimeoutMs,
+            $receiveTimeoutMs
+        );
+        
+        if ($useFramedTransport) {
+            $this->transport = $this->createFramedTransport($this->socket);
+        } else {
+            $this->transport = $this->createBufferedTransport($this->socket);
+        }
+        
+        $this->transport->open();
+        $this->isOpen = true;
+        
+        $this->protocol = new TBinaryProtocolAccelerated($this->transport);
+        $this->client = new CassandraClient($this->protocol);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_ab491ef3fe8550d70856e708e528cb570}{
+\index{CassandraConnection@{CassandraConnection}!\_\-\_\-destruct@{\_\-\_\-destruct}}
+\index{\_\-\_\-destruct@{\_\-\_\-destruct}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{\_\-\_\-destruct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::\_\-\_\-destruct (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_ab491ef3fe8550d70856e708e528cb570}
+Closes the connection on destruction. 
+
+Definition at line 168 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                 {
+        $this->close();
+    }
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandraConnection_abd8bbd3ef94126f1e6a274b5ad512ece}{
+\index{CassandraConnection@{CassandraConnection}!close@{close}}
+\index{close@{close}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{close}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::close (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_abd8bbd3ef94126f1e6a274b5ad512ece}
+Forces the connection to close.
+
+Generally there's no need to call it yourself as it will be closed on termination. 
+
+Definition at line 178 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                            {
+        if ($this->isOpen) {
+            $this->transport->flush();
+            $this->transport->close();
+            
+            $this->isOpen = false;
+        }
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_a3e3b2e2318ff07ee56bcae235634c2e4}{
+\index{CassandraConnection@{CassandraConnection}!createBufferedTransport@{createBufferedTransport}}
+\index{createBufferedTransport@{createBufferedTransport}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{createBufferedTransport}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::createBufferedTransport (
+\begin{DoxyParamCaption}
+\item[{TSocket \$}]{socket}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandraConnection_a3e3b2e2318ff07ee56bcae235634c2e4}
+Creates buffered transport.
+
+
+\begin{DoxyParams}[1]{Parameters}
+TSocket & {\em \$socket} & Socket to base the transport on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+TBufferedTransport Instance of the transport 
+\end{DoxyReturn}
+
+
+Definition at line 316 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                {
+        require_once THRIFT_PATH.'/transport/TBufferedTransport.php';
+            
+        return new TBufferedTransport($socket, 512, 512);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_a00c2d10e54028d15cfb5ef8bde3468d3}{
+\index{CassandraConnection@{CassandraConnection}!createFramedTransport@{createFramedTransport}}
+\index{createFramedTransport@{createFramedTransport}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{createFramedTransport}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::createFramedTransport (
+\begin{DoxyParamCaption}
+\item[{TSocket \$}]{socket}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandraConnection_a00c2d10e54028d15cfb5ef8bde3468d3}
+Creates framed transport.
+
+
+\begin{DoxyParams}[1]{Parameters}
+TSocket & {\em \$socket} & Socket to base the transport on \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+TFramedTransport Instance of the transport 
+\end{DoxyReturn}
+
+
+Definition at line 304 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                              {
+        require_once THRIFT_PATH.'/transport/TFramedTransport.php';
+            
+        return new TFramedTransport($socket, true, true);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_a6886c992c6b7cbc24deb801fb8ee52db}{
+\index{CassandraConnection@{CassandraConnection}!createSocket@{createSocket}}
+\index{createSocket@{createSocket}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{createSocket}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::createSocket (
+\begin{DoxyParamCaption}
+\item[{\$}]{host, }
+\item[{\$}]{port, }
+\item[{\$}]{sendTimeoutMs, }
+\item[{\$}]{receiveTimeoutMs}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandraConnection_a6886c992c6b7cbc24deb801fb8ee52db}
+Creates the socket to use.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$host} & Hostname/IP \\
+\hline
+integer & {\em \$port} & Port number \\
+\hline
+integer & {\em \$sendTimeoutMs} & Send operations timeout \\
+\hline
+integer & {\em \$receiveTimeoutMs} & Receive operations timeout \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+TSocket Initiated socket connection 
+\end{DoxyReturn}
+
+
+Definition at line 279 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $socket = new TSocket($host, $port);
+        
+        if ($sendTimeoutMs !== null) {
+            $socket->setSendTimeout($sendTimeoutMs);
+        }
+        
+        if ($receiveTimeoutMs !== null) {
+            $socket->setRecvTimeout($receiveTimeoutMs);
+        }
+        
+        return $socket;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_a9333243e248f73414e25d5fe143250df}{
+\index{CassandraConnection@{CassandraConnection}!getClient@{getClient}}
+\index{getClient@{getClient}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{getClient}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::getClient (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_a9333243e248f73414e25d5fe143250df}
+Returns the low-\/level \hyperlink{classCassandra}{Cassandra} client used by the wrapper.
+
+\begin{DoxyReturn}{Returns}
+CassandraClient 
+\end{DoxyReturn}
+
+
+Definition at line 201 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                {
+        if (!$this->isOpen) {
+            throw new CassandraConnectionClosedException(
+                'The connection has been closed'
+            );
+        }
+        
+        return $this->client;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_adb1d52d166f36506ab94605b260e821f}{
+\index{CassandraConnection@{CassandraConnection}!getProtocol@{getProtocol}}
+\index{getProtocol@{getProtocol}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{getProtocol}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::getProtocol (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_adb1d52d166f36506ab94605b260e821f}
+Returns the used transportation protocol.
+
+\begin{DoxyReturn}{Returns}
+TBinaryProtocolAccelerated 
+\end{DoxyReturn}
+
+
+Definition at line 225 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                  {
+        return $this->transport;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_a7f12a9a108ea4d89083a48bbebdb8a60}{
+\index{CassandraConnection@{CassandraConnection}!getTransport@{getTransport}}
+\index{getTransport@{getTransport}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{getTransport}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::getTransport (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_a7f12a9a108ea4d89083a48bbebdb8a60}
+Returns the used transport method.
+
+\begin{DoxyReturn}{Returns}
+TTransport 
+\end{DoxyReturn}
+
+
+Definition at line 216 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                   {
+        return $this->transport;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_aed004bd39c88a8aea40292f9c5271512}{
+\index{CassandraConnection@{CassandraConnection}!isOpen@{isOpen}}
+\index{isOpen@{isOpen}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{isOpen}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::isOpen (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_aed004bd39c88a8aea40292f9c5271512}
+Is the connection open.
+
+\begin{DoxyReturn}{Returns}
+boolean 
+\end{DoxyReturn}
+
+
+Definition at line 192 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                             {
+        return $this->isOpen;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraConnection_a9bb32ec133d74c18a5ab142a33b96539}{
+\index{CassandraConnection@{CassandraConnection}!useKeyspace@{useKeyspace}}
+\index{useKeyspace@{useKeyspace}!CassandraConnection@{CassandraConnection}}
+\subsubsection[{useKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}CassandraConnection::useKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace, }
+\item[{\$}]{username = {\ttfamily null}, }
+\item[{\$}]{password = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraConnection_a9bb32ec133d74c18a5ab142a33b96539}
+Attempts to start using given keyspace.
+
+Using the keyspace is attempted three times before giving up.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Name of the keyspace \\
+\hline
+string & {\em \$username} & Optional username in case authentication is used \\
+\hline
+string & {\em \$password} & Optional password \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 238 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $attempts = 3;
+        $success = false;
+
+        while($attempts-- > 0 && !$success) {
+            try {
+                $this->client->set_keyspace($keyspace);
+                $success = true;
+            } catch (cassandra_InvalidRequestException $e) {
+                continue;
+            }
+        }
+        
+        if (!$success) {
+            throw new CassandraSettingKeyspaceFailedException(
+                'Using keyspace "'.$keyspace.'" failed after several attempts'
+            );
+        }
+        
+        if ($username !== null) {
+            $request = new cassandra_AuthenticationRequest(
+                array('credentials' => array($username, $password))
+            );
+
+            $this->client->login($request);
+        }
+    }
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}

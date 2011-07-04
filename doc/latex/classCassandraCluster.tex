@@ -1,0 +1,391 @@
+\hypertarget{classCassandraCluster}{
+\section{CassandraCluster Class Reference}
+\label{classCassandraCluster}\index{CassandraCluster@{CassandraCluster}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraCluster_a6ca88a787d742b39e43b6a5fefabc633}{\_\-\_\-construct} (array \$servers=array())
+\item 
+\hyperlink{classCassandraCluster_a4ce9e28f647bbbbb253273c3e0fa377a}{\_\-\_\-destruct} ()
+\item 
+\hyperlink{classCassandraCluster_a49baa9fac921644a5ba10f98c4a7412d}{registerServer} (\$host= '127.0.0.1', \$port=9160, \$useFramedTransport=true, \$sendTimeoutMs=null, \$receiveTimeoutMs=null)
+\item 
+\hyperlink{classCassandraCluster_a1044f6f79a82fbb33aa6dd0374cac07a}{useKeyspace} (\$keyspace, \$username=null, \$password=null)
+\item 
+\hyperlink{classCassandraCluster_a0cc3add750920cad51b03676b549e256}{getCurrentKeyspace} ()
+\item 
+\hyperlink{classCassandraCluster_af213845fa6bfb0e6a986fb671be28552}{getServers} ()
+\item 
+\hyperlink{classCassandraCluster_a27ec1b4718ca21a87a791035130d0746}{getConnection} ()
+\item 
+\hyperlink{classCassandraCluster_afbff3180c5d4bb74c8b230436349d460}{closeConnections} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandraCluster_a4c951a13437250db700fe8dfc454813d}{
+{\bfseries \$keyspace}}
+\label{classCassandraCluster_a4c951a13437250db700fe8dfc454813d}
+
+\item 
+\hypertarget{classCassandraCluster_afbc5c047e01dd66d7038eace25351821}{
+{\bfseries \$username}}
+\label{classCassandraCluster_afbc5c047e01dd66d7038eace25351821}
+
+\item 
+\hypertarget{classCassandraCluster_a22e38d287bbe58c37c05b68f9a135d4a}{
+{\bfseries \$password}}
+\label{classCassandraCluster_a22e38d287bbe58c37c05b68f9a135d4a}
+
+\item 
+\hypertarget{classCassandraCluster_abe7bfa4c2e8f16ae3db4f18bec36ca21}{
+{\bfseries \$servers} = array()}
+\label{classCassandraCluster_abe7bfa4c2e8f16ae3db4f18bec36ca21}
+
+\item 
+\hypertarget{classCassandraCluster_ad542f19e5b3f83fe6985c0b96a71cb22}{
+{\bfseries \$connections} = array()}
+\label{classCassandraCluster_ad542f19e5b3f83fe6985c0b96a71cb22}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A cluster is a collection of servers and connections to them.
+
+Provides handling the pool of connections. 
+
+Definition at line 328 of file Cassandra.php.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classCassandraCluster_a6ca88a787d742b39e43b6a5fefabc633}{
+\index{CassandraCluster@{CassandraCluster}!\_\-\_\-construct@{\_\-\_\-construct}}
+\index{\_\-\_\-construct@{\_\-\_\-construct}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{\_\-\_\-construct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::\_\-\_\-construct (
+\begin{DoxyParamCaption}
+\item[{array \$}]{servers = {\ttfamily array()}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_a6ca88a787d742b39e43b6a5fefabc633}
+Sets the list of servers to use.
+
+You could add the servers one-\/by-\/one using \{\begin{DoxySeeAlso}{See also}
+\hyperlink{classCassandraCluster_a49baa9fac921644a5ba10f98c4a7412d}{CassandraCluster::registerServer()}\}.
+\end{DoxySeeAlso}
+
+\begin{DoxyParams}[1]{Parameters}
+array & {\em \$servers} & Servers that can be connected to. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 375 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                          {
+        foreach ($servers as $server) {
+            $this->registerServer(
+                isset($server['host']) ? $server['host'] : '127.0.0.1',
+                isset($server['port']) ? $server['port'] : 9160,
+                isset($server['use-framed-transport']) ? $server['use-framed-tran
+      sport'] : true,
+                isset($server['send-timeout-ms']) ? $server['send-timeout-ms'] : 
+      null,
+                isset($server['receive-timeout-ms']) ? $server['receive-timeout-m
+      s'] : null
+            );
+        }
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraCluster_a4ce9e28f647bbbbb253273c3e0fa377a}{
+\index{CassandraCluster@{CassandraCluster}!\_\-\_\-destruct@{\_\-\_\-destruct}}
+\index{\_\-\_\-destruct@{\_\-\_\-destruct}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{\_\-\_\-destruct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::\_\-\_\-destruct (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_a4ce9e28f647bbbbb253273c3e0fa377a}
+Closes all connections on destruction. 
+
+Definition at line 390 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                 {
+        $this->closeConnections();
+    }
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandraCluster_afbff3180c5d4bb74c8b230436349d460}{
+\index{CassandraCluster@{CassandraCluster}!closeConnections@{closeConnections}}
+\index{closeConnections@{closeConnections}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{closeConnections}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::closeConnections (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_afbff3180c5d4bb74c8b230436349d460}
+Closes all open connections.
+
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraCluster}{CassandraCluster} Self for chaining calls 
+\end{DoxyReturn}
+
+
+Definition at line 540 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                       {
+        foreach ($this->connections as $connection) {
+            $connection->close();
+        }
+        
+        $this->connections = array();
+        
+        return $this;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraCluster_a27ec1b4718ca21a87a791035130d0746}{
+\index{CassandraCluster@{CassandraCluster}!getConnection@{getConnection}}
+\index{getConnection@{getConnection}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{getConnection}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::getConnection (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_a27ec1b4718ca21a87a791035130d0746}
+Returns a connection to one of the servers.
+
+The connections are created from the server list at random and if a server is chosen that already has an active connection, it is reused.
+
+If a closed connection is found in the pool, it is removed and may be reconnected to later.
+
+It will try to connect to the servers the number of servers times two times before giving up.
+
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraConnection}{CassandraConnection} Connection to one of the nodes 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em \hyperlink{classCassandraConnectionFailedException}{CassandraConnectionFailedException}} & If all connections failed \\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 484 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                    {
+        if (empty($this->servers)) {
+            throw new CassandraConnectionFailedException(
+                'Unable to create connection, the cluster server pool is empty'
+            );
+        }
+            
+        $serverCount = count($this->servers);
+        $attemptsLeft = $serverCount * 2;
+        
+        while ($attemptsLeft-- > 0) {
+            $randomServerIndex = mt_rand(0, $serverCount - 1);
+            
+            if (isset($this->connections[$randomServerIndex])) {
+                if (!$this->connections[$randomServerIndex]->isOpen()) {
+                    unset($this->connections[$randomServerIndex]);
+                    
+                    continue;
+                }
+
+                return $this->connections[$randomServerIndex];
+            } else {
+                $server = $this->servers[$randomServerIndex];
+                
+                try {
+                    $this->connections[$randomServerIndex] = new 
+      CassandraConnection(
+                        $server['host'],
+                        $server['port'],
+                        $server['use-framed-transport'],
+                        $server['send-timeout-ms'],
+                        $server['receive-timeout-ms']
+                    );
+                    
+                    $this->connections[$randomServerIndex]->useKeyspace(
+                        $this->keyspace,
+                        $this->username,
+                        $this->password
+                    );
+                    
+                    return $this->connections[$randomServerIndex];
+                } catch (TException $e) {
+                    continue;
+                }
+            }
+        }
+        
+        throw new CassandraConnectionFailedException(
+            'Connecting to any of the '.$serverCount.' nodes failed'
+        );
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraCluster_a0cc3add750920cad51b03676b549e256}{
+\index{CassandraCluster@{CassandraCluster}!getCurrentKeyspace@{getCurrentKeyspace}}
+\index{getCurrentKeyspace@{getCurrentKeyspace}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{getCurrentKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::getCurrentKeyspace (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_a0cc3add750920cad51b03676b549e256}
+Returns the name of currently used keyspace.
+
+\begin{DoxyReturn}{Returns}
+string 
+\end{DoxyReturn}
+
+
+Definition at line 456 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                         {
+        return $this->keyspace;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraCluster_af213845fa6bfb0e6a986fb671be28552}{
+\index{CassandraCluster@{CassandraCluster}!getServers@{getServers}}
+\index{getServers@{getServers}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{getServers}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::getServers (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_af213845fa6bfb0e6a986fb671be28552}
+Returns the list of servers connection info in the pool.
+
+\begin{DoxyReturn}{Returns}
+array 
+\end{DoxyReturn}
+
+
+Definition at line 465 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                 {
+        return $this->servers;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraCluster_a49baa9fac921644a5ba10f98c4a7412d}{
+\index{CassandraCluster@{CassandraCluster}!registerServer@{registerServer}}
+\index{registerServer@{registerServer}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{registerServer}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::registerServer (
+\begin{DoxyParamCaption}
+\item[{\$}]{host = {\ttfamily '127.0.0.1'}, }
+\item[{\$}]{port = {\ttfamily 9160}, }
+\item[{\$}]{useFramedTransport = {\ttfamily true}, }
+\item[{\$}]{sendTimeoutMs = {\ttfamily null}, }
+\item[{\$}]{receiveTimeoutMs = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_a49baa9fac921644a5ba10f98c4a7412d}
+Registers a new server in the cluster pool.
+
+This does not mean that it is connected to at once but it may be used in any of the requests.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$host} & Hostname or IP of the node \\
+\hline
+integer & {\em \$port} & Port of the instance \\
+\hline
+boolean & {\em \$useFramedTransport} & Use framed or buffered transport \\
+\hline
+integer & {\em \$sendTimeoutMs} & Timeout of send operations in milliseconds \\
+\hline
+integer & {\em \$receiveTimeoutMs} & Timeout of receive operations \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraCluster}{CassandraCluster} Self for chaining calls 
+\end{DoxyReturn}
+
+
+Definition at line 407 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $this->servers[] = array(
+            'host' => $host,
+            'port' => $port,
+            'use-framed-transport' => $useFramedTransport,
+            'send-timeout-ms' => $sendTimeoutMs,
+            'receive-timeout-ms' => $receiveTimeoutMs
+        );
+        
+        return $this;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraCluster_a1044f6f79a82fbb33aa6dd0374cac07a}{
+\index{CassandraCluster@{CassandraCluster}!useKeyspace@{useKeyspace}}
+\index{useKeyspace@{useKeyspace}!CassandraCluster@{CassandraCluster}}
+\subsubsection[{useKeyspace}]{\setlength{\rightskip}{0pt plus 5cm}CassandraCluster::useKeyspace (
+\begin{DoxyParamCaption}
+\item[{\$}]{keyspace, }
+\item[{\$}]{username = {\ttfamily null}, }
+\item[{\$}]{password = {\ttfamily null}}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraCluster_a1044f6f79a82fbb33aa6dd0374cac07a}
+Starts using given keyspace for all active and future connections.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$keyspace} & Keyspace to use \\
+\hline
+string & {\em \$username} & Optional username \\
+\hline
+string & {\em \$password} & Password \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\hyperlink{classCassandraCluster}{CassandraCluster} Self for chaining calls 
+\end{DoxyReturn}
+
+
+Definition at line 433 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                                               {
+        $this->keyspace = $keyspace;
+        $this->username = $username;
+        $this->password = $password;
+        
+        $this->getConnection();
+
+        foreach ($this->connections as $connection) {
+            $connection->useKeyspace(
+                $keyspace,
+                $username,
+                $password
+            );
+        }
+        
+        return $this;
+    }
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}

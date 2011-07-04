@@ -1,0 +1,417 @@
+\hypertarget{classCassandraDataIterator}{
+\section{CassandraDataIterator Class Reference}
+\label{classCassandraDataIterator}\index{CassandraDataIterator@{CassandraDataIterator}}
+}
+Inheritance diagram for CassandraDataIterator:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classCassandraDataIterator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraDataIterator_adfcc357f08ade6908e0304a8c93226b4}{\_\-\_\-construct} (\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} \$columnFamily, cassandra\_\-ColumnParent \$columnParent, cassandra\_\-SlicePredicate \$slicePredicate, \$startKey, \$consistency, \$rowCountLimit, \$bufferSize)
+\item 
+\hyperlink{classCassandraDataIterator_a4543482c99d8a586477214766783978b}{current} ()
+\item 
+\hyperlink{classCassandraDataIterator_a4cbe7dbf861e1deffaf14ae5cf2e4696}{key} ()
+\item 
+\hyperlink{classCassandraDataIterator_a33a1d60da9dd9e9d610f2720558914d3}{next} ()
+\item 
+\hyperlink{classCassandraDataIterator_a768a5fdcefd168820cf2ce498d4b2215}{rewind} ()
+\item 
+\hyperlink{classCassandraDataIterator_a5378a5276e6095d7e199ddb493d24ad8}{valid} ()
+\item 
+\hyperlink{classCassandraDataIterator_abc2745605d011776a747505aafff43b3}{getAll} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraDataIterator_a20435cd4a3a06df86d62f9975933c808}{updateBuffer} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandraDataIterator_a719c9f5f2c4d0b7c36f9a907e74e9bde}{
+{\bfseries \$columnFamily}}
+\label{classCassandraDataIterator_a719c9f5f2c4d0b7c36f9a907e74e9bde}
+
+\item 
+\hypertarget{classCassandraDataIterator_a587f537ee776d6a81fe1caf3b7fa394c}{
+{\bfseries \$columnParent}}
+\label{classCassandraDataIterator_a587f537ee776d6a81fe1caf3b7fa394c}
+
+\item 
+\hypertarget{classCassandraDataIterator_a2067030fc535151134504f2d38c7145b}{
+{\bfseries \$slicePredicate}}
+\label{classCassandraDataIterator_a2067030fc535151134504f2d38c7145b}
+
+\item 
+\hypertarget{classCassandraDataIterator_ab48967cb97d603e67412a6ff550a1c54}{
+{\bfseries \$consistency}}
+\label{classCassandraDataIterator_ab48967cb97d603e67412a6ff550a1c54}
+
+\item 
+\hypertarget{classCassandraDataIterator_a79f4fe24c390166c93ed6dcb742a7a70}{
+{\bfseries \$rowCountLimit}}
+\label{classCassandraDataIterator_a79f4fe24c390166c93ed6dcb742a7a70}
+
+\item 
+\hypertarget{classCassandraDataIterator_a32097680d8532ed8899a295e9c85930d}{
+{\bfseries \$bufferSize}}
+\label{classCassandraDataIterator_a32097680d8532ed8899a295e9c85930d}
+
+\item 
+\hypertarget{classCassandraDataIterator_a4906d7d4f4df7f4fcc4a1a152cc0c09e}{
+{\bfseries \$buffer}}
+\label{classCassandraDataIterator_a4906d7d4f4df7f4fcc4a1a152cc0c09e}
+
+\item 
+\hypertarget{classCassandraDataIterator_a2f5300c6e18b1ca14ae2a8c065d30cc0}{
+{\bfseries \$originalStartKey}}
+\label{classCassandraDataIterator_a2f5300c6e18b1ca14ae2a8c065d30cc0}
+
+\item 
+\hypertarget{classCassandraDataIterator_a8179ae2bf0d84e72c68e4373ee99f999}{
+{\bfseries \$nextStartKey}}
+\label{classCassandraDataIterator_a8179ae2bf0d84e72c68e4373ee99f999}
+
+\item 
+\hypertarget{classCassandraDataIterator_a020ee424b711830688073ccc5f51ff3e}{
+{\bfseries \$isValid}}
+\label{classCassandraDataIterator_a020ee424b711830688073ccc5f51ff3e}
+
+\item 
+\hypertarget{classCassandraDataIterator_aecc13b3a764da2a649cc59e109ed9bc6}{
+{\bfseries \$rowsSeen}}
+\label{classCassandraDataIterator_aecc13b3a764da2a649cc59e109ed9bc6}
+
+\item 
+\hypertarget{classCassandraDataIterator_a97c85b648a8c0f552217a48c921c594d}{
+{\bfseries \$expectedPageSize}}
+\label{classCassandraDataIterator_a97c85b648a8c0f552217a48c921c594d}
+
+\item 
+\hypertarget{classCassandraDataIterator_aa7a065000d7e20c0eaecb5a403d5ed90}{
+{\bfseries \$currentPageSize}}
+\label{classCassandraDataIterator_aa7a065000d7e20c0eaecb5a403d5ed90}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{classCassandra}{Cassandra} iterator used for indexed and key range queries where there may be more rows than is possible or reasonable to fetch in a single go so instead an iterator is returned that fetches the data in batches as the data is iterated.
+
+This is an abstract class with implementations for indexed and range queries. 
+
+Definition at line 3176 of file Cassandra.php.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classCassandraDataIterator_adfcc357f08ade6908e0304a8c93226b4}{
+\index{CassandraDataIterator@{CassandraDataIterator}!\_\-\_\-construct@{\_\-\_\-construct}}
+\index{\_\-\_\-construct@{\_\-\_\-construct}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{\_\-\_\-construct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::\_\-\_\-construct (
+\begin{DoxyParamCaption}
+\item[{{\bf CassandraColumnFamily} \$}]{columnFamily, }
+\item[{cassandra\_\-ColumnParent \$}]{columnParent, }
+\item[{cassandra\_\-SlicePredicate \$}]{slicePredicate, }
+\item[{\$}]{startKey, }
+\item[{\$}]{consistency, }
+\item[{\$}]{rowCountLimit, }
+\item[{\$}]{bufferSize}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraDataIterator_adfcc357f08ade6908e0304a8c93226b4}
+Sets the information needed to iterate the data in batches.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} & {\em \$columnFamily} & Column family \\
+\hline
+cassandra\_\-ColumnParent & {\em \$columnParent} & Parent column \\
+\hline
+cassandra\_\-SlicePredicate & {\em \$slicePredicate} & Slice predicate \\
+\hline
+type & {\em \$startKey} & Key to start fetching data from \\
+\hline
+type & {\em \$consistency} & Consistency to use \\
+\hline
+type & {\em \$rowCountLimit} & Maximum number or rows to fetch \\
+\hline
+type & {\em \$bufferSize} & How many rows to fetch in a single request \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 3282 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        $this->columnFamily = $columnFamily;
+        $this->columnParent = $columnParent;
+        $this->slicePredicate = $slicePredicate;
+        $this->consistency = $consistency;
+        $this->rowCountLimit = $rowCountLimit;
+        $this->bufferSize = $bufferSize;
+        $this->originalStartKey = $startKey;
+        $this->nextStartKey = $startKey;
+        $this->buffer = null;
+        
+        if ($rowCountLimit !== null) {
+            $this->bufferSize = min($rowCountLimit, $bufferSize);
+        }
+    }
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandraDataIterator_a4543482c99d8a586477214766783978b}{
+\index{CassandraDataIterator@{CassandraDataIterator}!current@{current}}
+\index{current@{current}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{current}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::current (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraDataIterator_a4543482c99d8a586477214766783978b}
+Returns the current element in the array.
+
+\begin{DoxyReturn}{Returns}
+mixed 
+\end{DoxyReturn}
+
+
+Definition at line 3311 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                              {
+        return current($this->buffer);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraDataIterator_abc2745605d011776a747505aafff43b3}{
+\index{CassandraDataIterator@{CassandraDataIterator}!getAll@{getAll}}
+\index{getAll@{getAll}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{getAll}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::getAll (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraDataIterator_abc2745605d011776a747505aafff43b3}
+Iterates over the whole matches data set and compiles the results into a single array.
+
+Only use this if you are not expecting many thousand of lines as it can get slow and require lots of memory.
+
+\begin{DoxyReturn}{Returns}
+array 
+\end{DoxyReturn}
+
+
+Definition at line 3427 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                             {
+        $results = array();
+        
+        $this->rewind();
+        
+        while ($this->valid()) {
+            $key = $this->key();
+            $value = $this->current();
+            
+            $results[$key] = $value;
+            
+            $this->next();
+        }
+        
+        return $results;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraDataIterator_a4cbe7dbf861e1deffaf14ae5cf2e4696}{
+\index{CassandraDataIterator@{CassandraDataIterator}!key@{key}}
+\index{key@{key}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{key}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::key (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraDataIterator_a4cbe7dbf861e1deffaf14ae5cf2e4696}
+Returns the key of the array element that's currently being pointed to by the internal pointer.
+
+If the internal pointer points beyond the end of the elements list or the array is empty, returns NULL.
+
+\begin{DoxyReturn}{Returns}
+mixed 
+\end{DoxyReturn}
+
+
+Definition at line 3324 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                          {
+        return key($this->buffer);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraDataIterator_a33a1d60da9dd9e9d610f2720558914d3}{
+\index{CassandraDataIterator@{CassandraDataIterator}!next@{next}}
+\index{next@{next}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{next}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::next (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraDataIterator_a33a1d60da9dd9e9d610f2720558914d3}
+Advances the internal array pointer one place forward before returning the element value.
+
+\begin{DoxyReturn}{Returns}
+mixed Next array value 
+\end{DoxyReturn}
+
+
+Definition at line 3334 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                           {
+        $value = null;
+        $beyondLastRow = false;
+        
+        if (!empty($this->buffer)) {
+            $this->nextStartKey = key($this->buffer);
+            
+            $value = next($this->buffer);
+
+            if (count(current($this->buffer)) == 0) {
+                $this->next();
+            } else {
+                $key = key($this->buffer);
+                
+                if (isset($key)) {
+                    $this->rowsSeen++;
+                    
+                    if (
+                        $this->rowCountLimit !== null
+                        && $this->rowsSeen > $this->rowCountLimit
+                    ) {
+                        $this->isValid = false;
+                        
+                        return null;
+                    }
+                } else {
+                    $beyondLastRow = true;
+                }
+            }
+        } else {
+            $beyondLastRow = true;
+        }
+
+        if ($beyondLastRow) {
+            if ($this->currentPageSize < $this->expectedPageSize) {
+                $this->isValid = false;
+            } else {
+                $this->updateBuffer();
+                
+                if (count($this->buffer) == 1) {
+                    $this->isValid = false;
+                } else {
+                    $this->next();
+                }
+            }
+        }
+        
+        return $value;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraDataIterator_a768a5fdcefd168820cf2ce498d4b2215}{
+\index{CassandraDataIterator@{CassandraDataIterator}!rewind@{rewind}}
+\index{rewind@{rewind}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{rewind}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::rewind (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraDataIterator_a768a5fdcefd168820cf2ce498d4b2215}
+Rewinds the iterator internal pointer back to the beginning.
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Definition at line 3389 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                             {
+        $this->rowsSeen = 0;
+        $this->isValid = true;
+        $this->nextStartKey = $this->originalStartKey;
+        
+        $this->updateBuffer();
+        
+        if (count($this->buffer) == 0) {
+            $this->isValid = false;
+            
+            return;
+        }
+        
+        if (count(current($this->buffer)) == 0) {
+            $this->next();
+        } else {
+            $this->rowsSeen++;
+        }
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraDataIterator_a20435cd4a3a06df86d62f9975933c808}{
+\index{CassandraDataIterator@{CassandraDataIterator}!updateBuffer@{updateBuffer}}
+\index{updateBuffer@{updateBuffer}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{updateBuffer}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::updateBuffer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}abstract, protected\mbox{]}}}}
+\label{classCassandraDataIterator_a20435cd4a3a06df86d62f9975933c808}
+Updates the internal buffer, fetching a new batch of data.
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Reimplemented in \hyperlink{classCassandraIndexedDataIterator_a1d38641286c86458941bca203d6fea65}{CassandraIndexedDataIterator}, and \hyperlink{classCassandraRangeDataIterator_a743234ebb424200a5c3d7473ce95dbba}{CassandraRangeDataIterator}.
+
+\hypertarget{classCassandraDataIterator_a5378a5276e6095d7e199ddb493d24ad8}{
+\index{CassandraDataIterator@{CassandraDataIterator}!valid@{valid}}
+\index{valid@{valid}!CassandraDataIterator@{CassandraDataIterator}}
+\subsubsection[{valid}]{\setlength{\rightskip}{0pt plus 5cm}CassandraDataIterator::valid (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraDataIterator_a5378a5276e6095d7e199ddb493d24ad8}
+Returns whether the iterator is still valid and has more data.
+
+\begin{DoxyReturn}{Returns}
+boolean 
+\end{DoxyReturn}
+
+
+Definition at line 3414 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                            {
+        return $this->isValid;
+    }
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}

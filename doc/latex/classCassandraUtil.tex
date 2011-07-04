@@ -1,0 +1,516 @@
+\hypertarget{classCassandraUtil}{
+\section{CassandraUtil Class Reference}
+\label{classCassandraUtil}\index{CassandraUtil@{CassandraUtil}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraUtil_ad5c94f8a7e99e7240385cf471c2b4ae8}{getTimestamp} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classCassandraUtil_a0c6545c1306d917051a53598a0f23ee6}{extractType} (\$definition)
+\item 
+static \hyperlink{classCassandraUtil_aa70ff00c6c785127c87a46c966999e66}{pack} (\$value, \$type)
+\item 
+static \hyperlink{classCassandraUtil_a92f49d16f99991a04a3f798ee91f7d0b}{packLong} (\$value)
+\item 
+static \hyperlink{classCassandraUtil_aa5b20568dcda475aba51dc1ac6bdfcb1}{packInteger} (\$value)
+\item 
+static \hyperlink{classCassandraUtil_a5e6486c8b5438bf565f13789f0403053}{packString} (\$string, \$length)
+\item 
+static \hyperlink{classCassandraUtil_a0e4efa10d6999de6fbbc2efa3f24a089}{unpack} (\$value, \$type)
+\item 
+static \hyperlink{classCassandraUtil_a8753dea96e94a3c84d8e5aada1418dbb}{unpackLong} (\$data)
+\item 
+static \hyperlink{classCassandraUtil_ab0dcf37a5de9d22e665ca291a3afd4a2}{unpackInteger} (\$value)
+\item 
+static \hyperlink{classCassandraUtil_ab49d399bb60d2e0094de49b77cd00dbe}{unpackString} (\$value, \$length)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Utility class for the \hyperlink{classCassandra}{Cassandra} library, providing some common operations like packing data to correct type.
+
+Includes quite a lot of code from PHPCassa project. 
+
+Definition at line 2888 of file Cassandra.php.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandraUtil_a0c6545c1306d917051a53598a0f23ee6}{
+\index{CassandraUtil@{CassandraUtil}!extractType@{extractType}}
+\index{extractType@{extractType}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{extractType}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::extractType (
+\begin{DoxyParamCaption}
+\item[{\$}]{definition}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_a0c6545c1306d917051a53598a0f23ee6}
+Extracts the data type name from given definition.
+
+The parsed names match the constancts Cassandra::TYPE\_\-...
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$definition} & Definition to parse \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Valid data type name 
+\end{DoxyReturn}
+
+
+Definition at line 2898 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                    {
+        if ($definition === null or $definition == '') {
+            return Cassandra::TYPE_BYTES;
+        }
+
+        $index = strrpos($definition, '.');
+
+        if ($index === false) {
+            return Cassandra::TYPE_BYTES;
+        }
+
+        return substr($definition, $index + 1);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_ad5c94f8a7e99e7240385cf471c2b4ae8}{
+\index{CassandraUtil@{CassandraUtil}!getTimestamp@{getTimestamp}}
+\index{getTimestamp@{getTimestamp}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{getTimestamp}]{\setlength{\rightskip}{0pt plus 5cm}CassandraUtil::getTimestamp (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraUtil_ad5c94f8a7e99e7240385cf471c2b4ae8}
+Returns current timestamp that can be used in insert/update opearations.
+
+By Zach Buller (\href{mailto:zachbuller@gmail.com}{\tt zachbuller@gmail.com})
+
+\begin{DoxyReturn}{Returns}
+integer Unpacked data 
+\end{DoxyReturn}
+
+
+Definition at line 3156 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                   {
+        $microtime = microtime();
+        
+        settype($microtime, 'string');
+        
+        $timeTokens = explode(" ", $microtime);
+        $subSeconds = preg_replace('/0./', '', $timeTokens[0], 1);
+        
+        return ($timeTokens[1].$subSeconds) / 100;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_aa70ff00c6c785127c87a46c966999e66}{
+\index{CassandraUtil@{CassandraUtil}!pack@{pack}}
+\index{pack@{pack}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{pack}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::pack (
+\begin{DoxyParamCaption}
+\item[{\$}]{value, }
+\item[{\$}]{type}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_aa70ff00c6c785127c87a46c966999e66}
+Packs given value to given type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$value} & Value to pack \\
+\hline
+string & {\em \$type} & Type name to pack to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mixed Data packed to requested type 
+\end{DoxyReturn}
+
+
+Definition at line 2919 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                               {
+        switch ($type) {
+            case Cassandra::TYPE_LONG:
+                return self::packLong($value);
+            
+            case Cassandra::TYPE_INTEGER:
+                return self::packInteger($value);
+            
+            case Cassandra::TYPE_ASCII:
+                return self::packString($value, strlen($value));
+            
+            case Cassandra::TYPE_UTF8:
+                if (mb_detect_encoding($value, 'UTF-8') != 'UTF-8') {
+                    $value = utf8_encode($value);
+                }
+                
+                return self::packString($value, strlen($value));
+                
+            case Cassandra::TYPE_TIME_UUID:
+                return self::packString($value, 16);
+            
+            case Cassandra::TYPE_LEXICAL_UUID:
+                return self::packString($value, 16);
+                
+            default:
+                return $value;
+        }
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_aa5b20568dcda475aba51dc1ac6bdfcb1}{
+\index{CassandraUtil@{CassandraUtil}!packInteger@{packInteger}}
+\index{packInteger@{packInteger}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{packInteger}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::packInteger (
+\begin{DoxyParamCaption}
+\item[{\$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_aa5b20568dcda475aba51dc1ac6bdfcb1}
+Packs data to integer type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$value} & Value to pack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer Packed data 
+\end{DoxyReturn}
+
+
+Definition at line 2997 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                               {
+        return pack('N', $value);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_a92f49d16f99991a04a3f798ee91f7d0b}{
+\index{CassandraUtil@{CassandraUtil}!packLong@{packLong}}
+\index{packLong@{packLong}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{packLong}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::packLong (
+\begin{DoxyParamCaption}
+\item[{\$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_a92f49d16f99991a04a3f798ee91f7d0b}
+Packs data to long type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$value} & Value to pack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer Packed data 
+\end{DoxyReturn}
+
+
+Definition at line 2954 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                            {
+        // If we are on a 32bit architecture we have to explicitly deal with
+        // 64-bit twos-complement arithmetic since PHP wants to treat all ints
+        // as signed and any int over 2^31 - 1 as a float
+        if (PHP_INT_SIZE == 4) {
+            $neg = $value < 0;
+
+            if ($neg) {
+                $value *= - 1;
+            }
+
+            $hi = (int) ($value / 4294967296);
+            $lo = (int) $value;
+
+            if ($neg) {
+                $hi = ~$hi;
+                $lo = ~$lo;
+                
+                if (($lo & (int)0xffffffff) == (int)0xffffffff) {
+                    $lo = 0;
+                    $hi++;
+                } else {
+                    $lo++;
+                }
+            }
+            
+            $data = pack('N2', $hi, $lo);
+        } else {
+            $hi = $value >> 32;
+            $lo = $value & 0xFFFFFFFF;
+            
+            $data = pack('N2', $hi, $lo);
+        }
+        
+        return $data;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_a5e6486c8b5438bf565f13789f0403053}{
+\index{CassandraUtil@{CassandraUtil}!packString@{packString}}
+\index{packString@{packString}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{packString}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::packString (
+\begin{DoxyParamCaption}
+\item[{\$}]{string, }
+\item[{\$}]{length}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_a5e6486c8b5438bf565f13789f0403053}
+Packs data to string type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$value} & Value to pack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Packed data 
+\end{DoxyReturn}
+
+
+Definition at line 3007 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                        {       
+        $result = '';
+        
+        for($i = 0; $i < $length; $i++) {
+            $result .= pack('c', ord(substr($string, $i, 1)));
+        }
+        
+        return $result;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_a0e4efa10d6999de6fbbc2efa3f24a089}{
+\index{CassandraUtil@{CassandraUtil}!unpack@{unpack}}
+\index{unpack@{unpack}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{unpack}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::unpack (
+\begin{DoxyParamCaption}
+\item[{\$}]{value, }
+\item[{\$}]{type}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_a0e4efa10d6999de6fbbc2efa3f24a089}
+Unpacks packed data from given type to something PHP understands.
+
+
+\begin{DoxyParams}[1]{Parameters}
+string & {\em \$value} & Value to unpack \\
+\hline
+string & {\em \$type} & Current type of the data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mixed Unpacked data 
+\end{DoxyReturn}
+
+
+Definition at line 3024 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                 {
+        switch ($type) {
+            case Cassandra::TYPE_LONG:
+                return self::unpackLong($value);
+            
+            case Cassandra::TYPE_INTEGER:
+                return self::unpackInteger($value);
+            
+            case Cassandra::TYPE_ASCII:
+                return self::unpackString($value, strlen($value));
+            
+            case Cassandra::TYPE_UTF8:
+                return self::unpackString($value, strlen($value));
+                
+            case Cassandra::TYPE_TIME_UUID:
+                return $value;
+            
+            case Cassandra::TYPE_LEXICAL_UUID:
+                return $value;
+                
+            default:
+                return $value;
+        }
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_ab0dcf37a5de9d22e665ca291a3afd4a2}{
+\index{CassandraUtil@{CassandraUtil}!unpackInteger@{unpackInteger}}
+\index{unpackInteger@{unpackInteger}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{unpackInteger}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::unpackInteger (
+\begin{DoxyParamCaption}
+\item[{\$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_ab0dcf37a5de9d22e665ca291a3afd4a2}
+Unpacks integer data type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$data} & Data to unpack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer Unpacked data 
+\end{DoxyReturn}
+
+
+Definition at line 3124 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                 {
+        $unpacked = unpack('N', $value);
+        
+        return array_pop($unpacked);
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_a8753dea96e94a3c84d8e5aada1418dbb}{
+\index{CassandraUtil@{CassandraUtil}!unpackLong@{unpackLong}}
+\index{unpackLong@{unpackLong}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{unpackLong}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::unpackLong (
+\begin{DoxyParamCaption}
+\item[{\$}]{data}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_a8753dea96e94a3c84d8e5aada1418dbb}
+Unpacks long data type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$data} & Data to unpack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+integer Unpacked data 
+\end{DoxyReturn}
+
+
+Definition at line 3055 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                             {
+        $arr = unpack('N2', $data);
+
+        // If we are on a 32bit architecture we have to explicitly deal with
+        // 64-bit twos-complement arithmetic since PHP wants to treat all ints
+        // as signed and any int over 2^31 - 1 as a float
+        if (PHP_INT_SIZE == 4) {
+
+            $hi = $arr[1];
+            $lo = $arr[2];
+            $isNeg = $hi < 0;
+
+            // Check for a negative
+            if ($isNeg) {
+                $hi = ~$hi & (int)0xffffffff;
+                $lo = ~$lo & (int)0xffffffff;
+
+                if ($lo == (int)0xffffffff) {
+                    $hi++;
+                    $lo = 0;
+                } else {
+                    $lo++;
+                }
+            }
+
+            // Force 32bit words in excess of 2G to pe positive - we deal wigh
+            // sign explicitly below
+
+            if ($hi & (int)0x80000000) {
+                $hi &= (int)0x7fffffff;
+                $hi += 0x80000000;
+            }
+
+            if ($lo & (int)0x80000000) {
+                $lo &= (int)0x7fffffff;
+                $lo += 0x80000000;
+            }
+
+            $value = $hi * 4294967296 + $lo;
+
+            if ($isNeg) {
+                $value = 0 - $value;
+            }
+        } else {
+            // Upcast negatives in LSB bit
+            if ($arr[2] & 0x80000000)
+                $arr[2] = $arr[2] & 0xffffffff;
+
+            // Check for a negative
+            if ($arr[1] & 0x80000000) {
+                $arr[1] = $arr[1] & 0xffffffff;
+                $arr[1] = $arr[1] ^ 0xffffffff;
+                $arr[2] = $arr[2] ^ 0xffffffff;
+                
+                $value = 0 - $arr[1] * 4294967296 - $arr[2] - 1;
+            } else {
+                $value = $arr[1] * 4294967296 + $arr[2];
+            }
+        }
+        
+        return $value;
+    }
+\end{DoxyCode}
+\hypertarget{classCassandraUtil_ab49d399bb60d2e0094de49b77cd00dbe}{
+\index{CassandraUtil@{CassandraUtil}!unpackString@{unpackString}}
+\index{unpackString@{unpackString}!CassandraUtil@{CassandraUtil}}
+\subsubsection[{unpackString}]{\setlength{\rightskip}{0pt plus 5cm}static CassandraUtil::unpackString (
+\begin{DoxyParamCaption}
+\item[{\$}]{value, }
+\item[{\$}]{length}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}static\mbox{]}}}}
+\label{classCassandraUtil_ab49d399bb60d2e0094de49b77cd00dbe}
+Unpacks string data type.
+
+
+\begin{DoxyParams}[1]{Parameters}
+mixed & {\em \$data} & Data to unpack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string Unpacked data 
+\end{DoxyReturn}
+
+
+Definition at line 3136 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                                         {
+        $unpacked = unpack('c'.$length.'chars', $value);
+        $out = '';
+        
+        foreach($unpacked as $element) {
+            if($element > 0) {
+                $out .= chr($element);
+            }
+        }
+        
+        return $out;
+    }
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}

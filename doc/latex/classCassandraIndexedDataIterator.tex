@@ -1,0 +1,156 @@
+\hypertarget{classCassandraIndexedDataIterator}{
+\section{CassandraIndexedDataIterator Class Reference}
+\label{classCassandraIndexedDataIterator}\index{CassandraIndexedDataIterator@{CassandraIndexedDataIterator}}
+}
+Inheritance diagram for CassandraIndexedDataIterator:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classCassandraIndexedDataIterator}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraIndexedDataIterator_a489fdf163525dd1bd4cf99b4e81708f3}{\_\-\_\-construct} (\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} \$columnFamily, cassandra\_\-ColumnParent \$columnParent, cassandra\_\-IndexClause \$indexClause, cassandra\_\-SlicePredicate \$slicePredicate, \$consistency, \$rowCountLimit, \$bufferSize)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classCassandraIndexedDataIterator_a1d38641286c86458941bca203d6fea65}{updateBuffer} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{classCassandraIndexedDataIterator_a21fda6e85a7d5d7dda9da9edf26be514}{
+{\bfseries \$indexClause}}
+\label{classCassandraIndexedDataIterator_a21fda6e85a7d5d7dda9da9edf26be514}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Indexed data iterator, used when performing where-\/queries. 
+
+Definition at line 3455 of file Cassandra.php.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classCassandraIndexedDataIterator_a489fdf163525dd1bd4cf99b4e81708f3}{
+\index{CassandraIndexedDataIterator@{CassandraIndexedDataIterator}!\_\-\_\-construct@{\_\-\_\-construct}}
+\index{\_\-\_\-construct@{\_\-\_\-construct}!CassandraIndexedDataIterator@{CassandraIndexedDataIterator}}
+\subsubsection[{\_\-\_\-construct}]{\setlength{\rightskip}{0pt plus 5cm}CassandraIndexedDataIterator::\_\-\_\-construct (
+\begin{DoxyParamCaption}
+\item[{{\bf CassandraColumnFamily} \$}]{columnFamily, }
+\item[{cassandra\_\-ColumnParent \$}]{columnParent, }
+\item[{cassandra\_\-IndexClause \$}]{indexClause, }
+\item[{cassandra\_\-SlicePredicate \$}]{slicePredicate, }
+\item[{\$}]{consistency, }
+\item[{\$}]{rowCountLimit, }
+\item[{\$}]{bufferSize}
+\end{DoxyParamCaption}
+)}}
+\label{classCassandraIndexedDataIterator_a489fdf163525dd1bd4cf99b4e81708f3}
+Sets the information needed to iterate the data in batches.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\hyperlink{classCassandraColumnFamily}{CassandraColumnFamily} & {\em \$columnFamily} & Column family \\
+\hline
+cassandra\_\-ColumnParent & {\em \$columnParent} & Parent column \\
+\hline
+cassandra\_\-IndexClause & {\em \$indexClause} & The index clause to use \\
+\hline
+cassandra\_\-SlicePredicate & {\em \$slicePredicate} & Slice predicate \\
+\hline
+type & {\em \$startKey} & Key to start fetching data from \\
+\hline
+type & {\em \$consistency} & Consistency to use \\
+\hline
+type & {\em \$rowCountLimit} & Maximum number or rows to fetch \\
+\hline
+type & {\em \$bufferSize} & How many rows to fetch in a single request \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 3476 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+      {
+        parent::__construct(
+            $columnFamily,
+            $columnParent,
+            $slicePredicate,
+            $indexClause->start_key,
+            $consistency,
+            $rowCountLimit, 
+            $bufferSize
+        );
+        
+        $this->indexClause = $indexClause;
+    }
+\end{DoxyCode}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classCassandraIndexedDataIterator_a1d38641286c86458941bca203d6fea65}{
+\index{CassandraIndexedDataIterator@{CassandraIndexedDataIterator}!updateBuffer@{updateBuffer}}
+\index{updateBuffer@{updateBuffer}!CassandraIndexedDataIterator@{CassandraIndexedDataIterator}}
+\subsubsection[{updateBuffer}]{\setlength{\rightskip}{0pt plus 5cm}CassandraIndexedDataIterator::updateBuffer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily  \mbox{[}protected\mbox{]}}}}
+\label{classCassandraIndexedDataIterator_a1d38641286c86458941bca203d6fea65}
+Updates the internal buffer, fetching new indexed data.
+
+\begin{DoxyReturn}{Returns}
+void 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classCassandraDataIterator_a20435cd4a3a06df86d62f9975933c808}{CassandraDataIterator}.
+
+
+
+Definition at line 3503 of file Cassandra.php.
+
+
+\begin{DoxyCode}
+                                      {
+        if ($this->rowCountLimit !== null) {
+            $this->indexClause->count = min(
+                $this->rowCountLimit - $this->rowsSeen + 1,
+                $this->bufferSize
+            );
+        } else {
+            $this->indexClause->count = $this->bufferSize;
+        }
+        
+        $this->expectedPageSize = $this->indexClause->count;
+        $this->indexClause->start_key = $this->nextStartKey;
+        
+        $result = $this->columnFamily->getCassandra()->call(
+            'get_indexed_slices',
+            $this->columnParent,
+            $this->indexClause,
+            $this->slicePredicate,
+            $this->consistency
+        );
+        
+        if (count($result) == 0) {
+            $this->buffer = array();
+        } else {
+            $this->buffer = $this->columnFamily->parseSlicesResponse($result);
+        }
+        
+        $this->currentPageSize = count($this->buffer);
+    }
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+Cassandra.php\end{DoxyCompactItemize}
