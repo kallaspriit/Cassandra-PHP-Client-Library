@@ -3624,7 +3624,7 @@ class CassandraRangeDataIterator extends CassandraDataIterator {
 /**
  * Thrown if maximum number of call retries is exceeded.
  */
-class CassandraMaxRetriesException				extends Exception {};
+class CassandraMaxRetriesException extends Exception {};
 
 /**
  * Throws if trying to fetch the client of a connection but the connection has

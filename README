@@ -4,7 +4,7 @@ lifting and providing a simple to learn and use interface.
 
 Features:
 - simple and intuitive interface
-- well covered with unit tests (>90%)
+- well covered with unit tests (> 90%)
 - support for multiple server pools using named singletons
 - requires including a single file
 - uses reasonable defaults through-out
@@ -14,6 +14,11 @@ Features:
 - retries failed queries using back-off strategy
 - built with performance in mind (caches schema description etc)
 - well documented API and a working example
+
+The class diagram is available on the wiki, see:
+https://github.com/kallaspriit/Cassandra-PHP-Client-Library/wiki
+
+The library uses the permissive MIT licence.
 
 
 The following example covers most of what you need to know to use this library.
