@@ -223,7 +223,7 @@ echo 'Users "chuck" and "john": <pre>'.print_r($chuckAndJohn, true).'</pre><hr/>
 // again as there may be more results than it's reasonable to fetch in a single
 // query, an iterator is returned that can make several smaller range queries
 // as the data is iterated
-$usersAZ = $cassandra->cf('user')->getRange('a', 'z');
+$usersAZ = $cassandra->cf('user')->getKeyRange('a', 'z');
 echo 'Users with keys in range a-z: <pre>'.print_r($usersAZ->getAll(), true).'</pre><hr/>';
 
 // find the number of columns a key has, we could also request for ranges

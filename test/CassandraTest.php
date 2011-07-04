@@ -214,7 +214,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException CassandraInvalidRequestException
 	 */
 	public function testExceptionThrownOnInvalidColumnsRequest4() {
-		$this->cassandra->cf('user')->getRange(
+		$this->cassandra->cf('user')->getKeyRange(
 			'user1',
 			'userN',
 			100,
@@ -886,7 +886,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			}
 		}
 		
-		$data = $this->cassandra->cf('user')->getRange('test-'.chr(101), 'test-'.(chr(107)));
+		$data = $this->cassandra->cf('user')->getKeyRange('test-'.chr(101), 'test-'.(chr(107)));
 		$results = $data->getAll();
 
 		$this->assertEquals($expected, $results);
@@ -911,7 +911,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 			$expected['test-'.chr($i)] = $testData;
 		}
 		
-		$data = $this->cassandra->cf('user')->getRange();
+		$data = $this->cassandra->cf('user')->getKeyRange();
 		$results = $data->getAll();
 		
 		$this->assertEquals($expected, $results);
