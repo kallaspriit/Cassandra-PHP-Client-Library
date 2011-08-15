@@ -536,6 +536,26 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 	
+	public function testSpecialCharactersAreProperlyUnpacked() {
+		$this->cassandra->set(
+			'user.special',
+			array(
+				'email' => 'Jèna@grùber.com',
+				'name' => 'Jèna Grùber',
+				'age' => 41
+			)
+		);
+		
+		$this->assertEquals(
+			array(
+				'email' => 'Jèna@grùber.com',
+				'name' => 'Jèna Grùber',
+				'age' => 41
+			),
+			$this->cassandra->get('user.special')
+		);
+	}
+	
 	/**
 	 * @expectedException CassandraInvalidPatternException
 	 */
@@ -861,8 +881,8 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		);
 	}
 	
-	//* Run only with
-	// * partitioner: org.apache.cassandra.dht.CollatingOrderPreservingPartitioner
+	/* Run only with partitioner:
+	 * org.apache.cassandra.dht.CollatingOrderPreservingPartitioner
 	public function testKeysCanBeFetchedByRange() {
 		$expected = array();
 		$expected2 = array();
@@ -891,6 +911,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals($expected, $results);
 	}
+	*/
 	
 	public function testKeysCanBeFetchedByRange2() {
 		$expected = array();
