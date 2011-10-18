@@ -14,7 +14,9 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	protected static $setupComplete = false;
 	
 	public function setup() {
-		apc_clear_cache();
+		if (function_exists('apc_clear_cache')) {
+			apc_clear_cache();
+		}
 		
 		$this->servers = array(
 			array(
@@ -87,7 +89,10 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 	
 	public function tearDown() {
 		unset($this->cassandra);
-		apc_clear_cache();
+		
+		if (function_exists('apc_clear_cache')) {
+			apc_clear_cache();
+		}
 	}
 	
 	public function testKeyspaceCanBeUpdated() {
@@ -533,6 +538,84 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 				'email' => 'foobar@gmail.com',
 			),
 			$this->cassandra->get('user.foobar|2R')
+		);
+	}
+	
+	public function testRemovesKeys() {
+		$this->cassandra->set(
+			'user.removable',
+			array(
+				'email' => 'john@smith.com',
+				'name' => 'John Smith',
+				'age' => 44
+			)
+		);
+		
+		$this->assertEquals(
+			array(
+				'email' => 'john@smith.com',
+				'name' => 'John Smith',
+				'age' => 44
+			),
+			$this->cassandra->get('user.removable')
+		);
+		
+		$this->cassandra->remove('user.removable');
+		
+		$this->assertNull($this->cassandra->get('user.removable'));
+	}
+	
+	public function testRemovesKeys2() {
+		$this->cassandra->set(
+			'user.removable',
+			array(
+				'email' => 'john@smith.com',
+				'name' => 'John Smith',
+				'age' => 44
+			)
+		);
+		
+		$this->assertEquals(
+			array(
+				'email' => 'john@smith.com',
+				'name' => 'John Smith',
+				'age' => 44
+			),
+			$this->cassandra->get('user.removable')
+		);
+		
+		$this->cassandra->cf('user')->remove('removable');
+		
+		$this->assertNull($this->cassandra->get('user.removable'));
+	}
+	
+	public function testRemovesColumn() {
+		$this->cassandra->set(
+			'user.removable',
+			array(
+				'email' => 'john@smith.com',
+				'name' => 'John Smith',
+				'age' => 44
+			)
+		);
+		
+		$this->assertEquals(
+			array(
+				'email' => 'john@smith.com',
+				'name' => 'John Smith',
+				'age' => 44
+			),
+			$this->cassandra->get('user.removable')
+		);
+		
+		$this->cassandra->remove('user.removable:email');
+		
+		$this->assertEquals(
+			array(
+				'name' => 'John Smith',
+				'age' => 44
+			),
+			$this->cassandra->get('user.removable')
 		);
 	}
 	

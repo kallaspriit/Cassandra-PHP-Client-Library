@@ -1190,6 +1190,38 @@ class Cassandra {
 	}
 	
 	/**
+	 * Removes a row or element of a row.
+	 * 
+	 * Supported patterns:
+	 * - family.key
+	 * - family.key:col1 * 
+	 * - family.super.key:col1
+	 * 
+	 * In all of the parts, the following characters shoudl be escaped (. etc)
+	 * '.', ':', ',', '-', '|'.
+	 * 
+	 * @param string $request The request string, see patterns above
+	 * @param integer $consistency Consistency level to use
+	 * @param integer $timestamp Optional timestamp to use.
+	 * @throws Exception If something goes wrong
+	 */
+	public function remove(
+		$request, 
+		$consistency = null, 
+		$timestamp = null
+	) {
+		$details = $this->parseRequest($request);
+		
+		$this->cf($details['column-family'])->remove(
+			$details['key'],
+			$details['columns'],
+			$details['super-column'],
+			$consistency,
+			$timestamp
+		);
+	}
+	
+	/**
 	 * Creates a new keyspace.
 	 * 
 	 * Note that the replication factor means how many nodes hold a single
@@ -2038,6 +2070,50 @@ class CassandraColumnFamily {
 	}
 	
 	/**
+	 * Removes a row or element of a row.
+	 * 
+	 * @param string $key Key to remove
+	 * @param array|null Array of column names or null for all
+	 * @param integer $consistency Consistency level to use
+	 * @param integer $timestamp Optional timestamp to use
+	 * @throws Exception If something goes wrong
+	 */
+	public function remove(
+		$key,
+		array $columns = null,
+		$superColumn = null,
+		$consistency = null, 
+		$timestamp = null
+	) {
+		if (is_array($columns) && count($columns) > 1) {
+			throw new Exception(
+				'Removing several columns is not yet supported'
+			);
+		}
+		
+		$columnPath = $this->createColumnPath(
+			is_array($columns) && count($columns) == 1 ? $columns[0] : null,
+			$superColumn
+		);
+
+		if ($timestamp === null) {
+			$timestamp = CassandraUtil::getTimestamp();
+		}
+
+		if ($consistency === null) {
+			$consistency = $this->defaultWriteConsistency;
+		}
+
+		$this->cassandra->call(
+			'remove',
+			$key,
+			$columnPath,
+			$timestamp,
+			$consistency
+		);
+	}
+	
+	/**
 	 * Fetch a set of rows filtered by secondary index where clause.
 	 * 
 	 * To use this method, at least one of the columns present in the where
@@ -2482,6 +2558,37 @@ class CassandraColumnFamily {
 		}
 		
 		return $columnParent;
+	}
+	
+	/**
+	 * Creates low-level Cassandra column-path definition.
+	 * 
+	 * @param string $columnName Name of the column
+	 * @param string $superColumName Name of the super column
+	 * @return cassandra_ColumnPath Column path definition
+	 */
+	public function createColumnPath($columnName, $superColumnName) {
+		$schema = $this->getSchema();
+		
+		$columnPath = new cassandra_ColumnPath();
+		
+		$columnPath->column_family = $this->name;
+		
+		if ($columnName !== null) {
+			$columnPath->column = CassandraUtil::pack(
+				$columnName,
+				$this->getColumnNameType()
+			);
+		}
+		
+		if ($superColumnName !== null) {
+			$columnPath->super_column = CassandraUtil::pack(
+				$superColumnName,
+				$schema['super-type']
+			);
+		}
+		
+		return $columnPath;
 	}
 	
 	/**
