@@ -144,7 +144,7 @@ class CassandraTest extends PHPUnit_Framework_TestCase {
 		$connection = $this->cassandra->getConnection();
 		$client = $connection->getClient();
 		
-		if (!($client instanceof CassandraClient)) {
+		if (!($client instanceof cassandra_CassandraClient)) {
 			$this->fail('Instance of CassandraClient expected');
 		}
 		

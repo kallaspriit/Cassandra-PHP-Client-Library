@@ -34,7 +34,7 @@
  */
 
 // set the globals that the thrift library uses
-$GLOBALS['THRIFT_ROOT'] = dirname(__FILE__) . '/thrift/';
+$GLOBALS['THRIFT_ROOT'] = dirname(__FILE__) . '/thrift';
 define('THRIFT_PATH', $GLOBALS['THRIFT_ROOT']);
 
 // require thrift packages
@@ -108,7 +108,7 @@ class CassandraConnection {
 	/**
 	 * The low-level cassandra client.
 	 * 
-	 * @var CassandraClient
+	 * @var cassandra_CassandraClient
 	 */
 	protected $client;
 	
@@ -159,7 +159,7 @@ class CassandraConnection {
 		$this->isOpen = true;
 		
 		$this->protocol = new TBinaryProtocolAccelerated($this->transport);
-		$this->client = new CassandraClient($this->protocol);
+		$this->client = new cassandra_CassandraClient($this->protocol);
 	}
 	
 	/**
@@ -196,7 +196,7 @@ class CassandraConnection {
 	/**
 	 * Returns the low-level Cassandra client used by the wrapper.
 	 * 
-	 * @return CassandraClient
+	 * @return cassandra_CassandraClient
 	 */
 	public function getClient() {
 		if (!$this->isOpen) {
@@ -631,7 +631,7 @@ class Cassandra {
 	 * what else is reading and writing, it's possible that they could briefly
 	 * give conflicting answers.
 	 */
-	const CONSISTENCY_ONE = cassandra_ConsistencyLevel::ONE;
+	const CONSISTENCY_ONE = ConsistencyLevel::ONE;
 	
 	/**
 	 * Majority of the nodes holding the data must reply.
@@ -641,7 +641,7 @@ class Cassandra {
 	 * factor of atleast three for this to work differently from all and should
 	 * use odd number for replication factor.
 	 */
-	const CONSISTENCY_QUORUM = cassandra_ConsistencyLevel::QUORUM;
+	const CONSISTENCY_QUORUM = ConsistencyLevel::QUORUM;
 	
 	/**
 	 * Only meaningful for writes and means as soon as a write is received by
@@ -654,7 +654,7 @@ class Cassandra {
 	 * you write to node 5, either 6, 7, or 8 have to return success before
 	 * node 5 returns success.
 	 */
-	const CONSISTENCY_ANY = cassandra_ConsistencyLevel::ANY;
+	const CONSISTENCY_ANY = ConsistencyLevel::ANY;
 	
 	/**
 	 * Returns success only if all the nodes holding the data respond.
@@ -664,7 +664,7 @@ class Cassandra {
 	 * is down, it's not possible to read or write the data as the requirement
 	 * can not be fulfilled.
 	 */
-	const CONSISTENCY_ALL = cassandra_ConsistencyLevel::ALL;
+	const CONSISTENCY_ALL = ConsistencyLevel::ALL;
 	
 	/**
 	 * Standard column type.
@@ -723,27 +723,27 @@ class Cassandra {
 	/**
 	 * Equality comparator used in where queries.
 	 */
-	const OP_EQ = cassandra_IndexOperator::EQ;
+	const OP_EQ = IndexOperator::EQ;
 	
 	/**
 	 * Strict less-than comparator.
 	 */
-	const OP_LT = cassandra_IndexOperator::LT;
+	const OP_LT = IndexOperator::LT;
 	
 	/**
 	 * Strict greater-than comparator.
 	 */
-	const OP_GT = cassandra_IndexOperator::GT;
+	const OP_GT = IndexOperator::GT;
 	
 	/**
 	 * Less-than-equals comparator.
 	 */
-	const OP_LTE = cassandra_IndexOperator::LTE;
+	const OP_LTE = IndexOperator::LTE;
 	
 	/**
 	 * Greater-than-equals comparator.
 	 */
-	const OP_GTE = cassandra_IndexOperator::GTE;
+	const OP_GTE = IndexOperator::GTE;
 	
 	/**
 	 * Default simple placement strategy not taking network topology into
@@ -898,7 +898,7 @@ class Cassandra {
 	/**
 	 * Return the low-level thrift client.
 	 * 
-	 * @return CassandraClient
+	 * @return cassandra_CassandraClient
 	 */
 	public function getClient() {
 		return $this->cluster->getConnection()->getClient();

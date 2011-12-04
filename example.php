@@ -1,5 +1,8 @@
 <?php
 
+// show all the errors
+error_reporting(E_ALL);
+
 // the only file that needs including into your project
 require_once 'Cassandra.php';
 
@@ -92,11 +95,11 @@ $cassandra->createSuperColumnFamily(
 // lets fetch and display the schema of created keyspace
 $schema = $cassandra->getKeyspaceSchema('CassandraExample');
 echo 'Schema: <pre>'.print_r($schema, true).'</pre><hr/>';
-
+/*
 // should we need to, we can access the low-level client directly
 $version = $cassandra->getConnection()->getClient()->describe_version();
 echo 'Version directly: <pre>'.print_r($version, true).'</pre><hr/>';
-
+*/
 // if implemented, use the wrapped methods as these are smarter - can retry etc
 $version = $cassandra->getVersion();
 echo 'Version through wrapper: <pre>'.print_r($version, true).'</pre><hr/>';
@@ -193,6 +196,7 @@ echo 'Users at age 24: <pre>'.print_r($aged24->getAll(), true).'</pre><hr/>';
 $chuckAndJohn = $cassandra->cf('user')->getMultiple(array('chuck', 'john'));
 echo 'Users "chuck" and "john": <pre>'.print_r($chuckAndJohn, true).'</pre><hr/>';
 
+/* Uncomment this when using order preserving partitioner
 // we can fetch a range of keys but this is predictable only if using an
 // order preserving partitioner, Cassandra defaults to random one
 // again as there may be more results than it's reasonable to fetch in a single
@@ -200,6 +204,7 @@ echo 'Users "chuck" and "john": <pre>'.print_r($chuckAndJohn, true).'</pre><hr/>
 // as the data is iterated
 $usersAZ = $cassandra->cf('user')->getKeyRange('a', 'z');
 echo 'Users with keys in range a-z: <pre>'.print_r($usersAZ->getAll(), true).'</pre><hr/>';
+*/
 
 // find the number of columns a key has, we could also request for ranges
 $chuckColumnCount = $cassandra->cf('user')->getColumnCount('chuck');
