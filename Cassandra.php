@@ -3252,7 +3252,7 @@ class CassandraUtil {
 	 * 
 	 * @return integer Unpacked data
 	 */
-	public function getTimestamp() {
+	public static function getTimestamp() {
         $microtime = microtime();
 		
         settype($microtime, 'string');
