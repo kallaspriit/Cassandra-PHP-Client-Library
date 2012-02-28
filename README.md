@@ -1,5 +1,4 @@
-Cassandra PHP Client Library
-============================
+![Cassandra PHP Client Library logo](http://dl.dropbox.com/u/8855759/cpcl/logo.png "CPCL logo")
 Cassandra PHP Client Library or **CPCL** for short allows for **managing and querying your Cassandra cluster**. It's a **high-level library** performing all the rather complex low-level heavy lifting and provides a **simple to learn and use interface**.
 
 Features
