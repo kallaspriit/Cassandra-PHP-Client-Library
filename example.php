@@ -239,9 +239,10 @@ echo 'Super-column cities.Estonia.Tartu: <pre>'.print_r($tartu, true).'</pre><hr
 // we can still use the additional filters of columns
 $tallinn = $cassandra->get('cities.Estonia.Tallinn:population,size');
 echo 'Super-column cities.Estonia.Tallinn: <pre>'.print_r($tallinn, true).'</pre><hr/>';
-
+/*
 // you can delete all the data in a column family using "truncate"
 $cassandra->truncate('user');
 
 // you may choose to drop an entire keyspace
 $cassandra->dropKeyspace('CassandraExample');
+*/

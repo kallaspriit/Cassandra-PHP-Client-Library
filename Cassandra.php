@@ -1,15 +1,15 @@
 <?php
 /**
- * Cassandra-PHP-Client.
- * 
+ * Cassandra-PHP-Client Library (CPCL).
+ *
  * Cassandra PHP-based client library for managing and querying your Cassandra
  * cluster. It's a high-level library performing all the rather complex
  * low-level lifting and providing a simple to learn and use interface.
- * 
+ *
  * Includes ideas and code snippets from PHPCassa project.
- * 
+ *
  * Copyright (C) 2011 by Priit Kallas <kallaspriit@gmail.com>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -27,7 +27,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * 
+ *
  * @author Priit Kallas <kallaspriit@gmail.com>
  * @package Cassandra
  * @version 1.0
@@ -44,84 +44,84 @@ require_once $GLOBALS['THRIFT_ROOT'].'/protocol/TBinaryProtocol.php';
 
 /**
  * Represents a connection to a single Cassandra node.
- * 
+ *
  * Provides direct access to the low-level Cassandra client.
  */
 class CassandraConnection {
-	
+
 	/**
 	 * Hostname or IP of the node.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $host;
-	
+
 	/**
 	 * Port of the instance, defaults to 9160.
-	 * 
-	 * @var integer 
+	 *
+	 * @var integer
 	 */
 	protected $port;
-	
+
 	/**
 	 * Should framed or buffered transport be used.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $useFramedTransport;
-	
+
 	/**
 	 * Timeout of send operations in milliseconds.
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $sendTimeoutMs;
-	
+
 	/**
 	 * Timeout of receive operations in milliseconds.
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $receiveTimeoutMs;
-	
+
 	/**
 	 * Socket to the node.
-	 * 
+	 *
 	 * @var TSocket
 	 */
 	protected $socket;
-	
+
 	/**
 	 * Transport method.
-	 * 
+	 *
 	 * @var TTransport
 	 */
 	protected $transport;
-	
+
 	/**
 	 * Used communication protocol.
-	 * 
+	 *
 	 * @var TBinaryProtocolAccelerated
 	 */
 	protected $protocol;
-	
+
 	/**
 	 * The low-level cassandra client.
-	 * 
+	 *
 	 * @var cassandra_CassandraClient
 	 */
 	protected $client;
-	
+
 	/**
 	 * Is the connection currently open.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $isOpen;
-	
+
 	/**
 	 * Constructs the connection, setting access parameters.
-	 * 
+	 *
 	 * @param string $host Hostname or IP of the node
 	 * @param integer $port Port of the instance
 	 * @param boolean $useFramedTransport Use framed or buffered transport
@@ -141,37 +141,37 @@ class CassandraConnection {
 		$this->sendTimeoutMs = $sendTimeoutMs;
 		$this->receiveTimeoutMs = $receiveTimeoutMs;
 		$this->isOpen = false;
-		
+
 		$this->socket = $this->createSocket(
 			$host,
 			$port,
 			$sendTimeoutMs,
 			$receiveTimeoutMs
 		);
-		
+
 		if ($useFramedTransport) {
 			$this->transport = $this->createFramedTransport($this->socket);
 		} else {
 			$this->transport = $this->createBufferedTransport($this->socket);
 		}
-		
+
 		$this->transport->open();
 		$this->isOpen = true;
-		
+
 		$this->protocol = new TBinaryProtocolAccelerated($this->transport);
 		$this->client = new cassandra_CassandraClient($this->protocol);
 	}
-	
+
 	/**
 	 * Closes the connection on destruction.
 	 */
 	public function __destruct() {
 		$this->close();
 	}
-	
+
 	/**
 	 * Forces the connection to close.
-	 * 
+	 *
 	 * Generally there's no need to call it yourself as it will be closed on
 	 * termination.
 	 */
@@ -179,23 +179,23 @@ class CassandraConnection {
 		if ($this->isOpen) {
 			$this->transport->flush();
 			$this->transport->close();
-			
+
 			$this->isOpen = false;
 		}
 	}
-	
+
 	/**
 	 * Is the connection open.
-	 * 
-	 * @return boolean 
+	 *
+	 * @return boolean
 	 */
 	public function isOpen() {
 		return $this->isOpen;
 	}
-	
+
 	/**
 	 * Returns the low-level Cassandra client used by the wrapper.
-	 * 
+	 *
 	 * @return cassandra_CassandraClient
 	 */
 	public function getClient() {
@@ -204,33 +204,33 @@ class CassandraConnection {
 				'The connection has been closed'
 			);
 		}
-		
+
 		return $this->client;
 	}
-	
+
 	/**
 	 * Returns the used transport method.
-	 * 
+	 *
 	 * @return TTransport
 	 */
 	public function getTransport() {
 		return $this->transport;
 	}
-	
+
 	/**
 	 * Returns the used transportation protocol.
-	 * 
+	 *
 	 * @return TBinaryProtocolAccelerated
 	 */
 	public function getProtocol() {
 		return $this->transport;
 	}
-	
+
 	/**
 	 * Attempts to start using given keyspace.
-	 * 
+	 *
 	 * Using the keyspace is attempted three times before giving up.
-	 * 
+	 *
 	 * @param string $keyspace Name of the keyspace
 	 * @param string $username Optional username in case authentication is used
 	 * @param string $password Optional password
@@ -251,13 +251,13 @@ class CassandraConnection {
 				continue;
 			}
 		}
-		
+
 		if (!$success) {
 			throw new CassandraSettingKeyspaceFailedException(
 				'Using keyspace "'.$keyspace.'" failed after several attempts'
 			);
 		}
-		
+
 		if ($username !== null) {
 			$request = new cassandra_AuthenticationRequest(
 				array('credentials' => array($username, $password))
@@ -266,10 +266,10 @@ class CassandraConnection {
 			$this->client->login($request);
 		}
 	}
-	
+
 	/**
 	 * Creates the socket to use.
-	 * 
+	 *
 	 * @param string $host Hostname/IP
 	 * @param integer $port Port number
 	 * @param integer $sendTimeoutMs Send operations timeout
@@ -283,93 +283,93 @@ class CassandraConnection {
 		$receiveTimeoutMs
 	) {
 		$socket = new TSocket($host, $port);
-		
+
 		if ($sendTimeoutMs !== null) {
 			$socket->setSendTimeout($sendTimeoutMs);
 		}
-		
+
 		if ($receiveTimeoutMs !== null) {
 			$socket->setRecvTimeout($receiveTimeoutMs);
 		}
-		
+
 		return $socket;
 	}
-	
+
 	/**
 	 * Creates framed transport.
-	 * 
+	 *
 	 * @param TSocket $socket Socket to base the transport on
 	 * @return TFramedTransport Instance of the transport
 	 */
 	protected function createFramedTransport(TSocket $socket) {
 		require_once THRIFT_PATH.'/transport/TFramedTransport.php';
-			
+
 		return new TFramedTransport($socket, true, true);
 	}
-	
+
 	/**
 	 * Creates buffered transport.
-	 * 
+	 *
 	 * @param TSocket $socket Socket to base the transport on
 	 * @return TBufferedTransport Instance of the transport
 	 */
 	protected function createBufferedTransport(TSocket $socket) {
 		require_once THRIFT_PATH.'/transport/TBufferedTransport.php';
-			
+
 		return new TBufferedTransport($socket, 512, 512);
 	}
 }
 
 /**
  * A cluster is a collection of servers and connections to them.
- * 
+ *
  * Provides handling the pool of connections.
  */
 class CassandraCluster {
-	
+
 	/**
 	 * Currently used keyspace name.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	protected $keyspace;
-	
+
 	/**
 	 * Currently used username if using authentication.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $username;
-	
+
 	/**
 	 * Currently used password if using authentication.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $password;
-	
+
 	/**
 	 * Array of server connection information used to connect to them.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected $servers = array();
-	
+
 	/**
 	 * Array of open connections to servers.
-	 * 
+	 *
 	 * The connections are reused if already opened.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected $connections = array();
-	
+
 	/**
 	 * Sets the list of servers to use.
-	 * 
+	 *
 	 * You could add the servers one-by-one using
 	 * {@see CassandraCluster::registerServer()}.
-	 * 
+	 *
 	 * @param array $servers Servers that can be connected to.
 	 */
 	public function __construct(array $servers = array()) {
@@ -383,20 +383,20 @@ class CassandraCluster {
 			);
 		}
 	}
-	
+
 	/**
 	 * Closes all connections on destruction.
 	 */
 	public function __destruct() {
 		$this->closeConnections();
 	}
-	
+
 	/**
 	 * Registers a new server in the cluster pool.
-	 * 
+	 *
 	 * This does not mean that it is connected to at once but it may be used in
 	 * any of the requests.
-	 * 
+	 *
 	 * @param string $host Hostname or IP of the node
 	 * @param integer $port Port of the instance
 	 * @param boolean $useFramedTransport Use framed or buffered transport
@@ -418,13 +418,13 @@ class CassandraCluster {
 			'send-timeout-ms' => $sendTimeoutMs,
 			'receive-timeout-ms' => $receiveTimeoutMs
 		);
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Starts using given keyspace for all active and future connections.
-	 * 
+	 *
 	 * @param string $keyspace Keyspace to use
 	 * @param string $username Optional username
 	 * @param string $password Password
@@ -434,7 +434,7 @@ class CassandraCluster {
 		$this->keyspace = $keyspace;
 		$this->username = $username;
 		$this->password = $password;
-		
+
 		$this->getConnection();
 
 		foreach ($this->connections as $connection) {
@@ -444,40 +444,40 @@ class CassandraCluster {
 				$password
 			);
 		}
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Returns the name of currently used keyspace.
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	public function getCurrentKeyspace() {
 		return $this->keyspace;
 	}
-	
+
 	/**
 	 * Returns the list of servers connection info in the pool.
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
 	public function getServers() {
 		return $this->servers;
 	}
-	
+
 	/**
 	 * Returns a connection to one of the servers.
-	 * 
+	 *
 	 * The connections are created from the server list at random and if a
 	 * server is chosen that already has an active connection, it is reused.
-	 * 
+	 *
 	 * If a closed connection is found in the pool, it is removed and may be
 	 * reconnected to later.
-	 * 
+	 *
 	 * It will try to connect to the servers the number of servers times two
 	 * times before giving up.
-	 * 
+	 *
 	 * @return CassandraConnection Connection to one of the nodes
 	 * @throws CassandraConnectionFailedException If all connections failed
 	 */
@@ -487,24 +487,24 @@ class CassandraCluster {
 				'Unable to create connection, the cluster server pool is empty'
 			);
 		}
-			
+
 		$serverCount = count($this->servers);
 		$attemptsLeft = $serverCount * 2;
-		
+
 		while ($attemptsLeft-- > 0) {
 			$randomServerIndex = mt_rand(0, $serverCount - 1);
-			
+
 			if (isset($this->connections[$randomServerIndex])) {
 				if (!$this->connections[$randomServerIndex]->isOpen()) {
 					unset($this->connections[$randomServerIndex]);
-					
+
 					continue;
 				}
 
 				return $this->connections[$randomServerIndex];
 			} else {
 				$server = $this->servers[$randomServerIndex];
-				
+
 				try {
 					$this->connections[$randomServerIndex] = new CassandraConnection(
 						$server['host'],
@@ -513,37 +513,37 @@ class CassandraCluster {
 						$server['send-timeout-ms'],
 						$server['receive-timeout-ms']
 					);
-					
+
 					$this->connections[$randomServerIndex]->useKeyspace(
 						$this->keyspace,
 						$this->username,
 						$this->password
 					);
-					
+
 					return $this->connections[$randomServerIndex];
 				} catch (TException $e) {
 					continue;
 				}
 			}
 		}
-		
+
 		throw new CassandraConnectionFailedException(
 			'Connecting to any of the '.$serverCount.' nodes failed'
 		);
 	}
-	
+
 	/**
 	 * Closes all open connections.
-	 * 
+	 *
 	 * @return CassandraCluster Self for chaining calls
 	 */
 	public function closeConnections() {
 		foreach ($this->connections as $connection) {
 			$connection->close();
 		}
-		
+
 		$this->connections = array();
-		
+
 		return $this;
 	}
 }
@@ -553,100 +553,100 @@ class CassandraCluster {
  * column families, get info about schema, fetch and store data.
  */
 class Cassandra {
-	
+
 	/**
 	 * Array of named singleton instances.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected static $instances = array();
-	
+
 	/**
 	 * Array of Cassandra low-level method names that require a keyspace to
 	 * be selected. Populated as needed.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected static $keyspaceRequiredMethods;
-	
+
 	/**
 	 * Key tokens in get() method requiring escaping.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected static $requestKeyTokens = array('.', ':', ',', '-', '|');
-	
+
 	/**
 	 * The Cassandra cluster to use.
-	 * 
-	 * @var CassandraCluster 
+	 *
+	 * @var CassandraCluster
 	 */
 	protected $cluster;
-	
+
 	/**
 	 * Maximum number of times to retry failed calls to Cassandra.
-	 * 
+	 *
 	 * Use {@see Cassandra::setMaxCallRetries()} to change.
-	 * 
-	 * @var integer 
+	 *
+	 * @var integer
 	 */
 	protected $maxCallRetries = 5;
-	
+
 	/**
 	 * Default maximum number of columns to fetch on range queries.
-	 * 
-	 * @var integer 
+	 *
+	 * @var integer
 	 */
 	protected $defaultColumnCount = 100;
-	
+
 	/**
 	 * Array of column families.
-	 * 
+	 *
 	 * If a single column family is requested more than once during a single
 	 * request, the CassandraColumnFamily object is created only once.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $columnFamilies = array();
-	
+
 	/**
 	 * Authentication details per keyspace.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected $keyspaceAuthentication = array();
-	
+
 	/**
 	 * Should key names and values be automatically packed to correct format
 	 * based on column metadata.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	protected $autopack = true;
-	
+
 	/**
 	 * It is enough if a single node replies.
-	 * 
+	 *
 	 * This makes reads and writes fast, but it also means that depending on
 	 * what else is reading and writing, it's possible that they could briefly
 	 * give conflicting answers.
 	 */
 	const CONSISTENCY_ONE = ConsistencyLevel::ONE;
-	
+
 	/**
 	 * Majority of the nodes holding the data must reply.
-	 * 
+	 *
 	 * If you have replication factor of 3 then it's enough if two of the
 	 * nodes holding the data are up and reply. You need to have a replication
 	 * factor of atleast three for this to work differently from all and should
 	 * use odd number for replication factor.
 	 */
 	const CONSISTENCY_QUORUM = ConsistencyLevel::QUORUM;
-	
+
 	/**
 	 * Only meaningful for writes and means as soon as a write is received by
 	 * any node, the call returns success.
-	 * 
+	 *
 	 * This occurs when your client might be connecting to node 5 but the nodes
 	 * responsible for it are 6-8. The difference between ONE and ANY
 	 * is that with ANY, as soon as node 5 receives the write, it returns
@@ -655,124 +655,124 @@ class Cassandra {
 	 * node 5 returns success.
 	 */
 	const CONSISTENCY_ANY = ConsistencyLevel::ANY;
-	
+
 	/**
 	 * Returns success only if all the nodes holding the data respond.
-	 * 
+	 *
 	 * This makes sure that all the nodes get the same data, but includes a
 	 * performance penalty and also if a single node of the replication group
 	 * is down, it's not possible to read or write the data as the requirement
 	 * can not be fulfilled.
 	 */
 	const CONSISTENCY_ALL = ConsistencyLevel::ALL;
-	
+
 	/**
 	 * Standard column type.
 	 */
 	const COLUMN_STANDARD = 'Standard';
-	
+
 	/**
 	 * Super column type.
 	 */
 	const COLUMN_SUPER = 'Super';
-	
+
 	/**
 	 * ASCII text type.
 	 */
 	const TYPE_ASCII = 'AsciiType';
-	
+
 	/**
 	 * Simplest binary type
 	 */
 	const TYPE_BYTES = 'BytesType';
-	
+
 	/**
 	 * Used for a non-time based comparison. It is compared lexically, by byte
 	 * value.
-	 * 
+	 *
 	 * (UUID) are a standardized unique indentifier in the form of a 128 bit
 	 * number. In it's canonical form UUIDs are represented by a 32 digit
 	 * hexadecimal number in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 	 */
 	const TYPE_LEXICAL_UUID = 'LexicalUUIDType';
-	
+
 	/**
 	 * Used for a time based comparison. It uses a version 1 UUID.
-	 * 
+	 *
 	 * (UUID) are a standardized unique indentifier in the form of a 128 bit
 	 * number. In it's canonical form UUIDs are represented by a 32 digit
 	 * hexadecimal number in the form of xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 	 */
 	const TYPE_TIME_UUID = 'TimeUUIDType';
-	
+
 	/**
 	 * Long data type.
 	 */
 	const TYPE_LONG = 'LongType';
-	
+
 	/**
 	 * Simple integer data type.
 	 */
 	const TYPE_INTEGER = 'IntegerType';
-	
+
 	/**
 	 * UTF8 international text data type.
 	 */
 	const TYPE_UTF8 = 'UTF8Type';
-	
+
 	/**
 	 * Equality comparator used in where queries.
 	 */
 	const OP_EQ = IndexOperator::EQ;
-	
+
 	/**
 	 * Strict less-than comparator.
 	 */
 	const OP_LT = IndexOperator::LT;
-	
+
 	/**
 	 * Strict greater-than comparator.
 	 */
 	const OP_GT = IndexOperator::GT;
-	
+
 	/**
 	 * Less-than-equals comparator.
 	 */
 	const OP_LTE = IndexOperator::LTE;
-	
+
 	/**
 	 * Greater-than-equals comparator.
 	 */
 	const OP_GTE = IndexOperator::GTE;
-	
+
 	/**
 	 * Default simple placement strategy not taking network topology into
 	 * account.
 	 */
 	const PLACEMENT_SIMPLE = 'org.apache.cassandra.locator.SimpleStrategy';
-	
+
 	/**
 	 * Network topology aware placement strategy.
 	 */
 	const PLACEMENT_NETWORK
 		= 'org.apache.cassandra.locator.NetworkTopologyStrategy';
-	
+
 	/**
 	 * Old network topology aware placement strategy.
 	 */
 	const PLACEMENT_OLD_NETWORK
 		= 'org.apache.cassandra.locator.OldNetworkTopologyStrategy';
-	
+
 	/**
 	 * Keys index type, currently only one supported.
 	 */
 	const INDEX_KEYS = 0;
-	
+
 	/**
 	 * Sets the list of servers to use and whether keys and values should be
 	 * automatically packed to the correct format as defined by column families
 	 * column metadata.
-	 * 
+	 *
 	 * @param array $servers Array of server connection details.
 	 * @param type $autopack Should keys and data be autopacked.
 	 */
@@ -780,36 +780,36 @@ class Cassandra {
 		$this->cluster = new CassandraCluster($servers);
 		$this->autopack = $autopack;
 	}
-	
+
 	/**
 	 * Prevent users cloning the instance.
 	 */
 	public function __clone() {
 		trigger_error('Clone is not allowed.', E_USER_ERROR);
 	}
-	
+
 	/**
 	 * Creates a new named cassandra instance.
-	 * 
+	 *
 	 * The name can be used in {@see Cassandra::getInstance()} to fetch the
 	 * named singleton anywhere in the project.
-	 * 
+	 *
 	 * @param array $servers List of seed servers to connect to
 	 * @param type $name Name of the instance
 	 * @return Cassandra New cassandra instance
 	 */
 	public static function createInstance(array $servers, $name = 'main') {
 		self::$instances[$name] = new self($servers);
-		
+
 		return self::$instances[$name];
 	}
-	
+
 	/**
 	 * Returns named singleton instance.
-	 * 
+	 *
 	 * Name defaults to "main" the same as createInstance() so when using a
 	 * single connection pool, the name needs not to be set on neither.
-	 * 
+	 *
 	 * @param string $name Name of the instance to fetch
 	 * @return Cassandra The instance
 	 * @throws CassandraInvalidRequestException If no such instance exists
@@ -820,13 +820,13 @@ class Cassandra {
 				'Instance called "'.$name.'" does not exist'
 			);
 		}
-		
+
 		return self::$instances[$name];
 	}
-	
+
 	/**
 	 * Registers a keyspace with authentication info.
-	 * 
+	 *
 	 * @param string $keyspace Keyspace name
 	 * @param string $username The username
 	 * @param string $password Password
@@ -841,15 +841,15 @@ class Cassandra {
 			'password' => $password
 		);
 	}
-	
+
 	/**
 	 * Start using a new keyspace.
-	 * 
+	 *
 	 * If the keyspace requires authentication, the username and password of it
 	 * should be provided the first time this method is called. The username
 	 * and password are stored so on next calls, they are used automatically if
 	 * exist.
-	 * 
+	 *
 	 * @param string $keyspace Keyspace name
 	 * @param string $username The username
 	 * @param string $password Password
@@ -862,80 +862,80 @@ class Cassandra {
 			$username = $this->keyspaceAuthentication[$keyspace]['username'];
 			$password = $this->keyspaceAuthentication[$keyspace]['password'];
 		}
-		
+
 		$this->cluster->useKeyspace($keyspace, $username, $password);
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Returns the Cassandra cluster of servers.
-	 * 
+	 *
 	 * @return CassandraCluster
 	 */
 	public function getCluster() {
 		return $this->cluster;
 	}
-	
+
 	/**
 	 * Returns random connection to a node.
-	 * 
+	 *
 	 * @return CassandraConnection
 	 */
 	public function getConnection() {
 		return $this->cluster->getConnection();
 	}
-	
+
 	/**
 	 * Closes all open connections to nodes.
-	 * 
+	 *
 	 * Proxies the call to cluster.
 	 */
 	public function closeConnections() {
 		$this->cluster->closeConnections();
 	}
-	
+
 	/**
 	 * Return the low-level thrift client.
-	 * 
+	 *
 	 * @return cassandra_CassandraClient
 	 */
 	public function getClient() {
 		return $this->cluster->getConnection()->getClient();
 	}
-	
+
 	/**
 	 * Sets the maximum number of times a call to Cassandra will be retried
 	 * should it fail for any reason.
-	 * 
+	 *
 	 * @param integer $retryCount Number of times to retry, defaults to 5.
 	 * @return Cassandra Self for call chaining
 	 */
 	public function setMaxCallRetries($retryCount) {
 		$this->maxCallRetries = $retryCount;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Sets the default number of columns to fetch at maximum.
-	 * 
+	 *
 	 * @param integer $columnCountLimit The limit
 	 */
 	public function setDefaultColumnCount($columnCountLimit) {
 		$this->defaultColumnCount = $columnCountLimit;
 	}
-	
+
 	/**
 	 * Makes a call to a Cassandra node.
-	 * 
+	 *
 	 * This method accepts a variable number of parameters where the first one
 	 * is the Cassandra client method name and the rest the parameters to pass
 	 * to it.
-	 * 
+	 *
 	 * If a call fails, it will be retried for {@see Cassandra::$maxCallRetries}
 	 * times, backing off (waiting) a bit more each time to prevent flooding.
-	 * 
+	 *
 	 * @return mixed The returned value
 	 * @throws CassandraInvalidRequestException If the request is invalid
 	 * @throws CassandraMaxRetriesException If The call failed all retries
@@ -943,12 +943,12 @@ class Cassandra {
 	public function call(/*$methodName, $arg1, $arg2 */) {
 		$args = func_get_args();
 		$methodName = array_shift($args);
-		
+
 		$tries = $this->maxCallRetries;
 		$lastException = null;
-		
+
 		$keyspaceRequiredMethods = self::getKeyspaceRequiredMethods();
-		
+
 		if (
 			in_array($methodName, $keyspaceRequiredMethods)
 			&& $this->cluster->getCurrentKeyspace() === null
@@ -957,18 +957,18 @@ class Cassandra {
 				'Unable to call "'.$methodName.'", no keyspace has been set'
 			);
 		}
-		
+
 		$try = 0;
-		
+
 		while($tries-- > 0) {
 			$client = $this->getClient();
 			$try++;
-			
+
 			try {
                 return call_user_func_array(array($client, $methodName), $args);
             } catch (Exception $e) {
 				$lastException = $e;
-				
+
 				usleep(0.1 * pow(2, $try) * 1000000);
 			}
 		}
@@ -980,45 +980,45 @@ class Cassandra {
 			$lastException
 		);
 	}
-	
+
 	/**
 	 * Returns ow-level keyspace description as returned by Cassandra.
-	 * 
+	 *
 	 * Returns the result of "describe_keyspace" call without any processing and
 	 * does not use cache. Generally you want to use the more friendly version
 	 * {@see Cassandra::getKeyspaceSchema()}.
-	 * 
+	 *
 	 * If no keyspace name is defined, the currently active keyspace is used.
-	 * 
+	 *
 	 * @param string $keyspace Optional keyspace name.
-	 * @return array Keyspace description as given by Cassandra 
+	 * @return array Keyspace description as given by Cassandra
 	 */
 	public function describeKeyspace($keyspace = null) {
 		if ($keyspace === null) {
 			$keyspace = $this->cluster->getCurrentKeyspace();
 		}
-		
+
 		return $this->call('describe_keyspace', $keyspace);
 	}
-	
+
 	/**
 	 * Returns processed keyspace schema description that is also cached if
 	 * possible (APC caching enabled).
-	 * 
+	 *
 	 * @param string $keyspace Optional keyspace, current used if not set
 	 * @param boolean $useCache Should caching be used if possible
-	 * @return array Keyspace schema description with column families metadata 
+	 * @return array Keyspace schema description with column families metadata
 	 */
 	public function getKeyspaceSchema($keyspace = null, $useCache = true) {
 		if ($keyspace === null) {
 			$keyspace = $this->cluster->getCurrentKeyspace();
 		}
-		
+
 		$cacheKey = 'cassandra.schema|'.$keyspace;
 
 		$schema = false;
 		$storeSchema = false;
-		
+
 		if ($useCache && function_exists('apc_fetch')) {
 			$schema = apc_fetch($cacheKey);
 			$storeSchema = true;
@@ -1029,7 +1029,7 @@ class Cassandra {
 		}
 
 		$info = $this->describeKeyspace($keyspace);
-		
+
 		$schema = array(
 			'name' => $info->name,
 			'placement-strategy' => $info->strategy_class,
@@ -1037,10 +1037,10 @@ class Cassandra {
 			'replication-factor' => $info->replication_factor,
 			'column-families' => array()
 		);
-		
+
 		foreach ($info->cf_defs as $columnFamily) {
 			$isSuper = $columnFamily->column_type == 'Super' ? true : false;
-			
+
 			$schema['column-families'][$columnFamily->name] = array(
 				'name' => $columnFamily->name,
 				'super' => $isSuper,
@@ -1074,28 +1074,28 @@ class Cassandra {
 				}
 			}
 		}
-		
+
 		if ($storeSchema) {
 			apc_store($cacheKey, $schema, 3600);
 		}
-		
+
 		return $schema;
 	}
-	
+
 	/**
 	 * Returns the version of the Cassandra node.
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	public function getVersion() {
 		return $this->call('describe_version');
 	}
-	
+
 	/**
 	 * Column family factory for manipulating a specific column family.
-	 * 
+	 *
 	 * @param string $name Name of the column family.
-	 * @return CassandraColumnFamily 
+	 * @return CassandraColumnFamily
 	 */
 	public function cf($name) {
 		if (!isset($this->columnFamilies[$name])) {
@@ -1107,35 +1107,35 @@ class Cassandra {
 				$this->autopack
 			);
 		}
-		
+
 		return $this->columnFamilies[$name];
 	}
-	
+
 	/**
 	 * Column family factory for manipulating a specific column family.
-	 * 
+	 *
 	 * Alias to {@see Cassandra::cf()} for people preferring full names.
-	 * 
+	 *
 	 * @param string $name Name of the column family.
-	 * @return CassandraColumnFamily 
+	 * @return CassandraColumnFamily
 	 */
 	public function columnFamily($name) {
 		return $this->cf($name);
 	}
-	
+
 	/**
 	 * Requests some data as a single request string.
-	 * 
+	 *
 	 * Supported patterns:
 	 * - family.key
 	 * - family.key:col1,col2,coln
 	 * - family.key:col1-col2
 	 * - family.key:col1-col2|100
 	 * - family\.name:key\:name:col\.1,col\|2|100
-	 * 
+	 *
 	 * In all of the parts, the following characters shoudl be escaped (\. etc)
 	 * '.', ':', ',', '-', '|'
-	 * 
+	 *
 	 * @param string $request The request string, see patterns above
 	 * @param integer $consistency Consistency level, use constants, has default
 	 * @throws CassandraInvalidPatternException If equest pattern is invalid
@@ -1154,64 +1154,64 @@ class Cassandra {
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Sets a key value. The key should include column family name as first
 	 * part before fullstop so key "user.john" would set key "john" in column
 	 * family called "user".
-	 * 
+	 *
 	 * Used for both inserting new data and updating existing. The columns is
 	 * expected to be key-value pairs with keys as column names and values as
 	 * column values.
-	 * 
+	 *
 	 * @param string $key The key containing column family and row key
 	 * @param array $columns Column names and their values
 	 * @param integer $consistency Consistency to use, default used if not set
-	 * @return integer Timestamp of the insterted/updated item 
+	 * @return integer Timestamp of the insterted/updated item
 	 */
 	public function set($key, array $columns, $consistency = null) {
 		$dotPosition = mb_strpos($key, '.');
-		
+
 		if ($dotPosition === false) {
 			throw new CassandraInvalidPatternException(
 				'Unable to set "'.$key.'", expected the column family name and'.
 				'key name seperated by a fullstop'
 			);
 		}
-		
+
 		$columnFamilyName = mb_substr($key, 0, $dotPosition);
 		$keyName = mb_substr($key, $dotPosition + 1);
-		
+
 		return $this->cf($columnFamilyName)->set(
 			$keyName,
 			$columns,
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Removes a row or element of a row.
-	 * 
+	 *
 	 * Supported patterns:
 	 * - family.key
-	 * - family.key:col1 * 
+	 * - family.key:col1 *
 	 * - family.super.key:col1
-	 * 
+	 *
 	 * In all of the parts, the following characters shoudl be escaped (. etc)
 	 * '.', ':', ',', '-', '|'.
-	 * 
+	 *
 	 * @param string $request The request string, see patterns above
 	 * @param integer $consistency Consistency level to use
 	 * @param integer $timestamp Optional timestamp to use.
 	 * @throws Exception If something goes wrong
 	 */
 	public function remove(
-		$request, 
-		$consistency = null, 
+		$request,
+		$consistency = null,
 		$timestamp = null
 	) {
 		$details = $this->parseRequest($request);
-		
+
 		$this->cf($details['column-family'])->remove(
 			$details['key'],
 			$details['columns'],
@@ -1220,15 +1220,15 @@ class Cassandra {
 			$timestamp
 		);
 	}
-	
+
 	/**
 	 * Creates a new keyspace.
-	 * 
+	 *
 	 * Note that the replication factor means how many nodes hold a single
 	 * piece of information, not to how many nodes its replicated to so a
 	 * replication factor of one means that a single node has data and no
 	 * replication is performed.
-	 * 
+	 *
 	 * @param string $name Name of the keyspace
 	 * @param integer $replicationFactor How many nodes hold each piece of data
 	 * @param string $placementStrategyClass Data placement strategy
@@ -1243,24 +1243,24 @@ class Cassandra {
 		$placementStrategyOptions = null
 	) {
 		$def = new cassandra_KsDef();
-		
+
 		$def->name = $name;
 		$def->strategy_class = $placementStrategyClass;
 		$def->strategy_options = $placementStrategyOptions;
 		$def->cf_defs = array();
 		$def->replication_factor = $replicationFactor;
-		
+
 		return $this->call('system_add_keyspace', $def);
 	}
-	
+
 	/**
 	 * Updates keyspace information.
-	 * 
+	 *
 	 * Note that the replication factor means how many nodes hold a single
 	 * piece of information, not to how many nodes its replicated to so a
 	 * replication factor of one means that a single node has data and no
 	 * replication is performed.
-	 * 
+	 *
 	 * @param string $name Name of the keyspace
 	 * @param integer $replicationFactor How many nodes hold each piece of data
 	 * @param string $placementStrategyClass Data placement strategy
@@ -1275,19 +1275,19 @@ class Cassandra {
 		$placementStrategyOptions = null
 	) {
 		$def = new cassandra_KsDef();
-		
+
 		$def->name = $name;
 		$def->strategy_class = $placementStrategyClass;
 		$def->strategy_options = $placementStrategyOptions;
 		$def->cf_defs = array();
 		$def->replication_factor = $replicationFactor;
-		
+
 		return $this->call('system_update_keyspace', $def);
 	}
-	
+
 	/**
 	 * Drops an entire keyspace.
-	 * 
+	 *
 	 * @param string $name Name of the keyspace
 	 * @return boolean Was dropping successful
 	 * @throws Exception If anything goes wrong
@@ -1295,10 +1295,10 @@ class Cassandra {
 	public function dropKeyspace($name) {
 		return $this->call('system_drop_keyspace', $name);
 	}
-	
+
 	/**
 	 * Creates a new standard column family.
-	 * 
+	 *
 	 * @param string $keyspace Keyspace to create in
 	 * @param string $name Name of the column family
 	 * @param array $columns Column metadata
@@ -1359,10 +1359,10 @@ class Cassandra {
 			$memtableFlushAfterOpsMillions
 		);
 	}
-	
+
 	/**
 	 * Creates a new super column family.
-	 * 
+	 *
 	 * @param string $keyspace Keyspace to create in
 	 * @param string $name Name of the column family
 	 * @param array $columns Column metadata
@@ -1412,7 +1412,7 @@ class Cassandra {
 				);
 			}
 		}
-		
+
 		return $this->createColumnFamily(
 			$keyspace,
 			$name,
@@ -1435,14 +1435,14 @@ class Cassandra {
 			$memtableFlushAfterOpsMillions
 		);
 	}
-	
+
 	/**
 	 * Creates a new column family, either standard or super.
-	 * 
+	 *
 	 * You might want to use the {@see Cassandra::createStandardColumnFamily()}
 	 * and {@see Cassandra::createSuperColumnFamily()} that proxy to this
 	 * method.
-	 * 
+	 *
 	 * @param string $keyspace Keyspace to create in
 	 * @param string $name Name of the column family
 	 * @param array $columns Column metadata
@@ -1484,17 +1484,17 @@ class Cassandra {
 		$memtableFlushAfterOpsMillions = null
 	) {
 		$columnMetadata = null;
-		
+
 		if (!empty($columns)) {
 			$columnMetadata = array();
-			
+
 			foreach ($columns as $column) {
 				$columnMetadata[] = $this->createColumnDefinition($column);
 			}
 		}
-		
+
 		$def = new cassandra_CfDef();
-		
+
 		$def->keyspace = $keyspace;
 		$def->name = $name;
 		$def->column_type = $columnType;
@@ -1502,11 +1502,11 @@ class Cassandra {
 		$def->subcomparator_type = $subcomparatorType;
 		$def->comment = $comment;
 		$def->row_cache_size = $rowCacheSize;
-		
+
 		if ($keyCacheSize !== null) {
 			$def->key_cache_size = $keyCacheSize;
 		}
-		
+
 		$def->read_repair_chance = $readRepairChance;
 		$def->column_metadata = $columnMetadata;
 		$def->gc_grace_seconds = $cgGraceSeconds;
@@ -1521,21 +1521,21 @@ class Cassandra {
 
 		return $this->call('system_add_column_family', $def);
 	}
-	
+
 	/**
 	 * Truncates a column family of all of its data (entries).
-	 * 
+	 *
 	 * @param string $columnFamilyName Name of the column family
-	 * @return boolean Was truncating successful 
+	 * @return boolean Was truncating successful
 	 */
 	public function truncate($columnFamilyName) {
 		return $this->call('truncate', $columnFamilyName);
 	}
-	
+
 	/**
 	 * Returns the list of low-level cassandra methods that require keyspace to
 	 * be selected.
-	 * 
+	 *
 	 * @return array
 	 */
 	protected static function getKeyspaceRequiredMethods() {
@@ -1555,15 +1555,15 @@ class Cassandra {
 				'describe_splits'
 			);
 		}
-		
+
 		return self::$keyspaceRequiredMethods;
 	}
 
 	/**
 	 * Parses a get request.
-	 * 
+	 *
 	 * @param string $request Request to parse
-	 * @return array Request components 
+	 * @return array Request components
 	 */
 	protected function parseRequest($request) {
 		foreach(self::$requestKeyTokens as $tokenKey => $keyToken) {
@@ -1573,12 +1573,12 @@ class Cassandra {
 				$request
 			);
 		}
-		
+
 		$components = array();
-		
+
 		$matchSuccessful = preg_match(
 			'/^(.+)\.(.+)((\.(.*))|\[\])?(:(.*))?(\|(\d*)(R)?)?$/U',
-			// 1     2   34  5           6 7     8  9    10        
+			// 1     2   34  5           6 7     8  9    10
 			$request,
 			$components
 		);
@@ -1599,9 +1599,9 @@ class Cassandra {
 			'column-count' => $this->defaultColumnCount,
 			'super-column' => null
 		);
-		
+
 		$componentCount = count($components);
-		
+
 		// @codeCoverageIgnoreStart
 		if ($componentCount < 3 || $componentCount > 11) {
 			throw new CassandraInvalidPatternException(
@@ -1610,7 +1610,7 @@ class Cassandra {
 			);
 		}
 		// @codeCoverageIgnoreEnd
-		
+
 		if ($componentCount >= 6) {
 			if (
 				!empty($components[5])
@@ -1618,7 +1618,7 @@ class Cassandra {
 			) {
 				$result['super-column'] = $components[5];
 			}
-			
+
 			if ($componentCount >= 8) {
 				if (!empty($components[7])) {
 					if (strpos($components[7], ',') !== false) {
@@ -1660,17 +1660,17 @@ class Cassandra {
 				}
 			}
 		}
-		
+
 		foreach ($result as $key => $item) {
 			$result[$key] = self::unescape($item);
 		}
-	
+
 		return $result;
 	}
-	
+
 	/**
 	 * Escapes keys used in get requests.
-	 * 
+	 *
 	 * @param string $value Value to escape
 	 * @return string escaped value
 	 */
@@ -1682,13 +1682,13 @@ class Cassandra {
 				$value
 			);
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Unescapes keys used in get requests.
-	 * 
+	 *
 	 * @param string $value Value to unescape
 	 * @return string unescaped value
 	 */
@@ -1709,13 +1709,13 @@ class Cassandra {
 				);
 			}
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Creates column definition.
-	 * 
+	 *
 	 * @param array $info Column info
 	 * @return cassandra_ColumnDef Column definition
 	 */
@@ -1723,89 +1723,89 @@ class Cassandra {
 		$def = new cassandra_ColumnDef();
 
 		$def->name = $info['name'];
-		
+
 		if (!empty($info['type'])) {
 			$def->validation_class = $info['type'];
 		}
-		
+
 		if (isset($info['index-type'])) {
 			$def->index_type = $info['index-type'];
 		}
-		
+
 		if (!empty($info['index-name'])) {
 			$def->index_type = $info['index-name'];
 		}
-		
+
 		return $def;
 	}
 }
 
 /**
  * Represents a column family.
- * 
+ *
  * Provides an interface to insert, update and delete the data.
- * 
+ *
  * You generally do not want to create an instance of this classs by yourself
  * but rather use the factory method {@see Cassandra::cf()} or the longer
  * variant {@see Cassandra::columnFamily()}.
  */
 class CassandraColumnFamily {
-	
+
 	/**
 	 * Cassandra reference used for calls to database etc.
-	 * 
-	 * @var Cassandra 
+	 *
+	 * @var Cassandra
 	 */
 	protected $cassandra;
-	
+
 	/**
 	 * Name of the column family.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	protected $name;
-	
+
 	/**
 	 * Default consistency level to use on read operations.
-	 * 
+	 *
 	 * This can be set in the construcor.
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $defaultReadConsistency;
-	
+
 	/**
 	 * Default consistency level to use on write operations.
-	 * 
+	 *
 	 * This can be set in the construcor.
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $defaultWriteConsistency;
-	
+
 	/**
 	 * Should key names and values be auto-packed according to their types.
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $autopack;
-	
+
 	/**
 	 * Column family schema definition.
-	 * 
+	 *
 	 * Used to determine how to correctly pack data.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected $schema;
-	
+
 	/**
 	 * Constructs the object.
-	 * 
+	 *
 	 * You generally do not want to create an instance of this classs by
 	 * yourself but rather use the factory method {@see Cassandra::cf()} or the
 	 * longer variant {@see Cassandra::columnFamily()}.
-	 * 
+	 *
 	 * @param Cassandra $cassandra Cassandra reference
 	 * @param string $name Name of the column family
 	 * @param integer $defaultReadConsistency Default read consistency level
@@ -1826,19 +1826,19 @@ class CassandraColumnFamily {
 		$this->autopack = $autopack;
 		$this->schema = null;
 	}
-	
+
 	/**
 	 * Returns the used {@see Cassandra} reference.
-	 * 
-	 * @return Cassandra 
+	 *
+	 * @return Cassandra
 	 */
 	public function getCassandra() {
 		return $this->cassandra;
 	}
-	
+
 	/**
 	 * Returns the schema description of current column family.
-	 * 
+	 *
 	 * @param boolean $useCache Should cache be used if possible
 	 * @return array Schema description
 	 * @throws CassandraColumnFamilyNotFoundException If not found
@@ -1855,58 +1855,58 @@ class CassandraColumnFamily {
 					'Schema for column family "'.$this->name.'" not found'
 				);
 			}
-			
+
 			$this->schema = $keyspaceSchema['column-families'][$this->name];
 		}
-		
+
 		return $this->schema;
 	}
-	
+
 	/**
 	 * Returns the column name data type.
-	 * 
+	 *
 	 * Used for packing to correct datatype. Use the Cassandra::TYPE_..
 	 * constants to compare.
-	 * 
+	 *
 	 * @param boolean $useCache Should cache be used if possible
 	 * @return string Column name type
 	 */
 	public function getColumnNameType($useCache = true) {
 		$schema = $this->getSchema($useCache);
-		
+
 		if ($schema['super']) {
 			return $schema['super-type'];
 		} else {
 			return $schema['column-type'];
 		}
 	}
-	
+
 	/**
 	 * Returns the value data type of given column.
-	 * 
+	 *
 	 * Used for packing to correct datatype. Use the Cassandra::TYPE_..
 	 * constants to compare. Returns {@see Cassandra::TYPE_BYTES} if not found.
-	 * 
+	 *
 	 * @param string $columnName Name of the column to get info about
 	 * @param boolean $useCache Should cache be used to fetch this if possible
-	 * @return string The type name 
+	 * @return string The type name
 	 */
 	public function getColumnValueType($columnName, $useCache = true) {
 		$schema = $this->getSchema($useCache);
-			
+
 		if (isset($schema['column-data-types'][$columnName])) {
 			return $schema['column-data-types'][$columnName];
 		}
-		
+
 		return Cassandra::TYPE_BYTES;
 	}
-	
+
 	/**
 	 * Fetches all columns of given key at given consistency level.
-	 * 
+	 *
 	 * If no consistency level is given, the default set in constructor is
 	 * used.
-	 * 
+	 *
 	 * @param string $key Key name to fetch data of
 	 * @param string $superColumn Optional super column name
 	 * @param integer $consistency Override default consistency level
@@ -1925,13 +1925,13 @@ class CassandraColumnFamily {
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Fetches listed columns of given key at given consistency level.
-	 * 
+	 *
 	 * If no consistency level is given, the default set in constructor is
 	 * used.
-	 * 
+	 *
 	 * @param string $key Key name to fetch data of
 	 * @param array $columns List of column names to fetch data of
 	 * @param string $superColumn Optional super column name
@@ -1956,16 +1956,16 @@ class CassandraColumnFamily {
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Fetches a range columns of given key at given consistency level.
-	 * 
+	 *
 	 * If no consistency level is given, the default set in constructor is
 	 * used.
-	 * 
+	 *
 	 * The start end end columns do not have to actually exists, just "a" and
 	 * "z" would work for example, they're used just for comparison.
-	 * 
+	 *
 	 * @param string $key Key name to fetch data of
 	 * @param string $startColumn Name of the first column in range
 	 * @param string $endColumn Name of the last column in range
@@ -1994,24 +1994,24 @@ class CassandraColumnFamily {
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Lower level method for fetching row data by key.
-	 * 
+	 *
 	 * Consider using the high-level {@see Cassandra::get()} or one of:
 	 * - {@see CassandraColumnFamily::getAll()}
 	 * - {@see CassandraColumnFamily::getColumns()}
 	 * - {@see CassandraColumnFamily::getColumnRange()}
-	 * 
+	 *
 	 * If no consistency level is given, the default set in constructor is
 	 * used.
-	 * 
+	 *
 	 * The start end end columns do not have to actually exists, just "a" and
 	 * "z" would work for example, they're used just for comparison.
-	 * 
+	 *
 	 * You should not set bot the list of columns and range of columns at the
 	 * same time.
-	 * 
+	 *
 	 * @param string $key Key name to fetch data of
 	 * @param array $columns List of column names to fetch data of
 	 * @param string $startColumn Name of the first column in range
@@ -2039,11 +2039,11 @@ class CassandraColumnFamily {
 				'columns for a range but not both at the same time'
 			);
 		}
-		
+
 		if ($consistency === null) {
 			$consistency = $this->defaultReadConsistency;
 		}
-		
+
 		$columnParent = $this->createColumnParent($superColumn);
 
 		$slicePredicate = $this->createSlicePredicate(
@@ -2053,7 +2053,7 @@ class CassandraColumnFamily {
 			$columnsReversed,
 			$columnCount
 		);
-		
+
 		$result = $this->cassandra->call(
 			'get_slice',
 			$key,
@@ -2061,17 +2061,17 @@ class CassandraColumnFamily {
 			$slicePredicate,
 			$consistency
 		);
-				
+
 		if (count($result) == 0) {
 			return null;
 		}
-		
+
 		return $this->parseSliceResponse($result);
 	}
-	
+
 	/**
 	 * Removes a row or element of a row.
-	 * 
+	 *
 	 * @param string $key Key to remove
 	 * @param array|null Array of column names or null for all
 	 * @param integer $consistency Consistency level to use
@@ -2082,7 +2082,7 @@ class CassandraColumnFamily {
 		$key,
 		array $columns = null,
 		$superColumn = null,
-		$consistency = null, 
+		$consistency = null,
 		$timestamp = null
 	) {
 		if (is_array($columns) && count($columns) > 1) {
@@ -2090,7 +2090,7 @@ class CassandraColumnFamily {
 				'Removing several columns is not yet supported'
 			);
 		}
-		
+
 		$columnPath = $this->createColumnPath(
 			is_array($columns) && count($columns) == 1 ? $columns[0] : null,
 			$superColumn
@@ -2112,13 +2112,13 @@ class CassandraColumnFamily {
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Fetch a set of rows filtered by secondary index where clause.
-	 * 
+	 *
 	 * To use this method, at least one of the columns present in the where
 	 * clause need to have a secondary index defined on it.
-	 * 
+	 *
 	 * The where array can be a mix of two formats:
 	 * 1. For simplest equality comparison - column value must equal something
 	 *    exactly, the format array('column-name' => 'required value') can be
@@ -2129,16 +2129,16 @@ class CassandraColumnFamily {
 	 *    column name, second comparison operator and third the value. Use the
 	 *    Cassandra::OP_.. constants for operators.
 	 * You can mix the two variants.
-	 * 
+	 *
 	 * If no consistency level is given, the default set in constructor is
 	 * used.
-	 * 
+	 *
 	 * The start end end columns do not have to actually exists, just "a" and
 	 * "z" would work for example, they're used just for comparison.
-	 * 
+	 *
 	 * You should not set bot the list of columns and range of columns at the
 	 * same time.
-	 * 
+	 *
 	 * @param array $where The where index conditions
 	 * @param array $columns List of column names to fetch data of
 	 * @param string $startColumn Name of the first column in range
@@ -2168,11 +2168,11 @@ class CassandraColumnFamily {
 				'columns for a range but not both at the same time'
 			);
 		}
-		
+
 		if ($consistency === null) {
 			$consistency = $this->defaultReadConsistency;
 		}
-		
+
 		$columnParent = $this->createColumnParent($superColumn);
 
 		$slicePredicate = $this->createSlicePredicate(
@@ -2182,13 +2182,13 @@ class CassandraColumnFamily {
 			$columnsReversed,
 			$columnCount
 		);
-		
+
 		$indexClause = $this->createIndexClause(
 			$where,
 			$startColumn,
 			$columnCount
 		);
-		
+
 		return new CassandraIndexedDataIterator(
 			$this,
 			$columnParent,
@@ -2199,23 +2199,23 @@ class CassandraColumnFamily {
 			$bufferSize
 		);
 	}
-	
+
 	/**
 	 * Fetches multiple keys in a single request.
-	 * 
+	 *
 	 * You should use this when you know that you will need several rows in a
 	 * single place as this is cheaper than making a seperate request for each
 	 * of the rows.
-	 * 
+	 *
 	 * If no consistency level is given, the default set in constructor is
 	 * used.
-	 * 
+	 *
 	 * The start end end columns do not have to actually exists, just "a" and
 	 * "z" would work for example, they're used just for comparison.
-	 * 
+	 *
 	 * You should not set bot the list of columns and range of columns at the
 	 * same time.
-	 * 
+	 *
 	 * @param array $keys Names of the keys to fetch
 	 * @param array $columns List of column names to fetch data of
 	 * @param string $startColumn Name of the first column in range
@@ -2244,11 +2244,11 @@ class CassandraColumnFamily {
 				'columns for a range but not both at the same time'
 			);
 		}
-		
+
 		if ($consistency === null) {
 			$consistency = $this->defaultReadConsistency;
 		}
-		
+
 		$columnParent = $this->createColumnParent($superColumn);
 
 		$slicePredicate = $this->createSlicePredicate(
@@ -2258,20 +2258,20 @@ class CassandraColumnFamily {
 			$columnsReversed,
 			$columnCount
 		);
-		
+
 		$results = array();
 		$responses = array();
-		
+
 		foreach ($keys as $key) {
 			$results[$key] = null;
 		}
-		
+
 		$keyCount = count($keys);
 		$setCount = ceil($keyCount / $bufferSize);
-		
+
 		for ($i = 0; $i < $setCount; $i++) {
 			$setKeys = array_slice($keys, $i * $bufferSize, $bufferSize);
-			
+
 			$responses += $this->cassandra->call(
 				'multiget_slice',
 				$setKeys,
@@ -2287,31 +2287,31 @@ class CassandraColumnFamily {
 
 		return $results;
 	}
-	
+
 	/**
 	 * Fetches a range of keys in a single request.
-	 * 
+	 *
 	 * This method will only returns meaningful ordered results if you are using
 	 * an order-preserving partitioner such as
 	 * org.apache.cassandra.dht.CollatingOrderPreservingPartitioner. The default
 	 * cassandra partitioner is random and wont fetch the keys in order.
-	 * 
+	 *
 	 * As there may be very many rows in the given range, the whole result is
 	 * not fetched in a single request but rather an iterator is returned that
 	 * you can go over using a foreach loop or if you know you don't have very
 	 * many rows, use the {@see CassandraDataIterator::getAll()} that does the
 	 * iteration for you, returning a single array with all the data.
-	 * 
+	 *
 	 * The data is fetched in batches of size $bufferSize.
-	 * 
+	 *
 	 * The start end end key and columns do not have to actually exists, just
 	 * "a" and "z" would work for example, they're used just for comparison.
-	 * 
+	 *
 	 * Leave the $rowCountLimit empty to fetch all.
-	 * 
+	 *
 	 * You should not set bot the list of columns and range of columns at the
 	 * same time.
-	 * 
+	 *
 	 * @param string $startKey Key to start fetching data from
 	 * @param array $endKey Final key to fetch in the range
 	 * @param integer $rowCountLimit How many rows to fetch at maximum
@@ -2345,19 +2345,19 @@ class CassandraColumnFamily {
 				'columns for a range but not both at the same time'
 			);
 		}
-		
+
 		if ($consistency === null) {
 			$consistency = $this->defaultReadConsistency;
 		}
-		
+
 		if ($startKey === null) {
 			$startKey = '';
 		}
-		
+
 		if ($endKey === null) {
 			$endKey = '';
 		}
-		
+
 		$columnParent = $this->createColumnParent($superColumn);
 
 		$slicePredicate = $this->createSlicePredicate(
@@ -2367,7 +2367,7 @@ class CassandraColumnFamily {
 			$columnsReversed,
 			$columnCount
 		);
-		
+
 		return new CassandraRangeDataIterator(
 			$this,
 			$columnParent,
@@ -2379,11 +2379,11 @@ class CassandraColumnFamily {
 			$bufferSize
 		);
 	}
-	
+
 	/**
 	 * Returns the number of columns a key has that may match additional
 	 * list and range requirements.
-	 * 
+	 *
 	 * @param string $key Row key to get info about
 	 * @param array $columns List of columns to fetch
 	 * @param string $startColumn Name of the first column in range
@@ -2399,7 +2399,7 @@ class CassandraColumnFamily {
 		$startColumn = null,
 		$endColumn = null,
 		$superColumn = null,
-		$consistency = null	
+		$consistency = null
 	) {
 		if ($columns !== null && $startColumn !== null) {
 			throw new CassandraInvalidRequestException(
@@ -2407,11 +2407,11 @@ class CassandraColumnFamily {
 				'columns for a range but not both at the same time'
 			);
 		}
-		
+
 		if ($consistency === null) {
 			$consistency = $this->defaultReadConsistency;
 		}
-		
+
 		$columnParent = $this->createColumnParent($superColumn);
 
 		$slicePredicate = $this->createSlicePredicate(
@@ -2430,11 +2430,11 @@ class CassandraColumnFamily {
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Returns the number of columns of a set of keys key has that may match
 	 * additional list and range requirements.
-	 * 
+	 *
 	 * @param array $keys List of row keys to get info about
 	 * @param array $columns List of columns to fetch
 	 * @param string $startColumn Name of the first column in range
@@ -2450,7 +2450,7 @@ class CassandraColumnFamily {
 		$startColumn = null,
 		$endColumn = null,
 		$superColumn = null,
-		$consistency = null	
+		$consistency = null
 	) {
 		if ($columns !== null && $startColumn !== null) {
 			throw new CassandraInvalidRequestException(
@@ -2458,11 +2458,11 @@ class CassandraColumnFamily {
 				'columns for a range but not both at the same time'
 			);
 		}
-		
+
 		if ($consistency === null) {
 			$consistency = $this->defaultReadConsistency;
 		}
-		
+
 		$columnParent = $this->createColumnParent($superColumn);
 
 		$slicePredicate = $this->createSlicePredicate(
@@ -2481,21 +2481,21 @@ class CassandraColumnFamily {
 			$consistency
 		);
 	}
-	
+
 	/**
 	 * Inserts a new row or updates an existing one.
-	 * 
+	 *
 	 * If a key already exists with some columns and you update it, any columns
 	 * not listed in the update statement will not be changed or deleted.
-	 * 
+	 *
 	 * If not set, default consistency level set in the constructor is used.
-	 * 
+	 *
 	 * You generally do not need to provide a timestamp, it is generated for
 	 * you.
-	 * 
+	 *
 	 * You may optionally provide the time-to-live period in seconds after which
 	 * the entry will appear deleted.
-	 * 
+	 *
 	 * @param string $key Key to set or update
 	 * @param array $columns Array of column names and their values
 	 * @param integer $consistency Consistency level to use
@@ -2513,11 +2513,11 @@ class CassandraColumnFamily {
 		if ($timestamp === null) {
 			$timestamp = CassandraUtil::getTimestamp();
 		}
-		
+
 		if ($consistency === null) {
 			$consistency = $this->defaultWriteConsistency;
 		}
-		
+
 		$mutationMap = array(
 			$key => array(
 				$this->name => $this->createColumnMutations(
@@ -2527,25 +2527,25 @@ class CassandraColumnFamily {
 				)
 			)
 		);
-		
+
 		$this->cassandra->call('batch_mutate', $mutationMap, $consistency);
 	}
-	
+
 	/**
 	 * Creates a new low-level Cassandra column parent definition.
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param string $superColumName Name of the super column
 	 * @return cassandra_ColumnParent Column parent definition
 	 */
 	public function createColumnParent($superColumnName = null) {
 		$schema = $this->getSchema();
-		
+
 		$columnParent = new cassandra_ColumnParent();
 		$columnParent->column_family = $this->name;
-		
+
 		if ($superColumnName !== null) {
 			if ($this->autopack) {
 				$columnParent->super_column = CassandraUtil::pack(
@@ -2556,47 +2556,47 @@ class CassandraColumnFamily {
 				$columnParent->super_column = $superColumnName;
 			}
 		}
-		
+
 		return $columnParent;
 	}
-	
+
 	/**
 	 * Creates low-level Cassandra column-path definition.
-	 * 
+	 *
 	 * @param string $columnName Name of the column
 	 * @param string $superColumName Name of the super column
 	 * @return cassandra_ColumnPath Column path definition
 	 */
 	public function createColumnPath($columnName, $superColumnName) {
 		$schema = $this->getSchema();
-		
+
 		$columnPath = new cassandra_ColumnPath();
-		
+
 		$columnPath->column_family = $this->name;
-		
+
 		if ($columnName !== null) {
 			$columnPath->column = CassandraUtil::pack(
 				$columnName,
 				$this->getColumnNameType()
 			);
 		}
-		
+
 		if ($superColumnName !== null) {
 			$columnPath->super_column = CassandraUtil::pack(
 				$superColumnName,
 				$schema['super-type']
 			);
 		}
-		
+
 		return $columnPath;
 	}
-	
+
 	/**
 	 * Creates a slice predicate.
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param array $columns List of column names
 	 * @param string $startColumn Column range start
 	 * @param string $endColumn Column range end
@@ -2613,20 +2613,20 @@ class CassandraColumnFamily {
 	) {
 		$predicate = new cassandra_SlicePredicate();
 		$schema = $this->getSchema();
-		
+
 		if (is_array($columns)) {
 			if ($this->autopack) {
 				$packedColumns = array();
 
 				foreach ($columns as $columnName) {
 					$columnType = $this->getColumnNameType();
-					
+
 					$packedColumns[] = CassandraUtil::pack(
 						$columnName,
 						$columnType
 					);
 				}
-				
+
 				$predicate->column_names = $packedColumns;
 			} else {
 				$predicate->column_names = $columns;
@@ -2636,48 +2636,48 @@ class CassandraColumnFamily {
 				if ($startColumn === null) {
 					$startColumn = '';
 				}
-				
+
 				if ($endColumn === null) {
 					$endColumn = '';
 				}
-				
+
 				if (!empty($startColumn)) {
 					$columnType = $this->getColumnNameType();
-					
+
 					$startColumn = CassandraUtil::pack(
 						$startColumn,
 						$columnType
 					);
 				}
-				
+
 				if (!empty($endColumn)) {
 					$columnType = $this->getColumnNameType();
-					
+
 					$endColumn = CassandraUtil::pack(
 						$endColumn,
 						$columnType
 					);
 				}
 			}
-			
+
 			$sliceRange = new cassandra_SliceRange();
 			$sliceRange->count = $columnCount;
 			$sliceRange->reversed = $columnsReversed;
 			$sliceRange->start = $startColumn;
 			$sliceRange->finish = $endColumn;
-			
+
 			$predicate->slice_range = $sliceRange;
 		}
-		
+
 		return $predicate;
 	}
-	
+
 	/**
 	 * Creates a new index clause.
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param array $where Where conditions
 	 * @param string $startKey Key to start fetching from
 	 * @param integer $maxRowCount Maximum number of rows to fetch
@@ -2690,10 +2690,10 @@ class CassandraColumnFamily {
 	) {
 		$indexClause = new cassandra_IndexClause();
 		$expressions = array();
-		
+
 		foreach ($where as $columnName => $value) {
 			$indexExpression = new cassandra_IndexExpression();
-			
+
 			if (is_array($value)) {
 				$supportedOperators = array(
 					Cassandra::OP_EQ,
@@ -2702,7 +2702,7 @@ class CassandraColumnFamily {
 					Cassandra::OP_LTE,
 					Cassandra::OP_GTE
 				);
-				
+
 				if (
 					count($value) != 3
 					|| !in_array($value[1], $supportedOperators)
@@ -2711,14 +2711,14 @@ class CassandraColumnFamily {
 						'Invalid where clause: '.serialize($value)
 					);
 				}
-				
+
 				$indexExpression->column_name = CassandraUtil::pack(
 					$value[0],
 					$this->getColumnNameType()
 				);
-				
+
 				$indexExpression->op = $value[1];
-				
+
 				$indexExpression->value = CassandraUtil::pack(
 					$value[2],
 					$this->getColumnValueType($value[0])
@@ -2728,31 +2728,31 @@ class CassandraColumnFamily {
 					$columnName,
 					$this->getColumnNameType()
 				);
-				
+
 				$indexExpression->op = Cassandra::OP_EQ;
-				
+
 				$indexExpression->value = CassandraUtil::pack(
 					$value,
 					$this->getColumnValueType($columnName)
 				);
 			}
-			
+
 			$expressions[] = $indexExpression;
 		}
-		
+
 		$indexClause->expressions = $expressions;
         $indexClause->start_key = $startKey !== null ? $startKey : '';
         $indexClause->count = $maxRowCount;
-		
+
 		return $indexClause;
 	}
-	
+
 	/**
 	 * Creates column mutations, used in insert/update operations.
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param array $columns List of columns and their values
 	 * @param integer $timestamp Operation timestamp
 	 * @param integer $timeToLiveSeconds Data time-to-live period
@@ -2766,33 +2766,33 @@ class CassandraColumnFamily {
 		if ($timestamp === null) {
 			$timestamp = CassandraUtil::getTimestamp();
 		}
-		
+
 		$columnsOrSuperColumns = $this->createColumnsOrSuperColumns(
 			$columns,
 			$timestamp,
 			$timeToLiveSeconds
 		);
-		
+
 		$mutations = array();
-		
+
 		foreach ($columnsOrSuperColumns as $columnOrSuperColumn) {
 			$mutation = new cassandra_Mutation();
 			$mutation->column_or_supercolumn = $columnOrSuperColumn;
-			
+
 			$mutations[] = $mutation;
 		}
-		
+
 		return $mutations;
 	}
-	
+
 	/**
 	 * Creates a list of columns or super-columns.
-	 * 
+	 *
 	 * Returns a list of {@see cassandra_ColumnOrSuperColumn}
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param array $columns Array of columns and their values
 	 * @param integer $timestamp Operation timestamp
 	 * @param integer $timeToLiveSeconds Data time-to-live period
@@ -2806,12 +2806,12 @@ class CassandraColumnFamily {
 		if ($timestamp === null) {
 			$timestamp = CassandraUtil::getTimestamp();
 		}
-		
+
 		$results = array();
-		
+
 		foreach ($columns as $columnName => $columnValue) {
 			$column = new cassandra_ColumnOrSuperColumn();
-			
+
 			if (is_array($columnValue)) {
 				$column->super_column = new cassandra_SuperColumn();
 				$column->super_column->name = CassandraUtil::pack(
@@ -2837,20 +2837,20 @@ class CassandraColumnFamily {
 				$column->column->timestamp = $timestamp;
 				$column->column->ttl = $timeToLiveSeconds;
 			}
-			
+
 			$results[] = $column;
 		}
-		
+
 		return $results;
 	}
-	
+
 	/**
 	 * Creates a list of {@see cassandra_Column} from list of columns and their
 	 * values.
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param array $columns Array of columns and their values
 	 * @param integer $timestamp Operation timestamp
 	 * @param integer $timeToLiveSeconds Data time-to-live period
@@ -2864,9 +2864,9 @@ class CassandraColumnFamily {
 		if ($timestamp === null) {
 			$timestamp = CassandraUtil::getTimestamp();
 		}
-		
+
 		$results = array();
-		
+
 		foreach ($columns as $name => $value) {
 			$column = new cassandra_Column();
 			$column->name = CassandraUtil::pack(
@@ -2879,19 +2879,19 @@ class CassandraColumnFamily {
 			);
 			$column->timestamp = $timestamp;
 			$column->ttl = $timeToLiveSeconds;
-			
+
 			$results[] = $column;
 		}
-		
+
 		return $results;
 	}
-	
+
 	/**
 	 * Parses the result of slice requests into a simple array of data.
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param array $responses The responses to parse
 	 * @return array List of data
 	 */
@@ -2901,44 +2901,44 @@ class CassandraColumnFamily {
 		foreach ($responses as $row) {
 			$key = $row->key;
 			$results[$key] = array();
-			
-			foreach ($row->columns as $row) {
-				$results[$key] += $this->parseSliceRow($row);
+
+			foreach ($row->columns as $column) {
+				$results[$key] += $this->parseSliceRow($column);
 			}
 		}
-		
+
 		return $results;
 	}
 
 	/**
 	 * Parses the result of a single slice request into a simple array of data.
-	 * 
+	 *
 	 * This is a low-level method used internally but kept public in case you
 	 * may need it.
-	 * 
+	 *
 	 * @param array $response The response to parse
 	 * @return array List of data
 	 */
 	public function parseSliceResponse(array $response) {
 		$results = array();
-		
+
 		foreach ($response as $row) {
 			$results += $this->parseSliceRow($row);
 		}
-		
+
 		return $results;
 	}
-	
+
 	/**
 	 * Parses a slice row or {@see cassandra_ColumnOrSuperColumn} into a plain
 	 * array of data.
-	 * 
+	 *
 	 * @param cassandra_ColumnOrSuperColumn $row Row to parse
-	 * @return array Parsed plain array of data 
+	 * @return array Parsed plain array of data
 	 */
 	protected function parseSliceRow(cassandra_ColumnOrSuperColumn $row) {
 		$result = array();
-		
+
 		if ($row->column !== null) {
 			$nameType = $this->getColumnNameType();
 			$valueType = $this->getColumnValueType($row->column->name);
@@ -2981,16 +2981,16 @@ class CassandraColumnFamily {
 /**
  * Utility class for the Cassandra library, providing some common operations
  * like packing data to correct type.
- * 
+ *
  * Includes quite a lot of code from PHPCassa project.
  */
 class CassandraUtil {
-	
+
 	/**
 	 * Extracts the data type name from given definition.
-	 * 
+	 *
 	 * The parsed names match the constancts Cassandra::TYPE_...
-	 * 
+	 *
 	 * @param string $definition Definition to parse
 	 * @return string Valid data type name
 	 */
@@ -3007,46 +3007,46 @@ class CassandraUtil {
 
 		return substr($definition, $index + 1);
 	}
-	
+
 	/**
 	 * Packs given value to given type.
-	 * 
+	 *
 	 * @param mixed $value Value to pack
 	 * @param string $type Type name to pack to
-	 * @return mixed Data packed to requested type 
+	 * @return mixed Data packed to requested type
 	 */
 	public static function pack($value, $type) {
 		switch ($type) {
 			case Cassandra::TYPE_LONG:
 				return self::packLong($value);
-			
+
 			case Cassandra::TYPE_INTEGER:
 				return self::packInteger($value);
-			
+
 			case Cassandra::TYPE_ASCII:
 				return self::packString($value, strlen($value));
-			
+
 			case Cassandra::TYPE_UTF8:
 				if (mb_detect_encoding($value, 'UTF-8') != 'UTF-8') {
 					$value = utf8_encode($value);
 				}
-				
+
 				return self::packString($value, strlen($value));
-				
+
 			case Cassandra::TYPE_TIME_UUID:
 				return self::packString($value, 16);
-			
+
 			case Cassandra::TYPE_LEXICAL_UUID:
 				return self::packString($value, 16);
-				
+
 			default:
 				return $value;
 		}
 	}
-	
+
 	/**
 	 * Packs data to long type.
-	 * 
+	 *
 	 * @param mixed $value Value to pack
 	 * @return integer Packed data
 	 */
@@ -3067,7 +3067,7 @@ class CassandraUtil {
 			if ($neg) {
 				$hi = ~$hi;
 				$lo = ~$lo;
-				
+
 				if (($lo & (int)0xffffffff) == (int)0xffffffff) {
 					$lo = 0;
 					$hi++;
@@ -3075,79 +3075,79 @@ class CassandraUtil {
 					$lo++;
 				}
 			}
-			
+
 			$data = pack('N2', $hi, $lo);
 		} else {
 			$hi = $value >> 32;
 			$lo = $value & 0xFFFFFFFF;
-			
+
 			$data = pack('N2', $hi, $lo);
 		}
-		
+
 		return $data;
 	}
-	
+
 	/**
 	 * Packs data to integer type.
-	 * 
+	 *
 	 * @param mixed $value Value to pack
 	 * @return integer Packed data
 	 */
 	public static function packInteger($value) {
 		return pack('N', $value);
 	}
-	
+
 	/**
 	 * Packs data to string type.
-	 * 
+	 *
 	 * @param mixed $value Value to pack
 	 * @return string Packed data
 	 */
-	public static function packString($string, $length) {       
+	public static function packString($string, $length) {
         $result = '';
-		
+
         for($i = 0; $i < $length; $i++) {
             $result .= pack('c', ord(substr($string, $i, 1)));
 		}
-		
+
         return $result;
     }
-	
+
 	/**
 	 * Unpacks packed data from given type to something PHP understands.
-	 * 
+	 *
 	 * @param string $value Value to unpack
 	 * @param string $type Current type of the data
-	 * @return mixed Unpacked data 
+	 * @return mixed Unpacked data
 	 */
 	public static function unpack($value, $type) {
 		switch ($type) {
 			case Cassandra::TYPE_LONG:
 				return self::unpackLong($value);
-			
+
 			case Cassandra::TYPE_INTEGER:
 				return self::unpackInteger($value);
-			
+
 			case Cassandra::TYPE_ASCII:
 				return self::unpackString($value, strlen($value));
-			
+
 			case Cassandra::TYPE_UTF8:
 				return self::unpackString($value, strlen($value));
-				
+
 			case Cassandra::TYPE_TIME_UUID:
 				return $value;
-			
+
 			case Cassandra::TYPE_LEXICAL_UUID:
 				return $value;
-				
+
 			default:
 				return $value;
 		}
 	}
-	
+
 	/**
 	 * Unpacks long data type.
-	 * 
+	 *
 	 * @param mixed $data Data to unpack
 	 * @return integer Unpacked data
 	 */
@@ -3204,62 +3204,62 @@ class CassandraUtil {
 				$arr[1] = $arr[1] & 0xffffffff;
 				$arr[1] = $arr[1] ^ 0xffffffff;
 				$arr[2] = $arr[2] ^ 0xffffffff;
-				
+
 				$value = 0 - $arr[1] * 4294967296 - $arr[2] - 1;
 			} else {
 				$value = $arr[1] * 4294967296 + $arr[2];
 			}
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Unpacks integer data type.
-	 * 
+	 *
 	 * @param mixed $data Data to unpack
 	 * @return integer Unpacked data
 	 */
 	public static function unpackInteger($value) {
 		$unpacked = unpack('N', $value);
-		
+
 		return array_pop($unpacked);
 	}
-	
+
 	/**
 	 * Unpacks string data type.
-	 * 
+	 *
 	 * @param mixed $data Data to unpack
 	 * @return string Unpacked data
 	 */
 	public static function unpackString($value, $length) {
 		$unpacked = unpack('C'.$length.'chars', $value);
         $out = '';
-		
+
         foreach($unpacked as $element) {
             if($element > 0) {
 				$out .= chr($element);
 			}
 		}
-		
+
         return $out;
 	}
-	
+
 	/**
 	 * Returns current timestamp that can be used in insert/update opearations.
-	 * 
+	 *
 	 * By Zach Buller (zachbuller@gmail.com)
-	 * 
+	 *
 	 * @return integer Unpacked data
 	 */
 	public static function getTimestamp() {
         $microtime = microtime();
-		
+
         settype($microtime, 'string');
-		
+
         $timeTokens = explode(" ", $microtime);
         $subSeconds = preg_replace('/0./', '', $timeTokens[0], 1);
-		
+
         return ($timeTokens[1].$subSeconds) / 100;
 	}
 }
@@ -3269,107 +3269,107 @@ class CassandraUtil {
  * more rows than is possible or reasonable to fetch in a single go so instead
  * an iterator is returned that fetches the data in batches as the data
  * is iterated.
- * 
+ *
  * This is an abstract class with implementations for indexed and range queries.
  */
 abstract class CassandraDataIterator implements Iterator {
-	
+
 	/**
 	 * Column family to read data from.
-	 * 
+	 *
 	 * @var CassandraColumnFamily
 	 */
 	protected $columnFamily;
-	
+
 	/**
 	 * Column parent definition.
-	 * 
+	 *
 	 * @var cassandra_ColumnParent
 	 */
 	protected $columnParent;
-	
+
 	/**
 	 * The slice predicate to use.
-	 * 
-	 * @var cassandra_SlicePredicate 
+	 *
+	 * @var cassandra_SlicePredicate
 	 */
 	protected $slicePredicate;
-	
+
 	/**
 	 * Consistency level to use.
-	 * 
-	 * @var integer 
+	 *
+	 * @var integer
 	 */
 	protected $consistency;
-	
+
 	/**
 	 * Maximum number or rows to fetch.
-	 * 
+	 *
 	 * Left null if the row count is not limited.
-	 * 
-	 * @var integer|null 
+	 *
+	 * @var integer|null
 	 */
 	protected $rowCountLimit;
-	
+
 	/**
 	 * How many rows to fetch in a single request.
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $bufferSize;
-	
+
 	/**
 	 * Current buffer of data.
-	 * 
-	 * @var array 
+	 *
+	 * @var array
 	 */
 	protected $buffer;
-	
+
 	/**
 	 * The initial start key, used to rewing.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	protected $originalStartKey;
-	
+
 	/**
 	 * Next key to start fetching data from.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	protected $nextStartKey;
-	
+
 	/**
 	 * Is the iterator currently valid, ready to give out more data.
-	 * 
-	 * @var boolean 
+	 *
+	 * @var boolean
 	 */
 	protected $isValid;
-	
+
 	/**
 	 * Counter of how many rows the iterator has seen so far.
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $rowsSeen;
-	
+
 	/**
 	 * Expected page size.
-	 * 
-	 * @var integer 
+	 *
+	 * @var integer
 	 */
 	protected $expectedPageSize;
-	
+
 	/**
 	 * Actual current page size.
-	 * 
-	 * @var integer 
+	 *
+	 * @var integer
 	 */
 	protected $currentPageSize;
-	
+
 	/**
 	 * Sets the information needed to iterate the data in batches.
-	 * 
+	 *
 	 * @param CassandraColumnFamily $columnFamily Column family
 	 * @param cassandra_ColumnParent $columnParent Parent column
 	 * @param cassandra_SlicePredicate $slicePredicate Slice predicate
@@ -3396,63 +3396,63 @@ abstract class CassandraDataIterator implements Iterator {
 		$this->originalStartKey = $startKey;
 		$this->nextStartKey = $startKey;
 		$this->buffer = null;
-		
+
 		if ($rowCountLimit !== null) {
 			$this->bufferSize = min($rowCountLimit, $bufferSize);
 		}
 	}
-	
+
 	/**
 	 * Returns the current element in the array.
-	 * 
-	 * @return mixed 
+	 *
+	 * @return mixed
 	 */
 	public function current() {
 		return current($this->buffer);
 	}
-	
+
 	/**
 	 * Returns the key of the array element that's currently being pointed to by
 	 * the internal pointer.
-	 * 
+	 *
 	 * If the internal pointer points beyond the end of the elements list or the
 	 * array is empty, returns NULL.
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function key() {
 		return key($this->buffer);
 	}
-	
+
 	/**
 	 * Advances the internal array pointer one place forward before returning
 	 * the element value.
-	 * 
+	 *
 	 * @return mixed Next array value
 	 */
 	public function next() {
 		$value = null;
 		$beyondLastRow = false;
-		
+
 		if (!empty($this->buffer)) {
 			$this->nextStartKey = key($this->buffer);
-			
+
 			$value = next($this->buffer);
 
 			if (count(current($this->buffer)) == 0) {
 				$this->next();
 			} else {
 				$key = key($this->buffer);
-				
+
 				if (isset($key)) {
 					$this->rowsSeen++;
-					
+
 					if (
 						$this->rowCountLimit !== null
 						&& $this->rowsSeen > $this->rowCountLimit
 					) {
 						$this->isValid = false;
-						
+
 						return null;
 					}
 				} else {
@@ -3468,7 +3468,7 @@ abstract class CassandraDataIterator implements Iterator {
 				$this->isValid = false;
 			} else {
 				$this->updateBuffer();
-				
+
 				if (count($this->buffer) == 1) {
 					$this->isValid = false;
 				} else {
@@ -3476,73 +3476,73 @@ abstract class CassandraDataIterator implements Iterator {
 				}
 			}
 		}
-		
+
 		return $value;
 	}
-	
+
 	/**
 	 * Rewinds the iterator internal pointer back to the beginning.
-	 * 
-	 * @return void 
+	 *
+	 * @return void
 	 */
 	public function rewind() {
 		$this->rowsSeen = 0;
 		$this->isValid = true;
 		$this->nextStartKey = $this->originalStartKey;
-		
+
 		$this->updateBuffer();
-		
+
 		if (count($this->buffer) == 0) {
 			$this->isValid = false;
-			
+
 			return;
 		}
-		
+
 		if (count(current($this->buffer)) == 0) {
 			$this->next();
 		} else {
 			$this->rowsSeen++;
 		}
 	}
-	
+
 	/**
 	 * Returns whether the iterator is still valid and has more data.
-	 * 
-	 * @return boolean 
+	 *
+	 * @return boolean
 	 */
 	public function valid() {
 		return $this->isValid;
 	}
-	
+
 	/**
 	 * Iterates over the whole matches data set and compiles the results into a
 	 * single array.
-	 * 
+	 *
 	 * Only use this if you are not expecting many thousand of lines as it can
 	 * get slow and require lots of memory.
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
 	public function getAll() {
 		$results = array();
-		
+
 		$this->rewind();
-		
+
 		while ($this->valid()) {
 			$key = $this->key();
 			$value = $this->current();
-			
+
 			$results[$key] = $value;
-			
+
 			$this->next();
 		}
-		
+
 		return $results;
 	}
-	
+
 	/**
 	 * Updates the internal buffer, fetching a new batch of data.
-	 * 
+	 *
 	 * @return void
 	 */
 	abstract protected function updateBuffer();
@@ -3552,17 +3552,17 @@ abstract class CassandraDataIterator implements Iterator {
  * Indexed data iterator, used when performing where-queries.
  */
 class CassandraIndexedDataIterator extends CassandraDataIterator {
-	
+
 	/**
 	 * The index clause to use.
-	 * 
+	 *
 	 * @var cassandra_IndexClause
 	 */
 	protected $indexClause;
 
 	/**
 	 * Sets the information needed to iterate the data in batches.
-	 * 
+	 *
 	 * @param CassandraColumnFamily $columnFamily Column family
 	 * @param cassandra_ColumnParent $columnParent Parent column
 	 * @param cassandra_IndexClause $indexClause The index clause to use
@@ -3587,16 +3587,16 @@ class CassandraIndexedDataIterator extends CassandraDataIterator {
 			$slicePredicate,
 			$indexClause->start_key,
 			$consistency,
-			$rowCountLimit, 
+			$rowCountLimit,
 			$bufferSize
 		);
-		
+
 		$this->indexClause = $indexClause;
 	}
-	
+
 	/**
 	 * Updates the internal buffer, fetching new indexed data.
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function updateBuffer() {
@@ -3608,10 +3608,10 @@ class CassandraIndexedDataIterator extends CassandraDataIterator {
 		} else {
 			$this->indexClause->count = $this->bufferSize;
 		}
-		
+
 		$this->expectedPageSize = $this->indexClause->count;
 		$this->indexClause->start_key = $this->nextStartKey;
-		
+
 		$result = $this->columnFamily->getCassandra()->call(
 			'get_indexed_slices',
 			$this->columnParent,
@@ -3619,13 +3619,13 @@ class CassandraIndexedDataIterator extends CassandraDataIterator {
 			$this->slicePredicate,
 			$this->consistency
 		);
-		
+
 		if (count($result) == 0) {
 			$this->buffer = array();
 		} else {
 			$this->buffer = $this->columnFamily->parseSlicesResponse($result);
 		}
-		
+
 		$this->currentPageSize = count($this->buffer);
 	}
 }
@@ -3634,24 +3634,24 @@ class CassandraIndexedDataIterator extends CassandraDataIterator {
  * Key range data iterator.
  */
 class CassandraRangeDataIterator extends CassandraDataIterator {
-	
+
 	/**
 	 * Start key to begin iterating from.
-	 * 
-	 * @var string 
+	 *
+	 * @var string
 	 */
 	protected $startKey;
-	
+
 	/**
 	 * End key to iterate to.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $endKey;
 
 	/**
 	 * Sets the information needed to iterate the data in batches.
-	 * 
+	 *
 	 * @param CassandraColumnFamily $columnFamily Column family
 	 * @param cassandra_ColumnParent $columnParent Parent column
 	 * @param cassandra_SlicePredicate $slicePredicate Slice predicate
@@ -3677,36 +3677,36 @@ class CassandraRangeDataIterator extends CassandraDataIterator {
 			$slicePredicate,
 			$startKey,
 			$consistency,
-			$rowCountLimit, 
+			$rowCountLimit,
 			$bufferSize
 		);
-		
+
 		$this->startKey = $startKey;
 		$this->endKey = $endKey;
 	}
-	
+
 	/**
 	 * Updates the internal buffer, fetching new ranged data.
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function updateBuffer() {
 		$bufferSize = $this->bufferSize;
-		
+
 		if ($this->rowCountLimit !== null) {
 			$bufferSize = min(
 				$this->rowCountLimit - $this->rowsSeen + 1,
 				$this->bufferSize
 			);
 		}
-		
+
 		$this->expectedPageSize = $bufferSize;
-		
+
 		$keyRange = new cassandra_KeyRange();
 		$keyRange->start_key = $this->nextStartKey;
 		$keyRange->end_key = $this->endKey;
 		$keyRange->count = $bufferSize;
-		
+
 		$result = $this->columnFamily->getCassandra()->call(
 			'get_range_slices',
 			$this->columnParent,
@@ -3714,7 +3714,7 @@ class CassandraRangeDataIterator extends CassandraDataIterator {
 			$keyRange,
 			$this->consistency
 		);
-		
+
 		$this->buffer = $this->columnFamily->parseSlicesResponse($result);
 		$this->currentPageSize = count($this->buffer);
 	}
