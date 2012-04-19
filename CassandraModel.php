@@ -282,6 +282,23 @@ class CassandraModel {
 			100
 		);
 	}
+	
+	/**
+	 * Returns all columns for given row key.
+	 * 
+	 * @param string $rowKey Row key to get data from
+	 * @param Cassandra $connection If not set, the default connection is used
+	 * @return array 
+	 */
+	public static function getAll($rowKey, Cassandra $connection = null) {
+		if (!isset($connection)) {
+			$connection = self::$_defaultConnection;
+		}
+		
+		$columnFamily = self::getColumnFamilyName();
+		
+		return $connection->cf($columnFamily)->getAll($rowKey);
+	}
 
 	/**
 	 * Returns a range of columns for a key.
