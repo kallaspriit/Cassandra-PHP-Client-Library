@@ -210,7 +210,15 @@ class CassandraModel {
 		if (empty($columns)) {
 			$columns = null;
 		}
-
+		
+		$supercolumn = null;
+		$dotPos = mb_strpos($rowKey, '.');
+		
+		if ($dotPos !== false) {
+			$supercolumn = mb_substr($rowKey, $dotPos + 1);
+			$rowKey = mb_substr($rowKey, 0, $dotPos);
+		}
+		
 		$data = $connection->cf($columnFamily)->get(
 			$rowKey,
 			$columns,
@@ -218,7 +226,7 @@ class CassandraModel {
 			null,
 			false,
 			100,
-			null,
+			$supercolumn,
 			$consistency
 		);
 
