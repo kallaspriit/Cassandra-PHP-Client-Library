@@ -2813,6 +2813,10 @@ class CassandraColumnFamily {
 		$results = array();
 
 		foreach ($columns as $columnName => $columnValue) {
+			if (!isset($columnValue)) {
+				continue;
+			}
+
 			$column = new cassandra_ColumnOrSuperColumn();
 
 			if (is_array($columnValue)) {

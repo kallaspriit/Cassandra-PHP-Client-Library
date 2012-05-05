@@ -210,7 +210,15 @@ class CassandraModel {
 		if (empty($columns)) {
 			$columns = null;
 		}
-
+		
+		$supercolumn = null;
+		$dotPos = mb_strpos($rowKey, '.');
+		
+		if ($dotPos !== false) {
+			$supercolumn = mb_substr($rowKey, $dotPos + 1);
+			$rowKey = mb_substr($rowKey, 0, $dotPos);
+		}
+		
 		$data = $connection->cf($columnFamily)->get(
 			$rowKey,
 			$columns,
@@ -218,7 +226,7 @@ class CassandraModel {
 			null,
 			false,
 			100,
-			null,
+			$supercolumn,
 			$consistency
 		);
 
@@ -273,6 +281,23 @@ class CassandraModel {
 			$consistency,
 			100
 		);
+	}
+	
+	/**
+	 * Returns all columns for given row key.
+	 * 
+	 * @param string $rowKey Row key to get data from
+	 * @param Cassandra $connection If not set, the default connection is used
+	 * @return array 
+	 */
+	public static function getAll($rowKey, Cassandra $connection = null) {
+		if (!isset($connection)) {
+			$connection = self::$_defaultConnection;
+		}
+		
+		$columnFamily = self::getColumnFamilyName();
+		
+		return $connection->cf($columnFamily)->getAll($rowKey);
 	}
 
 	/**
@@ -398,6 +423,32 @@ class CassandraModel {
 	}
 
 	/**
+	 * Removes a supercolumn entry or some columns of it.
+	 *
+	 * If the columns is left to null, the entire row is deleted.
+	 *
+	 * If you already have an instance of the model, use deleteSuper().
+	 *
+	 * @param string $key Row key to delete
+	 * @param string $supercolumn Supercolumn name
+	 * @param array $columns Optional columns to delete
+	 * @param integer $consistency Option override of default consistency level
+	 * @param Cassandra $connection If not set, the default connection is used
+	 * @return boolean Was removing the entry successful
+	 */
+	public static function removeSuper(
+		$key,
+		$supercolumn,
+		array $columns = null,
+		$consistency = null,
+		Cassandra $connection = null
+	) {
+		$model = self::getInstance($key, $connection);
+
+		return $model->deleteSuper($supercolumn, $columns, $consistency);
+	}
+
+	/**
 	 * Removes an entry or some columns of it.
 	 *
 	 * If the columns is left to null, the entire row is deleted.
@@ -417,6 +468,32 @@ class CassandraModel {
 			$this->_key,
 			$columns,
 			null,
+			$consistency
+		);
+
+		return true;
+	}
+
+	/**
+	 * Removes an supercolumn entry or some columns of it.
+	 *
+	 * If the columns is left to null, the entire row is deleted.
+	 *
+	 * Uses the currently set row key, you can change it with key() method.
+	 *
+	 * You can remove a row by calling removeSuper() statically.
+	 *
+	 * @param array $columns Optional columns to delete
+	 * @param integer $consistency Option override of default consistency level
+	 * @return boolean Was removing the entry successful
+	 */
+	public function deleteSuper($supercolumn, array $columns = null, $consistency = null) {
+		$columnFamily = self::getColumnFamilyName();
+
+		$this->_connection->cf($columnFamily)->remove(
+			$this->_key,
+			$columns,
+			$supercolumn,
 			$consistency
 		);
 
