@@ -746,22 +746,25 @@ class Cassandra {
 	const OP_GTE = IndexOperator::GTE;
 
 	/**
-	 * Default simple placement strategy not taking network topology into
+	 * Returns the nodes that are next to each other on the ring.
+	 */
+	const PLACEMENT_LOCAL = 'org.apache.cassandra.locator.LocalStrategy';
+
+	/**
+	 * Simple placement strategy not taking network topology into
 	 * account.
 	 */
 	const PLACEMENT_SIMPLE = 'org.apache.cassandra.locator.SimpleStrategy';
 
 	/**
 	 * Network topology aware placement strategy.
+	 * 
+	 * Allows you to configure the number of replicas per data center as
+	 * specified in the strategy_options. Replicas are placed on different racks
+	 * within each data center, if possible.
 	 */
 	const PLACEMENT_NETWORK
 		= 'org.apache.cassandra.locator.NetworkTopologyStrategy';
-
-	/**
-	 * Old network topology aware placement strategy.
-	 */
-	const PLACEMENT_OLD_NETWORK
-		= 'org.apache.cassandra.locator.OldNetworkTopologyStrategy';
 
 	/**
 	 * Keys index type, currently only one supported.

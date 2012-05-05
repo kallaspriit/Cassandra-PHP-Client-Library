@@ -21,7 +21,7 @@ Features
 
 Class diagram
 -------------
-![CPCL class diagram](https://a248.e.akamai.net/assets.github.com/img/3c1398ba50a8d85e6dc6a6e9e55d92cdec66319e/687474703a2f2f646c2e64726f70626f782e636f6d2f752f383835353735392f6370636c2f636c6173732d6469616772616d2e706e67 "Cassandra PHP Client Library class diagram")
+![CPCL class diagram](https://github.com/kallaspriit/Cassandra-PHP-Client-Library/blob/master/doc/class-diagram.png?raw=true "Cassandra PHP Client Library class diagram")
 
 The library uses the very permissive [MIT licence](http://en.wikipedia.org/wiki/MIT_License) which means you can **do pretty much anything you like with it**.
 
