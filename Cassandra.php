@@ -642,6 +642,16 @@ class Cassandra {
 	 * use odd number for replication factor.
 	 */
 	const CONSISTENCY_QUORUM = ConsistencyLevel::QUORUM;
+	
+	/**
+	 * Local quorum consistency. 
+	 */
+	const CONSISTENCY_LOCAL_QUORUM = ConsistencyLevel::LOCAL_QUORUM;
+	
+	/**
+	 * Each quorum consistency. 
+	 */
+	const CONSISTENCY_EACH_QUORUM = ConsistencyLevel::EACH_QUORUM;
 
 	/**
 	 * Only meaningful for writes and means as soon as a write is received by
@@ -665,6 +675,16 @@ class Cassandra {
 	 * can not be fulfilled.
 	 */
 	const CONSISTENCY_ALL = ConsistencyLevel::ALL;
+	
+	/**
+	 * Consistency level of two.
+	 */
+	const CONSISTENCY_TWO = ConsistencyLevel::TWO;
+	
+	/**
+	 * Consistency level of three.
+	 */
+	const CONSISTENCY_THREE = ConsistencyLevel::THREE;
 
 	/**
 	 * Standard column type.
