@@ -3090,7 +3090,7 @@ class cassandra_CfDef {
   public $max_compaction_threshold = null;
   public $row_cache_save_period_in_seconds = null;
   public $key_cache_save_period_in_seconds = null;
-  public $replicate_on_write = null;
+  public $replicate_on_write = true;
   public $merge_shards_chance = null;
   public $key_validation_class = null;
   public $row_cache_provider = null;

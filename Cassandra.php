@@ -721,6 +721,11 @@ class Cassandra {
 	const TYPE_UTF8 = 'UTF8Type';
 
 	/**
+	 * Counter type.
+	 */
+	const TYPE_COUNTER = 'org.apache.cassandra.db.marshal.CounterColumnType';
+
+	/**
 	 * Equality comparator used in where queries.
 	 */
 	const OP_EQ = IndexOperator::EQ;
@@ -2533,6 +2538,56 @@ class CassandraColumnFamily {
 
 		$this->cassandra->call('batch_mutate', $mutationMap, $consistency);
 	}
+	
+	/**
+	 * Updates counter column by some amount defaulting to one.
+	 * 
+	 * @param string $key Key name
+	 * @param string $column Column name
+	 * @param integer $amount By how much to change the counter value
+	 * @param string $superColumn Optional supercolumn name
+	 * @param integer $consistency Consistency level to use
+	 * @author Madhan Dennis <mdennis_2000@yahoo.com>
+	 */
+	public function updateCounter(
+		$key,
+		$column,
+		$amount = 1,
+		$superColumn = null,
+		$consistency = null
+	) {
+		$columnParent = $this->createColumnParent($superColumn);
+
+		$counter = new cassandra_CounterColumn();
+		$counter->name = CassandraUtil::pack(
+			$column, $this->getColumnNameType()
+		);
+		$counter->value = $amount;
+
+		$this->cassandra->call(
+			'add', $key, $columnParent, $counter, $consistency
+		);
+	}
+	
+	/**
+	 * Increments counter columns by one.
+	 * 
+	 * Use updateCounter() to change counter value by other value than one.
+	 * 
+	 * @param string $key Key name
+	 * @param string $column Column name
+	 * @param integer $amount By how much to change the counter value
+	 * @param string $superColumn Optional supercolumn name
+	 * @param integer $consistency Consistency level to use
+	 */
+	public function increment(
+		$key,
+		$column,
+		$superColumn = null,
+		$consistency = null
+	) {
+		$this->updateCounter($key, $column, 1, $superColumn, $consistency);
+	}
 
 	/**
 	 * Creates a new low-level Cassandra column parent definition.
@@ -2935,6 +2990,82 @@ class CassandraColumnFamily {
 
 		return $results;
 	}
+	
+	/**
+	 * Parses a slice row or {@see cassandra_ColumnOrSuperColumn} into a plain
+	 * array of data.
+	 *
+	 * @param cassandra_ColumnOrSuperColumn $row Row to parse
+	 * @return array Parsed plain array of data
+	 * @author Improved by Madhan Dennis <mdennis_2000@yahoo.com>
+	 */
+	protected function parseSliceRow(cassandra_ColumnOrSuperColumn $row) {
+		$result = array();
+		
+		if ($row->column !== null) {
+			$nameType = $this->getColumnNameType();
+			$valueType = $this->getColumnValueType($row->column->name);
+
+			$name = CassandraUtil::unpack($row->column->name, $nameType);
+			$value = CassandraUtil::unpack($row->column->value, $valueType);
+
+			$result[$name] = $value;
+		} else if ($row->super_column !== null) {
+			$superNameType = null;
+
+			$superName = CassandraUtil::unpack(
+							$row->super_column->name, $superNameType
+			);
+
+			$values = array();
+
+			foreach ($row->super_column->columns as $column) {
+				$nameType = $this->getColumnNameType();
+				$valueType = $this->getColumnValueType($column->name);
+
+				$name = CassandraUtil::unpack($column->name, $nameType);
+				$value = CassandraUtil::unpack($column->value, $valueType);
+
+				$values[$name] = $value;
+			}
+
+			$result[$superName] = $values;
+		} else if ($row->counter_column !== null) {
+			$nameType = $this->getColumnNameType();
+			$valueType = $this->getColumnValueType($row->counter_column->name);
+
+			$name = CassandraUtil::unpack($row->counter_column->name, $nameType);
+			$value = CassandraUtil::unpack($row->counter_column->value, $valueType);
+
+			$result[$name] = $value;
+		} else if ($row->counter_super_column !== null) {
+			$superNameType = null;
+
+			$superName = CassandraUtil::unpack(
+							$row->counter_super_column->name, $superNameType
+			);
+
+			$values = array();
+
+			foreach ($row->counter_super_column->columns as $column) {
+				$nameType = $this->getColumnNameType();
+				$valueType = $this->getColumnValueType($column->name);
+
+				$name = CassandraUtil::unpack($column->name, $nameType);
+				$value = CassandraUtil::unpack($column->value, $valueType);
+
+				$values[$name] = $value;
+			}
+
+			$result[$superName] = $values;
+		} else {
+			// @codeCoverageIgnoreStart
+			throw new Exception('Expected either normal or super column');
+			// @codeCoverageIgnoreEnd
+		}
+
+		return $result;
+	}
 
 	/**
 	 * Parses a slice row or {@see cassandra_ColumnOrSuperColumn} into a plain
@@ -2943,7 +3074,7 @@ class CassandraColumnFamily {
 	 * @param cassandra_ColumnOrSuperColumn $row Row to parse
 	 * @return array Parsed plain array of data
 	 */
-	protected function parseSliceRow(cassandra_ColumnOrSuperColumn $row) {
+	protected function parseSliceRowX(cassandra_ColumnOrSuperColumn $row) {
 		$result = array();
 
 		if ($row->column !== null) {

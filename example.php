@@ -68,6 +68,15 @@ $cassandra->createStandardColumnFamily(
 	// actually accepts more parameters with reasonable defaults
 );
 
+// create a standard column family with given column metadata
+$cassandra->createStandardColumnFamily(
+	'CassandraExample',
+	'counter',
+	array(),
+	Cassandra::TYPE_UTF8,
+	Cassandra::TYPE_COUNTER
+);
+
 // create a super column family
 $cassandra->createSuperColumnFamily(
 	'CassandraExample',
@@ -206,6 +215,27 @@ $usersAZ = $cassandra->cf('user')->getKeyRange('a', 'z');
 echo 'Users with keys in range a-z: <pre>'.print_r($usersAZ->getAll(), true).'</pre><hr/>';
 */
 
+// counters example
+/*$cassandra->set(
+	'counter.test',
+	array(
+		'first' => 1,
+		'second' => 10
+	)
+);*/
+
+$cassandra->cf('counter')->increment('test', 'first');
+
+$testCounter = $cassandra->get('counter.test');
+
+echo 'Test counter after increment: <pre>'.print_r($testCounter, true).'</pre><hr/>';
+
+$cassandra->cf('counter')->updateCounter('test', 'first', 10);
+
+$testCounter = $cassandra->get('counter.test');
+
+echo 'Test counter after second increment by 10: <pre>'.print_r($testCounter, true).'</pre><hr/>';
+
 // find the number of columns a key has, we could also request for ranges
 $chuckColumnCount = $cassandra->cf('user')->getColumnCount('chuck');
 echo 'User "chuck" column count: <pre>'.print_r($chuckColumnCount, true).'</pre><hr/>';
@@ -239,6 +269,8 @@ echo 'Super-column cities.Estonia.Tartu: <pre>'.print_r($tartu, true).'</pre><hr
 // we can still use the additional filters of columns
 $tallinn = $cassandra->get('cities.Estonia.Tallinn:population,size');
 echo 'Super-column cities.Estonia.Tallinn: <pre>'.print_r($tallinn, true).'</pre><hr/>';
+
+
 /*
 // you can delete all the data in a column family using "truncate"
 $cassandra->truncate('user');
