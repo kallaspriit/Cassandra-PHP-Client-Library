@@ -1274,7 +1274,9 @@ class Cassandra {
 
 		$def->name = $name;
 		$def->strategy_class = $placementStrategyClass;
-		$def->strategy_options = $placementStrategyOptions;
+		$def->strategy_options = $placementStrategyOptions != null
+			? $placementStrategyOptions
+			: array("replication_factor" => 1);
 		$def->cf_defs = array();
 		$def->replication_factor = $replicationFactor;
 
