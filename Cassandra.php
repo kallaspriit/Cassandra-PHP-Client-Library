@@ -2562,6 +2562,54 @@ class CassandraColumnFamily {
 	}
 	
 	/**
+	 * Inserts multiple new rows or updates existing ones.
+	 *
+	 * If a key already exists with some columns and you update it, any columns
+	 * not listed in the update statement will not be changed or deleted.
+	 *
+	 * If not set, default consistency level set in the constructor is used.
+	 *
+	 * You generally do not need to provide a timestamp, it is generated for
+	 * you.
+	 *
+	 * You may optionally provide the time-to-live period in seconds after which
+	 * the entry will appear deleted.
+	 *
+	 * @param array $dataMap Array of keys with their associated column names and their values
+	 * @param integer $consistency Consistency level to use
+	 * @param integer $timestamp Optional timestamp to use.
+	 * @param integer $timeToLiveSeconds Optional time-to-live period
+	 * @throws Exception If something goes wrong
+	 */	
+	public function setMultiple(
+	    array $dataMap,
+		$consistency = null,
+		$timestamp = null,
+		$timeToLiveSeconds = null
+	) {
+		if ($timestamp === null) {
+			$timestamp = CassandraUtil::getTimestamp();
+		}
+
+		if ($consistency === null) {
+			$consistency = $this->defaultWriteConsistency;
+		}
+		
+		$mutationMap = array();
+		foreach ($dataMap as $key => $columns) {
+		    $mutationMap[$key] = array(
+				$this->name => $this->createColumnMutations(
+					$columns,
+					$timestamp,
+					$timeToLiveSeconds
+				)
+			);
+		}
+
+		$this->cassandra->call('batch_mutate', $mutationMap, $consistency);
+	}	
+	
+	/**
 	 * Updates counter column by some amount defaulting to one.
 	 * 
 	 * @param string $key Key name

@@ -270,6 +270,52 @@ echo 'Super-column cities.Estonia.Tartu: <pre>'.print_r($tartu, true).'</pre><hr
 $tallinn = $cassandra->get('cities.Estonia.Tallinn:population,size');
 echo 'Super-column cities.Estonia.Tallinn: <pre>'.print_r($tallinn, true).'</pre><hr/>';
 
+// we can also insert multiple rows and columns
+$cassandra->cf('user')->setMultiple(array(
+    'sam' => array(
+		'email' => 'sam@email.com',
+		'name' => 'Sam J',
+		'age' => 26
+	),
+	'rick' => array(
+		'email' => 'rick@email.com',
+		'name' => 'Rick P',
+		'age' => 48
+	)
+));
+
+$samAndRick = $cassandra->cf('user')->getMultiple(array('sam', 'rick'));
+echo 'Users "sam" and "rick": <pre>'.print_r($samAndRick, true).'</pre><hr/>';
+
+// we can also insert multiple entries into super column families
+$cassandra->cf('cities')->setMultiple(array(
+    'SomeCountryX' => array(
+		'CityA' => array(
+			'population' => '23432',
+			'comment' => 'Weird city name',
+			'size' => 'medium'
+		),
+		'CityB' => array(
+			'population' => '2332',
+			'comment' => 'City of bees?',
+			'size' => 'small'
+		)
+	),
+	'SomeCountryY' => array(
+		'CityC' => array(
+			'population' => '2352343',
+			'comment' => 'Capital of Y',
+			'size' => 'massive'
+		)
+	)
+));
+
+$countryX = $cassandra->cf('cities')->getAll('SomeCountryX');
+echo 'Super-column cities.SomeCountryX: <pre>'.print_r($countryX, true).'</pre><hr/>';
+
+$countryY = $cassandra->cf('cities')->getAll('SomeCountryY');
+echo 'Super-column cities.SomeCountryY: <pre>'.print_r($countryY, true).'</pre><hr/>';
+
 
 /*
 // you can delete all the data in a column family using "truncate"
