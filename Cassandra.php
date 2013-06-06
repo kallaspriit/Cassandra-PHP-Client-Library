@@ -260,7 +260,7 @@ class CassandraConnection {
 
 		if ($username !== null) {
 			$request = new cassandra_AuthenticationRequest(
-				array('credentials' => array($username, $password))
+				array('credentials' => array('username' => $username, 'password' => $password))
 			);
 
 			$this->client->login($request);
