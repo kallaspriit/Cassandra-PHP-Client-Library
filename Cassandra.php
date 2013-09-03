@@ -1047,9 +1047,12 @@ class Cassandra {
 		$schema = false;
 		$storeSchema = false;
 
+		if (function_exists('apc_fetch')) {
+			$storeSchema = true;
+		}
+
 		if ($useCache && function_exists('apc_fetch')) {
 			$schema = apc_fetch($cacheKey);
-			$storeSchema = true;
 		}
 
 		if ($schema !== false) {
@@ -1880,7 +1883,13 @@ class CassandraColumnFamily {
 				$useCache
 			);
 
-			if (!isset($keyspaceSchema['column-families'][$this->name])) {
+			// If we use cache, the cache may be wrong if column families has been changed by 
+			// another lib
+			if ($useCache && !isset($keyspaceSchema['column-families'][$this->name])) {
+				return $this->getSchema(false);
+			}
+			// Else, we are wrong
+			else if (!isset($keyspaceSchema['column-families'][$this->name])) {
 				throw new CassandraColumnFamilyNotFoundException(
 					'Schema for column family "'.$this->name.'" not found'
 				);
